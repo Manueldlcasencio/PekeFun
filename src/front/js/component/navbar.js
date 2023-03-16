@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { Modal_login_signup } from "./modal_login_signup";
 
 export const Navbar = () => {
 	return (
@@ -13,6 +14,8 @@ export const Navbar = () => {
 						<button className="btn btn-primary">Check the Context in action</button>
 					</Link>
 				</div>
+				<Modal_login_signup />
+
 			</div>
 		</nav>
 	);

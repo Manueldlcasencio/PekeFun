@@ -1,3 +1,29 @@
 /* 
     General Styles used on every website (Don't Repeat Yourself)
 */
+.btn {
+    background-color: #f9643f;
+    border-color: white; /* Modifica el color del borde */
+  }
+
+  .nav-link {
+    color: black;
+    border-color: white; /* Modifica el color del borde */
+  }
+
+  body {
+    background-color: #19d8b6;
+  }
+
+  .btn {
+    border-color: white;
+    color: #fff;
+    box-shadow: 0 0 40px 40px #f9643f inset, 0 0 0 0 #f9643f;
+    -webkit-transition: all 300ms ease-in-out;
+    transition: all 300ms ease-in-out;
+  }
+  .btn:hover {
+    box-shadow: 0 0 10px 0 white inset, 0 0 10px 4px white;
+    border-color: white;
+  }
+  
