@@ -12,6 +12,7 @@ from api.routes import api
 from api.admin import setup_admin
 from api.commands import setup_commands
 
+
 # JWT - Token
 from flask_jwt_extended import JWTManager
 

@@ -6,23 +6,14 @@ import { Collapse } from "react-bootstrap";
 export const Modal_login_signup = () => {
   const { actions } = useContext(Context);
   const [showTutorForm, setShowTutorForm] = useState(false);
-  const [tutorData, setTutorData] = useState({
-    firstName: "",
-    lastName: "",
-    birthDate: "",
-    city: "",
-    children: [{ firstName: "", lastName: "" }]
-  });
+  const [tutorData, setTutorData] = useState({firstName: "", lastName: "", birthDate: "", city: "", children: [{ firstName: "", lastName: "" }]});
 
   const handleTutorCheck = (e) => {
     setShowTutorForm(e.target.checked);
   };
 
   const addChild = () => {
-    setTutorData({
-      ...tutorData,
-      children: [...tutorData.children, { firstName: "", lastName: "" }]
-    });
+    setTutorData({...tutorData, children: [...tutorData.children, { firstName: "", lastName: "" }]});
   };
 
   const handleTutorFormSubmit = (e) => {
