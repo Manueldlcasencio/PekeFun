@@ -50,7 +50,7 @@ class Tutor(db.Model):
     def serialize(self):
         return {
             "id": self.id,
-            "user id": self.user_id,
+            "user_id": self.user_id,
             "birth": self.birth,
             "location": self.location,
             "avatar": self.avatar,
@@ -158,5 +158,5 @@ class Event(db.Model):
             "company": self.company,
             "cloth": self.cloth,
             "others": self.others,
-            "Participants": self.participants
+            "participants": self.participants
         }
