@@ -27,3 +27,7 @@
     border-color: white;
   }
   
+  .form-check-input:checked {
+    background-color: #8c52ff;
+  }
+  

@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Modal_login_signup } from "./modal_login_signup";
+import { Modal_login_signup } from "./modal_login_signup.js";
 
 export const Navbar = () => {
 	return (
