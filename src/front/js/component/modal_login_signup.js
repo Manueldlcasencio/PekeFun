@@ -78,7 +78,7 @@ export const Modal_login_signup = () => {
               </li>
 
               <div className="d-grid gap-2 d-md-flex justify-content-md-end ms-auto">
-                <button type="button" className="btn-close me-md-2" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" className="btn-close me-md-2 pt-3" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
             </ul>
             <div className="tab-content" id="myTabContent">
@@ -119,7 +119,6 @@ export const Modal_login_signup = () => {
                         una actividad)</label>
                     </div>
                   </div>
-
                   <div className="mb-3">
                     <div className="form-check">
                       <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault2" onChange={handleAdvertiserCheck} />
@@ -127,10 +126,9 @@ export const Modal_login_signup = () => {
                     </div>
                   </div>
 
-
-
                   <Collapse in={showTutorForm}>
                     <div>
+                    <h4 className="pt-3">Datos Tutor</h4>
                       <form onSubmit={handleTutorFormSubmit}>
                         <div className="mb-3">
                           <label htmlFor="name" className="form-label">
@@ -172,6 +170,12 @@ export const Modal_login_signup = () => {
                               </label>
                               <input type="text" className="form-control" id={`childLastName-${index}`} name="lastName" placeholder="Primer apellido" value={child.lastName} onChange={(e) => handleInputChange(e, index, true)} />
                             </div>
+                            <div className="mb-3">
+                              <label htmlFor={`childbirth-${index}`} className="form-label">
+                                Fecha de nacimiento
+                              </label>
+                              <input type="date" className="form-control" id={`childbirth-${index}`} name="birth" value={child.birth} onChange={(e) => handleInputChange(e)} />
+                            </div>
                           </div>
                         ))}
                         <button type="button" className="btn btn-primary" onClick={addChild}>
@@ -181,9 +185,9 @@ export const Modal_login_signup = () => {
                     </div>
                   </Collapse>
 
-
                   <Collapse in={showAdvertiserForm}>
                     <div>
+                      <h4 className="pt-3">Datos Anunciante</h4>
                       <form onSubmit={handleAdvertiserFormSubmit}>
                         <div className="mb-3">
                           <label htmlFor="name" className="form-label">
@@ -204,6 +208,36 @@ export const Modal_login_signup = () => {
                           <input type="date" className="form-control" id="birthDate" name="birthDate" value={advertiserData.birthDate} onChange={(e) => handleInputChangeAdv(e)} />
                         </div>
                         <div className="mb-3">
+                          <label htmlFor="twitter" className="form-label">
+                            Pega aquí el nombre de la cuenta de Twitter de tu Organización/Empresa 
+                          </label>
+                          <input type="text" className="form-control" id="twitter" name="twitter" placeholder="@nombre_de_tu_org_empresa" value={advertiserData.twitter} onChange={(e) => handleInputChangeAdv(e)} />
+                        </div>
+                        <div className="mb-3">
+                          <label htmlFor="company" className="form-label">
+                            Nombre de la Organización / Empresa
+                          </label>
+                          <input type="text" className="form-control" id="company" name="company" placeholder="Nombre de la Organización / Empresa" value={advertiserData.company} onChange={(e) => handleInputChangeAdv(e)} />
+                        </div>
+                        <div className="mb-3">
+                          <label htmlFor="avatar" className="form-label">
+                            Pega el link a tu avatar / logo de tu Organización / Empresa
+                          </label>
+                          <input type="text" className="form-control" id="avatar" name="avatar" placeholder="Pega el link a tu avatar / logo de tu Organización / Empresa" value={advertiserData.avatar} onChange={(e) => handleInputChangeAdv(e)} />
+                        </div>
+                        <div className="mb-3">
+                          <label htmlFor="contact" className="form-label">
+                            Datos de contacto
+                          </label>
+                          <input type="text" className="form-control" id="contact" name="contact" placeholder="Número de teléfono" value={advertiserData.contact} onChange={(e) => handleInputChangeAdv(e)} />
+                        </div>
+                        <div className="mb-3">
+                          <label htmlFor="working_since" className="form-label">
+                            Organización / Empresa trabajando desde
+                          </label>
+                          <input type="date" className="form-control" id="working_since" name="working_since" value={advertiserData.working_since} onChange={(e) => handleInputChangeAdv(e)} />
+                        </div>
+                        <div className="mb-3">
                           <label htmlFor="city" className="form-label">
                             Ciudad de residencia
                           </label>
@@ -213,12 +247,8 @@ export const Modal_login_signup = () => {
                     </div>
                   </Collapse>
 
-
-
-
                   <div className="d-grid gap-2 d-md-flex justify-content-md-end">
-                    <button
-                      type="submit" className="btn btn-primary" style={{ backgroundColor: "#f9643f" }}>
+                    <button type="submit" className="btn btn-primary" style={{ backgroundColor: "#f9643f" }}>
                       Registrarse
                     </button>
                   </div>
