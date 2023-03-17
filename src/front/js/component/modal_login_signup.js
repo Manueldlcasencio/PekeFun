@@ -6,19 +6,31 @@ import { Collapse } from "react-bootstrap";
 export const Modal_login_signup = () => {
   const { actions } = useContext(Context);
   const [showTutorForm, setShowTutorForm] = useState(false);
-  const [tutorData, setTutorData] = useState({firstName: "", lastName: "", birthDate: "", city: "", children: [{ firstName: "", lastName: "" }]});
+  const [ showAdvertiserForm, setShowAdvertiserForm ] = useState(false);
+  const [tutorData, setTutorData] = useState({name: "", lastName: "", birthDate: "", city: "", children: [{ name: "", lastName: "" }]});
+  const [advertiserData, setAdvertiserData] = useState({name: "", lastName: "", contact: "", avatar: "", company: "", working_since: "", twitter: "", birthDate: "", city: ""});
 
   const handleTutorCheck = (e) => {
     setShowTutorForm(e.target.checked);
   };
 
-  const addChild = () => {
-    setTutorData({...tutorData, children: [...tutorData.children, { firstName: "", lastName: "" }]});
+  const handleAdvertiserCheck = (e) => {
+    setShowAdvertiserForm(e.target.checked);
   };
+
+  const addChild = () => {
+    setTutorData({...tutorData, children: [...tutorData.children, { name: "", lastName: "" }]});
+  };
+
 
   const handleTutorFormSubmit = (e) => {
     e.preventDefault();
     actions.createTutor(tutorData);
+  };
+
+  const handleAdvertiserFormSubmit = (e) => {
+    e.preventDefault();
+    actions.createAdvertiser(advertiserData);
   };
 
   const handleChildFormSubmit = (index, childData) => {
@@ -37,6 +49,11 @@ export const Modal_login_signup = () => {
     } else {
       setTutorData({ ...tutorData, [name]: value });
     }
+  };
+
+  const handleInputChangeAdv = (e) => {
+    const { name, value } = e.target;
+    setAdvertiserData({ ...advertiserData, [name]: value });
   };
 
   return (
@@ -103,14 +120,23 @@ export const Modal_login_signup = () => {
                     </div>
                   </div>
 
+                  <div className="mb-3">
+                    <div className="form-check">
+                      <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault2" onChange={handleAdvertiserCheck} />
+                      <label className="form-check-label" htmlFor="flexCheckDefault2"><mark>Soy Anunciante</mark> (quiero publicitar eventos organizador por mi organización/empresa)</label>
+                    </div>
+                  </div>
+
+
+
                   <Collapse in={showTutorForm}>
                     <div>
                       <form onSubmit={handleTutorFormSubmit}>
                         <div className="mb-3">
-                          <label htmlFor="firstName" className="form-label">
+                          <label htmlFor="name" className="form-label">
                             Nombres
                           </label>
-                          <input type="text" className="form-control" id="firstName" name="firstName" placeholder="Nombres" value={tutorData.firstName} onChange={(e) => handleInputChange(e)} />
+                          <input type="text" className="form-control" id="name" name="name" placeholder="Nombres" value={tutorData.name} onChange={(e) => handleInputChange(e)} />
                         </div>
                         <div className="mb-3">
                           <label htmlFor="lastName" className="form-label">
@@ -135,10 +161,10 @@ export const Modal_login_signup = () => {
                           <div key={index}>
                             <h5>Niño {index + 1}</h5>
                             <div className="mb-3">
-                              <label htmlFor={`childFirstName-${index}`} className="form-label">
+                              <label htmlFor={`childname-${index}`} className="form-label">
                                 Nombres
                               </label>
-                              <input type="text" className="form-control" id={`childFirstName-${index}`} name="firstName" placeholder="Nombres" value={child.firstName} onChange={(e) => handleInputChange(e, index, true)} />
+                              <input type="text" className="form-control" id={`childname-${index}`} name="name" placeholder="Nombres" value={child.name} onChange={(e) => handleInputChange(e, index, true)} />
                             </div>
                             <div className="mb-3">
                               <label htmlFor={`childLastName-${index}`} className="form-label">
@@ -154,6 +180,42 @@ export const Modal_login_signup = () => {
                       </form>
                     </div>
                   </Collapse>
+
+
+                  <Collapse in={showAdvertiserForm}>
+                    <div>
+                      <form onSubmit={handleAdvertiserFormSubmit}>
+                        <div className="mb-3">
+                          <label htmlFor="name" className="form-label">
+                            Nombres
+                          </label>
+                          <input type="text" className="form-control" id="name" name="name" placeholder="Nombres" value={advertiserData.name} onChange={(e) => handleInputChangeAdv(e)} />
+                        </div>
+                        <div className="mb-3">
+                          <label htmlFor="lastName" className="form-label">
+                            Primer apellido
+                          </label>
+                          <input type="text" className="form-control" id="lastName" name="lastName" placeholder="Primer apellido" value={advertiserData.lastName} onChange={(e) => handleInputChangeAdv(e)} />
+                        </div>
+                        <div className="mb-3">
+                          <label htmlFor="birthDate" className="form-label">
+                            Fecha de nacimiento
+                          </label>
+                          <input type="date" className="form-control" id="birthDate" name="birthDate" value={advertiserData.birthDate} onChange={(e) => handleInputChangeAdv(e)} />
+                        </div>
+                        <div className="mb-3">
+                          <label htmlFor="city" className="form-label">
+                            Ciudad de residencia
+                          </label>
+                          <input type="text" className="form-control" id="city" name="city" placeholder="Ciudad de residencia" value={advertiserData.city} onChange={(e) => handleInputChangeAdv(e)} />
+                        </div>
+                      </form>
+                    </div>
+                  </Collapse>
+
+
+
+
                   <div className="d-grid gap-2 d-md-flex justify-content-md-end">
                     <button
                       type="submit" className="btn btn-primary" style={{ backgroundColor: "#f9643f" }}>
