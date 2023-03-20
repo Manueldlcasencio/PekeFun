@@ -67,6 +67,7 @@ class Child(db.Model):
     avatar = db.Column(db.String(100), unique=False, nullable=True)
     school = db.Column(db.String(100), unique=False, nullable=True)
     others = db.Column(db.String(300), unique=False, nullable=True)
+    parent = db.Column(db.Integer, nullable=False)
 
     def serialize(self):
         return {
@@ -143,7 +144,7 @@ class Event(db.Model):
         return {
             "event id": self.id,
             "advertiser id": self.id_advertiser,
-            "localization": self.localizationl,
+            "localization": self.localization,
             "min age": self.min_age,
             "max age": self.max_age,
             "price": self.price,
