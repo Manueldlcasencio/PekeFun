@@ -6,9 +6,13 @@ import { Collapse } from "react-bootstrap";
 export const Modal_login_signup = () => {
   const { actions } = useContext(Context);
   const [showTutorForm, setShowTutorForm] = useState(false);
-  const [ showAdvertiserForm, setShowAdvertiserForm ] = useState(false);
-  const [tutorData, setTutorData] = useState({name: "", lastName: "", birthDate: "", city: "", children: [{ name: "", lastName: "" }]});
-  const [advertiserData, setAdvertiserData] = useState({name: "", lastName: "", contact: "", avatar: "", company: "", working_since: "", twitter: "", birthDate: "", city: ""});
+  const [showAdvertiserForm, setShowAdvertiserForm] = useState(false);
+  const [tutorData, setTutorData] = useState({ name: "", lastName: "", birthDate: "", city: "", children: [{ name: "", lastName: "" }] });
+  const [advertiserData, setAdvertiserData] = useState({ name: "", lastName: "", contact: "", avatar: "", company: "", working_since: "", twitter: "", birthDate: "", city: "" });
+  const [loginError, setLoginError] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
 
   const handleTutorCheck = (e) => {
     setShowTutorForm(e.target.checked);
@@ -19,18 +23,24 @@ export const Modal_login_signup = () => {
   };
 
   const addChild = () => {
-    setTutorData({...tutorData, children: [...tutorData.children, { name: "", lastName: "" }]});
+    setTutorData({ ...tutorData, children: [...tutorData.children, { name: "", lastName: "" }] });
   };
 
 
-  const handleTutorFormSubmit = (e) => {
+  const handleTutorFormSubmit = async (e) => {
     e.preventDefault();
-    actions.createTutor(tutorData);
+    const token = await login(email, password);
+    if (token) {
+      actions.createTutor(tutorData, token);
+    }
   };
-
-  const handleAdvertiserFormSubmit = (e) => {
+  
+  const handleAdvertiserFormSubmit = async (e) => {
     e.preventDefault();
-    actions.createAdvertiser(advertiserData);
+    const token = await login(email, password);
+    if (token) {
+      actions.createAdvertiser(advertiserData, token);
+    }
   };
 
   const handleChildFormSubmit = (index, childData) => {
@@ -51,10 +61,32 @@ export const Modal_login_signup = () => {
     }
   };
 
+  const handleLoginSubmit = async (e) => {
+    e.preventDefault();
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+    const token = await actions.login(email, password);
+
+    if (token) {
+      localStorage.setItem("jwt", token);
+    } else {
+      setLoginError("Error al iniciar sesión");
+    }
+  };
+
   const handleInputChangeAdv = (e) => {
     const { name, value } = e.target;
     setAdvertiserData({ ...advertiserData, [name]: value });
   };
+
+  const handleEmailChange = (e) => {
+    setEmail(e.target.value);
+  };
+  
+  const handlePasswordChange = (e) => {
+    setPassword(e.target.value);
+  };
+  
 
   return (
     <div className="container">
@@ -62,7 +94,7 @@ export const Modal_login_signup = () => {
         Login / Sign Up!
       </button>
 
-      <div className="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+      <div className="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div className="modal-dialog">
           <div className="modal-content" style={{ backgroundColor: "#feb823" }}>
             <ul className="nav nav-tabs justify-content-center" id="myTab" role="tablist">
@@ -82,35 +114,41 @@ export const Modal_login_signup = () => {
               </div>
             </ul>
             <div className="tab-content" id="myTabContent">
-              <div className="tab-pane fade show active p-3"id="home-tab-pane"role="tabpanel"aria-labelledby="home-tab">
+              <div className="tab-pane fade show active p-3" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab">
 
-                <form>
+                <form onSubmit={handleLoginSubmit}>
                   <div className="mb-3">
-                    <label htmlFor="email" className="form-label">Email address</label>
-                    <input type="email" className="form-control" id="email" aria-describedby="emailHelp" placeholder="Enter email" />
+                    <label htmlFor="email" className="form-label" >Email address</label>
+                    <input type="email" className="form-control" id="email" aria-describedby="emailHelp" placeholder="Enter email" onChange={handleEmailChange} value={email}/>
                   </div>
                   <div className="mb-3">
-                    <label htmlFor="password" className="form-label">Password</label>
-                    <input type="password" className="form-control" id="password" placeholder="Password" />
+                    <label htmlFor="password" className="form-label" >Password</label>
+                    <input type="password" className="form-control" id="password" placeholder="Password" value={password} onChange={handlePasswordChange}/>
                   </div>
                   <div className="d-grid gap-2 col-6 mx-auto p-2">
+                    
                     <button type="submit" className="btn btn-primary" style={{ backgroundColor: "#f9643f" }}>Iniciar sesión</button>
                   </div>
                 </form>
+
               </div>
-              <div className="tab-pane fade p-3" id="profile-tab-pane" role="tabpanel"aria-labelledby="profile-tab">
+
+
+              <div className="tab-pane fade p-3" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab">
+
                 <form>
+
                   <div className="mb-3">
                     <label htmlFor="email" className="form-label">
                       Email address
                     </label>
-                    <input type="email" className="form-control" id="email" placeholder="name@example.com" />
+                    <input type="email" className="form-control" id="email" placeholder="name@example.com" value={email} onChange={handleEmailChange}/>
                   </div>
                   <div className="mb-3">
                     <label htmlFor="password" className="form-label">
                       Password
                     </label>
-                    <input type="password" className="form-control" id="password" placeholder="Password" />
+                    <input type="password" className="form-control" id="password" placeholder="Registre su contraseña" value={password} onChange={handlePasswordChange}/>
                   </div>
                   <div className="mb-3">
                     <div className="form-check">
@@ -128,8 +166,10 @@ export const Modal_login_signup = () => {
 
                   <Collapse in={showTutorForm}>
                     <div>
-                    <h4 className="pt-3">Datos Tutor</h4>
+                      <h4 className="pt-3">Datos Tutor</h4>
+
                       <form onSubmit={handleTutorFormSubmit}>
+
                         <div className="mb-3">
                           <label htmlFor="name" className="form-label">
                             Nombres
@@ -174,7 +214,7 @@ export const Modal_login_signup = () => {
                               <label htmlFor={`childbirth-${index}`} className="form-label">
                                 Fecha de nacimiento
                               </label>
-                              <input type="date" className="form-control" id={`childbirth-${index}`} name="birth" value={child.birth} onChange={(e) => handleInputChange(e)} />
+                              <input type="date" className="form-control" id={`childbirth-${index}`} name="birth" value={child.birth} onChange={(e) => handleInputChange(e, index, true)} />
                             </div>
                           </div>
                         ))}
@@ -182,13 +222,16 @@ export const Modal_login_signup = () => {
                           Agregar otro niño
                         </button>
                       </form>
+
                     </div>
                   </Collapse>
 
                   <Collapse in={showAdvertiserForm}>
                     <div>
                       <h4 className="pt-3">Datos Anunciante</h4>
+
                       <form onSubmit={handleAdvertiserFormSubmit}>
+
                         <div className="mb-3">
                           <label htmlFor="name" className="form-label">
                             Nombres
@@ -209,7 +252,7 @@ export const Modal_login_signup = () => {
                         </div>
                         <div className="mb-3">
                           <label htmlFor="twitter" className="form-label">
-                            Pega aquí el nombre de la cuenta de Twitter de tu Organización/Empresa 
+                            Pega aquí el nombre de la cuenta de Twitter de tu Organización/Empresa
                           </label>
                           <input type="text" className="form-control" id="twitter" name="twitter" placeholder="@nombre_de_tu_org_empresa" value={advertiserData.twitter} onChange={(e) => handleInputChangeAdv(e)} />
                         </div>
@@ -244,6 +287,7 @@ export const Modal_login_signup = () => {
                           <input type="text" className="form-control" id="city" name="city" placeholder="Ciudad de residencia" value={advertiserData.city} onChange={(e) => handleInputChangeAdv(e)} />
                         </div>
                       </form>
+
                     </div>
                   </Collapse>
 
@@ -261,162 +305,3 @@ export const Modal_login_signup = () => {
     </div>
   );
 };
-
-
-
-
-/* PRUEBA APLICANDO CAMBIOS DE PRUEBA EN FLUX.JS
-
-import React, { useContext } from "react";
-import { Context } from "../store/appContext";
-import jwt_decode from "jwt-decode";
-
-const ModalLoginSignup = (props) => {
-  const { store, actions } = useContext(Context);
-
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    const result = await actions.handleLogin();
-    if (result) {
-      const decodedToken = jwt_decode(result.access_token);
-      localStorage.setItem("token", result.access_token);
-      localStorage.setItem("user", JSON.stringify(decodedToken));
-      props.onHide();
-    }
-  };
-
-  const handleSignup = async (e) => {
-    e.preventDefault();
-    const result = await actions.handleSignup();
-    if (result) {
-      alert("Usuario registrado exitosamente.");
-      props.onHide();
-    }
-  };
-
-  return (
-    <div className="modal show" tabIndex="-1" style={{ display: "block" }}>
-      <div className="modal-dialog">
-        <div className="modal-content">
-          <div className="modal-header">
-            <h5 className="modal-title">Iniciar sesión / Registrarse</h5>
-            <button
-              type="button"
-              className="btn-close"
-              onClick={() => props.onHide()}
-            ></button>
-          </div>
-          <div className="modal-body">
-            <ul className="nav nav-tabs" id="myTab" role="tablist">
-              <li className="nav-item" role="presentation">
-                <button
-                  className="nav-link active"
-                  id="login-tab"
-                  data-bs-toggle="tab"
-                  data-bs-target="#login"
-                  type="button"
-                  role="tab"
-                  aria-controls="login"
-                  aria-selected="true"
-                >
-                  Iniciar sesión
-                </button>
-              </li>
-              <li className="nav-item" role="presentation">
-                <button
-                  className="nav-link"
-                  id="signup-tab"
-                  data-bs-toggle="tab"
-                  data-bs-target="#signup"
-                  type="button"
-                  role="tab"
-                  aria-controls="signup"
-                  aria-selected="false"
-                >
-                  Registrarse
-                </button>
-              </li>
-            </ul>
-            <div className="tab-content" id="myTabContent">
-              <div
-                className="tab-pane fade show active"
-                id="login"
-                role="tabpanel"
-                aria-labelledby="login-tab"
-              >
-                <form onSubmit={handleLogin}>
-                  <div className="mb-3">
-                    <label htmlFor="loginEmail" className="form-label">
-                      Correo electrónico
-                    </label>
-                    <input
-                      type="email"
-                      className="form-control"
-                      id="loginEmail"
-                      name="email"
-                      onChange={(e) => actions.handleChange(e, "login")}
-                    />
-                  </div>
-                  <div className="mb-3">
-                    <label htmlFor="loginPassword" className="form-label">
-                      Contraseña
-                    </label>
-                    <input
-                      type="password"
-                      className="form-control"
-                      id="loginPassword"
-                      name="password"
-                      onChange={(e) => actions.handleChange(e, "login")}
-                    />
-                  </div>
-                  <button type="submit" className="btn btn-primary">
-                    Iniciar sesión
-                  </button>
-                </form>
-              </div>
-              <div
-                className="tab-pane fade"
-                id="signup"
-                role="tabpanel"
-                aria-labelledby="signup-tab"
-              >
-                <form onSubmit={handleSignup}>
-                  <div className="mb-3">
-                    <label htmlFor="signupEmail" className="form-label">
-                      Correo electrónico
-                    </label>
-                    <input
-                      type="email"
-                      className="form-control"
-                      id="signupEmail"
-                      name="email"
-                      onChange={(e) => actions.handleChange(e, "signup")}
-                    />
-                  </div>
-                  <div className="mb-3">
-                    <label htmlFor="signupPassword" className="form-label">
-                      Contraseña
-                    </label>
-                    <input
-                      type="password"
-                      className="form-control"
-                      id="signupPassword"
-                      name="password"
-                      onChange={(e) => actions.handleChange(e, "signup")}
-                    />
-                  </div>
-                  <button type="submit" className="btn btn-primary">
-                    Registrarse
-                  </button>
-                </form>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-export default ModalLoginSignup;
-*/

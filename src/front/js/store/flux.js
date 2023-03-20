@@ -99,18 +99,20 @@ const getState = ({ getStore, getActions, setStore }) => {
 							"Content-type": "application/json"
 						},
 						body : JSON.stringify({
-							email : email, /*ver con manu qué cambio, sin ambos datos o solo la variable por username*/
-							password : password
+							"username" : email, 
+							"password" : password
 						})
 					};
 					try {
-						const resp = await fetch("https://3001-manueldlcasenci-pekefun-8ddm8lck07f.ws-eu90.gitpod.io/?vscodeBrowserReqId=1679078661124/api/login", requestOptions)
+						const resp = await fetch(process.env.BACKEND_URL + "/api/login", requestOptions)
 						if (resp.status != 200){
-							alert("An error has occurred");
+							console.log("actions.login: error");
 							return false;
 						} 
-						const data = await resp.json();						
+						const data = await resp.json();		
+						console.log("ok", data);				
 						localStorage.setItem("token", data.access_token);
+						
 						setStore({token: data.access_token})
 
 						return true;
@@ -132,7 +134,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					})
 				};
 				try {
-					const resp = await fetch("https://3001-manueldlcasenci-pekefun-8ddm8lck07f.ws-eu90.gitpod.io/?vscodeBrowserReqId=1679078661124/api/register", requestOptions)
+					const resp = await fetch(process.env.BACKEND_URL + "/api/signup", requestOptions)
 					if (resp.status != 200){
 						alert("An error has occurred while creating the user");
 						return false;
@@ -157,7 +159,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					  },
 					};
 					try {
-					  const res = await fetch("https://3001-manueldlcasenci-pekefun-8ddm8lck07f.ws-eu90.gitpod.io/?vscodeBrowserReqId=1679078661124/api/private", requestOptions);
+					  const res = await fetch(process.env.BACKEND_URL + "api/protected", requestOptions);
 					  const data = await res.json();
 					  return data;
 					} catch (error) {
@@ -168,6 +170,46 @@ const getState = ({ getStore, getActions, setStore }) => {
 			logout: ()=>{
 				const token = localStorage.removeItem("token");
 				setStore({token:null}); 
+			},
+			
+			createTutor: async (tutorData, token) => {
+				try {
+				  const response = await fetch(process.env.BACKEND_URL + "api/signup/tutor", {
+					method: "POST",
+					headers: {
+					  "Content-Type": "application/json",
+					  "Authorization": `Bearer ${token}`,
+					},
+					body: JSON.stringify(tutorData),
+				  });
+				  if (response.ok) {
+					console.log("Tutor creado correctamente");
+				  } else {
+					throw new Error("Error al crear tutor");
+				  }
+				} catch (error) {
+				  console.error("Error al crear tutor:", error);
+				}
+			},
+
+			createAdvertiser: async (advertiserData, token) => {
+				try {
+				  const response = await fetch(process.env.BACKEND_URL + "api/signup/advertiser", {
+					method: "POST",
+					headers: {
+					  "Content-Type": "application/json",
+					  "Authorization": `Bearer ${token}`,
+					},
+					body: JSON.stringify(advertiserData),
+				  });
+				  if (response.ok) {
+					console.log("Anunciante creado correctamente");
+				  } else {
+					console.log("Error al crear anunciante");
+				}
+			  } catch (error) {
+				console.error("Error al crear anunciante:", error);
+			  }
 			},
 
 		}
