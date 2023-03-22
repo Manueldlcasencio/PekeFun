@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Modal_login_signup } from "./modal_login_signup.js";
+import { Logout } from "./logout.js";
 
 export const Navbar = () => {
 	return (
@@ -15,6 +16,7 @@ export const Navbar = () => {
 					</Link>
 				</div>
 				<Modal_login_signup />
+				<Logout />
 
 			</div>
 		</nav>

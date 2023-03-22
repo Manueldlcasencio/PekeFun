@@ -2,6 +2,7 @@ import React, { useState, useContext } from "react";
 import { Link } from "react-router-dom";
 import { Context } from "../store/appContext.js";
 import { Collapse } from "react-bootstrap";
+import { Login } from "./login.js";
 
 export const Modal_login_signup = () => {
   const { actions } = useContext(Context);
@@ -9,12 +10,9 @@ export const Modal_login_signup = () => {
   const [showAdvertiserForm, setShowAdvertiserForm] = useState(false);
   const [tutorData, setTutorData] = useState({ name: "", lastName: "", birthDate: "", city: "", children: [{ name: "", lastName: "" }] });
   const [advertiserData, setAdvertiserData] = useState({ name: "", lastName: "", contact: "", avatar: "", company: "", working_since: "", twitter: "", birthDate: "", city: "" });
-  const [loginError, setLoginError] = useState("");
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState("");
-
-
 
   const handleTutorCheck = (e) => {
     setShowTutorForm(e.target.checked);
@@ -28,32 +26,29 @@ export const Modal_login_signup = () => {
     setTutorData({ ...tutorData, children: [...tutorData.children, { name: "", lastName: "" }] });
   };
 
-
   const handleTutorFormSubmit = (token) => {
-    actions.createTutor(tutorData, token);
-    console.log("Esta es la información almacenada en Tutor Data: " + tutorData);
+    actions.createTutor(email, tutorData, token);
+    actions.modifyTutor(email, tutorData, token);
+    console.log(`Esta es la información almacenada en Tutor Data: ${JSON.stringify(tutorData, null, 2)}`, showTutorForm);
   };
-  
+    
   const handleAdvertiserFormSubmit = (token) => {
-    actions.createAdvertiser(advertiserData);
-    console.log("Datos del Anunciante: ", advertiserData);
+    actions.createAdvertiser(advertiserData, token);
+    console.log(`Esta es la información almacenada en Advertiser Data: ${JSON.stringify(advertiserData, null, 2)}`);
   };
-
   
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (showTutorForm || showAdvertiserForm) {
       setErrorMessage('');
-      const isRegistered = await actions.register(email, password);
+      const isRegistered = await actions.register(email, password, setShowTutorForm, setShowAdvertiserForm, tutorData, advertiserData);
       if (isRegistered) {
         const token = await actions.login(email, password);
         if (token) {
-          if (showTutorForm && showAdvertiserForm) {
+          if (showTutorForm) {
             handleTutorFormSubmit(token);
-            handleAdvertiserFormSubmit(token);
-          } else if (showTutorForm) {
-            handleTutorFormSubmit(token);
-          } else {
+          } 
+          if (showAdvertiserForm) { 
             handleAdvertiserFormSubmit(token);
           }
         }
@@ -65,14 +60,6 @@ export const Modal_login_signup = () => {
     }
   };
   
-  
-
-  const handleChildFormSubmit = (index, childData) => {
-    actions.addChild(childData);
-    const updatedChildren = [...tutorData.children];
-    updatedChildren[index] = childData;
-    setTutorData({ ...tutorData, children: updatedChildren });
-  };
 
   const handleInputChange = (e, index, child) => {
     const { name, value } = e.target;
@@ -82,19 +69,6 @@ export const Modal_login_signup = () => {
       setTutorData({ ...tutorData, children: updatedChildren });
     } else {
       setTutorData({ ...tutorData, [name]: value });
-    }
-  };
-
-  const handleLoginSubmit = async (e) => {
-    e.preventDefault();
-    const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
-    const token = await actions.login(email, password);
-
-    if (token) {
-      localStorage.setItem("jwt", token);
-    } else {
-      setLoginError("Error al iniciar sesión");
     }
   };
 
@@ -111,14 +85,11 @@ export const Modal_login_signup = () => {
     setPassword(e.target.value);
   };
 
-
-
   return (
     <div className="container">
       <button type="button" className="btn btn-primary" style={{ backgroundColor: "#f9643f" }} data-bs-toggle="modal" data-bs-target="#staticBackdrop">
         Login / Sign Up!
       </button>
-
       <div className="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div className="modal-dialog">
           <div className="modal-content" style={{ backgroundColor: "#feb823" }}>
@@ -133,28 +104,15 @@ export const Modal_login_signup = () => {
                   Sign Up!
                 </button>
               </li>
-
               <div className="d-grid gap-2 d-md-flex justify-content-md-end ms-auto">
                 <button type="button" className="btn-close me-md-2 pt-3" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
             </ul>
             <div className="tab-content" id="myTabContent">
               <div className="tab-pane fade show active p-3" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab">
+            
+            <Login />
 
-                <form>
-                  <div className="mb-3">
-                    <label htmlFor="email" className="form-label" >Email address</label>
-                    <input type="email" className="form-control" id="email" aria-describedby="emailHelp" placeholder="Enter email" onChange={handleEmailChange} value={email} />
-                  </div>
-                  <div className="mb-3">
-                    <label htmlFor="password" className="form-label" >Password</label>
-                    <input type="password" className="form-control" id="password" placeholder="Password" value={password} onChange={handlePasswordChange} />
-                  </div>
-                  <div className="d-grid gap-2 col-6 mx-auto p-2">
-
-                    <button type="submit" className="btn btn-primary" style={{ backgroundColor: "#f9643f" }} onClick={handleLoginSubmit}>Iniciar sesión</button>
-                  </div>
-                </form>
               </div>
               <div className="tab-pane fade p-3" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab">
                 <div className="mb-3">
@@ -237,15 +195,12 @@ export const Modal_login_signup = () => {
                         Agregar otro niño
                       </button>
                     </form>
-
                   </div>
                 </Collapse>
                 <Collapse in={showAdvertiserForm}>
                   <div>
                     <h4 className="pt-3">Datos Anunciante</h4>
-
                     <form>
-
                       <div className="mb-3">
                         <label htmlFor="name" className="form-label">
                           Nombres
@@ -301,7 +256,6 @@ export const Modal_login_signup = () => {
                         <input type="text" className="form-control" id="city" name="city" placeholder="Ciudad de residencia" value={advertiserData.city} onChange={(e) => handleInputChangeAdv(e)} />
                       </div>
                     </form>
-
                   </div>
                 </Collapse>
                 <div className="d-grid gap-2 d-md-flex justify-content-md-end">
@@ -318,7 +272,6 @@ export const Modal_login_signup = () => {
                     onClick={handleSubmit}>
                     Registrarse
                   </button>
-
                 </div>
               </div>
             </div>
