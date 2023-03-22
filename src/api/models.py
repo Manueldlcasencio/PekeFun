@@ -159,5 +159,4 @@ class Event(db.Model):
             "company": self.company,
             "cloth": self.cloth,
             "others": self.others,
-            "participants": self.participants
         }
