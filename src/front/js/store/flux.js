@@ -71,24 +71,18 @@ const getState = ({ getStore, getActions, setStore }) => {
 				setStore({ demo: demo });
 			},
 
-			createTutor: (tutorData) => {
-				setStore({ tutorData: { ...getStore().tutorData, ...tutorData } });
-			},
-
-			createAdvertiser: (advertiserData) => {
-				setStore({ advertiserData: { ...getStore().advertiserData, ...advertiserData } });
-			},
-		
 			addChild: (childData) => {
 				const store = getStore();
 				const newChildren = [...store.tutorData.children, childData];
 				setStore({ tutorData: { ...store.tutorData, children: newChildren } });
 			  },
 
-			synctoken : () =>{
-				const token = localStorage.getItem("token");
+
+			//Para sincronizar el token almacenado en el almacenamiento local (localStorage) con el estado de la aplicación (setStore)
+			syncToken : () =>{ 
+				const token = localStorage.getItem("token"); 
 				console.log("App just loaded, synching the local storage");
-				if (token && token != "" && token != undefined) setStore({token: token}); 
+				if (token && token != "" && token != undefined) setStore({token: token}); // Si el token existe y no está vacío ni es undefined, actualiza el estado de la aplicación con el token obtenido del almacenamiento local.
 			},	
 
 			login: async (email, password) => {
@@ -159,7 +153,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					  },
 					};
 					try {
-					  const res = await fetch(process.env.BACKEND_URL + "api/protected", requestOptions);
+					  const res = await fetch(process.env.BACKEND_URL + "/api/protected", requestOptions);
 					  const data = await res.json();
 					  return data;
 					} catch (error) {
@@ -174,7 +168,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			
 			createTutor: async (tutorData, token) => {
 				try {
-				  const response = await fetch(process.env.BACKEND_URL + "api/signup/tutor", {
+				  const response = await fetch(process.env.BACKEND_URL + "/api/signup/tutor", {
 					method: "POST",
 					headers: {
 					  "Content-Type": "application/json",
@@ -194,7 +188,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 			createAdvertiser: async (advertiserData, token) => {
 				try {
-				  const response = await fetch(process.env.BACKEND_URL + "api/signup/advertiser", {
+				  const response = await fetch(process.env.BACKEND_URL + "/api/signup/advertiser", {
 					method: "POST",
 					headers: {
 					  "Content-Type": "application/json",

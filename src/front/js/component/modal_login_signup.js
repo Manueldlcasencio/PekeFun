@@ -29,23 +29,43 @@ export const Modal_login_signup = () => {
   };
 
 
-  const handleTutorFormSubmit = async (e) => {
-
-    const token = await login(email, password);
-    if (token) {
-      actions.createTutor(tutorData, token);
-      console.log("Esta es la información almacenada en Tutor Data: " + tutorData)
-    }
+  const handleTutorFormSubmit = (token) => {
+    actions.createTutor(tutorData, token);
+    console.log("Esta es la información almacenada en Tutor Data: " + tutorData);
+  };
+  
+  const handleAdvertiserFormSubmit = (token) => {
+    actions.createAdvertiser(advertiserData);
+    console.log("Datos del Anunciante: ", advertiserData);
   };
 
-  const handleAdvertiserFormSubmit = async (e) => {
-
-    const token = await login(email, password);
-    if (token) {
-      actions.createAdvertiser(advertiserData);
-      console.log("Datos del Anunciante: ", advertiserData)
+  
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (showTutorForm || showAdvertiserForm) {
+      setErrorMessage('');
+      const isRegistered = await actions.register(email, password);
+      if (isRegistered) {
+        const token = await actions.login(email, password);
+        if (token) {
+          if (showTutorForm && showAdvertiserForm) {
+            handleTutorFormSubmit(token);
+            handleAdvertiserFormSubmit(token);
+          } else if (showTutorForm) {
+            handleTutorFormSubmit(token);
+          } else {
+            handleAdvertiserFormSubmit(token);
+          }
+        }
+      } else {
+        setErrorMessage('Hubo un problema al registrar tu cuenta. Por favor, intenta nuevamente.');
+      }
+    } else {
+      setErrorMessage('Por favor, selecciona una opción antes de continuar.');
     }
   };
+  
+  
 
   const handleChildFormSubmit = (index, childData) => {
     actions.addChild(childData);
@@ -90,7 +110,7 @@ export const Modal_login_signup = () => {
   const handlePasswordChange = (e) => {
     setPassword(e.target.value);
   };
-  
+
 
 
   return (
@@ -285,35 +305,19 @@ export const Modal_login_signup = () => {
                   </div>
                 </Collapse>
                 <div className="d-grid gap-2 d-md-flex justify-content-md-end">
-                {errorMessage && (
-  <div className="alert alert-danger mt-3" role="alert">
-    {errorMessage}
-  </div>
-)}
+                  {errorMessage && (
+                    <div className="alert alert-danger mt-3" role="alert">
+                      {errorMessage}
+                    </div>
+                  )}
 
-                <button
-  type="submit"
-  className="btn btn-primary"
-  style={{ backgroundColor: "#f9643f" }}
-  onClick={(e) => {
-    e.preventDefault();
-    if (showTutorForm || showAdvertiserForm) {
-      setErrorMessage("");
-      if (showTutorForm && showAdvertiserForm) {
-        handleTutorFormSubmit(e);
-        handleAdvertiserFormSubmit(e);
-      } else if (showTutorForm) {
-        handleTutorFormSubmit(e);
-      } else {
-        handleAdvertiserFormSubmit(e);
-      }
-    } else {
-      setErrorMessage("Por favor, selecciona una opción antes de continuar.");
-    }
-  }}
->
-  Registrarse
-</button>
+                  <button
+                    type="submit"
+                    className="btn btn-primary"
+                    style={{ backgroundColor: "#f9643f" }}
+                    onClick={handleSubmit}>
+                    Registrarse
+                  </button>
 
                 </div>
               </div>
