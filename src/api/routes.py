@@ -29,6 +29,9 @@ def signup():
         password = request.json.get("password", None)
         if not username or not password:
             return jsonify({"msg": "An username and password must be entered."}), 400
+        check_if_exist = User.query.filter_by(email = username).first()
+        if check_if_exist:
+            return jsonify({"msg": "Email in use"})
         user = User(email = username,
                     password = password,
                     is_tutor = request.json.get("is_tutor", None),
@@ -119,6 +122,7 @@ def signup_tutor():
         query_id = User.query.filter_by(email = username).first()
         if not query_id:
             return jsonify({"error": "Username not found"}), 404
+        query_id.query.update({"is_tutor": True})
         id = query_id.id
         tutor = Tutor(user_id = id)
         db.session.add(tutor)
@@ -164,8 +168,21 @@ def signup_tutor():
             tutor = Tutor.query.filter_by(user_id = user.id).first()
             if not tutor:
                 return jsonify({"error": "Tutor not found"}), 400
-            db.session.delete(tutor)
-            db.session.commit()
+            if tutor:
+                if tutor.children:
+                    for kid in tutor.children:
+                        participant_id = Participants.query.filter_by(child_id = kid.id).first()
+                        if participant_id:
+                            db.session.delete(participant_id)
+                    to_remove = []
+                    for item in tutor.children:
+                        to_remove.append(item)
+                    for item in to_remove:
+                        for event in tutor.children:
+                            tutor.children.remove(item)
+                            db.session.delete(item)
+                db.session.delete(tutor)
+                db.session.commit()
             return jsonify({"removed": username + " as tutor"}), 200
         else:
             return jsonify({"msg": "Password is wrong."})
@@ -255,6 +272,7 @@ def advertiser():
         user = User.query.filter_by(email = username).first()
         if not username or not user:
             return jsonify({"msg": "You must send a valid username"}), 400
+        user.query.update({"is_advertiser": True})
         required = ["name", "lastname", "contact", "company"]
         missing = []
         for item in required:           
@@ -307,9 +325,19 @@ def advertiser():
             return jsonify({"msg": "User not found"}), 404
         if user.password == password:
             adv = Advertiser.query.filter_by(user_id = user.id).first()
-            db.session.delete(adv)
-            db.session.commit()
-            return jsonify({"removed": username + " as advertiser"}), 200
+            user.query.update({"is_advertiser": False})
+            if adv:         
+                if advertiser.events: 
+                    to_remove = []
+                    for item in advertiser.events:
+                        to_remove.append(item)
+                    for item in to_remove:
+                        for event in advertiser.events:
+                            advertiser.events.remove(item)
+                            db.session.delete(item)            
+                db.session.delete(adv)
+                db.session.commit()
+                return jsonify({"removed": username + " as advertiser"}), 200
         else:
             return jsonify({"msg": "Password is wrong."}), 400
 
