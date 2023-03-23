@@ -124,7 +124,12 @@ def signup_tutor():
             return jsonify({"error": "Username not found"}), 404
         query_id.query.update({"is_tutor": True})
         id = query_id.id
-        tutor = Tutor(user_id = id)
+        tutor = Tutor(user_id = id,
+                      birth = request.json.get("birth", None),
+                      location = request.json.get("location", None),
+                      avatar = request.json.get("avatar", None),
+                      name = request.json.get("name", None),
+                      lastname = request.json.get("lastname", None))
         db.session.add(tutor)
         db.session.commit()
         return jsonify({"tutor_added": username}), 200
