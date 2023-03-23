@@ -8,7 +8,7 @@ export const Modal_login_signup = () => {
   const { actions } = useContext(Context);
   const [showTutorForm, setShowTutorForm] = useState(false);
   const [showAdvertiserForm, setShowAdvertiserForm] = useState(false);
-  const [tutorData, setTutorData] = useState({ name: "", lastName: "", birthDate: "", city: "", children: [{ name: "", lastName: "" }] });
+  const [tutorData, setTutorData] = useState({ name: "", lastName: "", birthDate: "", city: "", children: [{ name: "", lastName: "", birth: "" }] });
   const [advertiserData, setAdvertiserData] = useState({ name: "", lastName: "", contact: "", avatar: "", company: "", working_since: "", twitter: "", birthDate: "", city: "" });
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -23,7 +23,7 @@ export const Modal_login_signup = () => {
   };
 
   const addChild = () => {
-    setTutorData({ ...tutorData, children: [...tutorData.children, { name: "", lastName: "" }] });
+    setTutorData({ ...tutorData, children: [...tutorData.children, { name: "", lastName: "", birth: "" }] });
   };
 
   const handleTutorFormSubmit = (token) => {
@@ -33,7 +33,7 @@ export const Modal_login_signup = () => {
   };
     
   const handleAdvertiserFormSubmit = (token) => {
-    actions.createAdvertiser(advertiserData, token);
+    actions.createAdvertiser(email, advertiserData, token);
     console.log(`Esta es la información almacenada en Advertiser Data: ${JSON.stringify(advertiserData, null, 2)}`);
   };
   
