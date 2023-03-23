@@ -2,17 +2,381 @@
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
 from flask import Flask, request, jsonify, url_for, Blueprint
-from api.models import db, User
+from api.models import db, User, Tutor, Child, Advertiser, Event, childs, participants
 from api.utils import generate_sitemap, APIException
+
+from flask_jwt_extended import create_access_token
+from flask_jwt_extended import get_jwt_identity
+from flask_jwt_extended import jwt_required
 
 api = Blueprint('api', __name__)
 
 
-@api.route('/hello', methods=['POST', 'GET'])
-def handle_hello():
+@api.route("/signup", methods=["POST", "PUT", "DELETE", "GET"])
+def signup():
+    if request.method == "GET":
+        username = request.json.get("username", None)
+        if not username:
+            return jsonify({"msg": "An username must be entered."}), 404
+        user = User.query.filter_by(email = username).first()
+        if user:
+            return jsonify({"info": user.serialize()}), 200
+        else:
+            return jsonify({"msg": "User doesn't exist."}), 404
+    
+    if request.method == "POST":
+        username = request.json.get("username", None)
+        password = request.json.get("password", None)
+        if not username or not password:
+            return jsonify({"msg": "An username and password must be entered."}), 400
+        user = User(email = username,
+                    password = password)
+        db.session.add(user)
+        db.session.commit()
+        return jsonify({"added": username}), 200
+    
+    if request.method == "PUT":
+        username = request.json.get("username", None)
+        password = request.json.get("password", None)
+        if not username or not password:
+            return jsonify({"msg": "An username and password must be entered. Only the password will change."}), 400
+        user = User.query.filter_by(email = username).first()
+        user.password = password
+        db.session.commit()
+        return jsonify({"msg": "Password has been updated"}), 200
 
-    response_body = {
-        "message": "Hello! I'm a message that came from the backend, check the network tab on the google inspector and you will see the GET request"
-    }
+    if request.method == "DELETE":
+        username = request.json.get("username", None)
+        password = request.json.get("password", None)
+        if not username or not password:
+            return jsonify({"msg": "An username and password must be entered."}), 400
+        user = User.query.filter_by(email = username).first()
+        if not user:
+            return jsonify({"msg": "User not found"}), 404
+        if user.password == password:
+            db.session.delete(user)
+            db.session.commit()
+            return jsonify({"removed": username}), 200
+        else:
+            return jsonify({"msg": "Password is wrong."}), 400
 
-    return jsonify(response_body), 200
+# About tutors
+@api.route("/signup/tutor", methods=["POST", "PUT", "DELETE", "GET"])
+def signup_tutor():
+    if request.method == "GET":
+        username = request.json.get("username", None)
+        if not username or username == "":
+            return jsonify({"msg": "You must send a valid username"}), 400
+        user = User.query.filter_by(email = username).first()
+        if not user:
+            return jsonify({"error": "User not found"}), 404
+        tutor = Tutor.query.filter_by(user_id = user.id).first()
+        if tutor:
+            basic_response = tutor.serialize()
+            kids = tutor.children
+            json_kids = []
+            for kid in kids:
+                temp_kids = kid.serialize()
+                json_kids.append(temp_kids)
+            return jsonify({"kids": json_kids,
+                            "msg": basic_response}), 200
+        else:
+            return jsonify({"error": "Tutor not found"}), 400
+       
+    
+    if request.method == "POST":
+        username = request.json.get("username", None)        
+        if not username:
+            return jsonify({"msg": "An username must be entered."}), 400
+        query_id = User.query.filter_by(email = username).first()
+        if not query_id:
+            return jsonify({"error": "Username not found"}), 404
+        id = query_id.id
+        tutor = Tutor(user_id = id)
+        db.session.add(tutor)
+        db.session.commit()
+        return jsonify({"added": username}), 200
+
+    if request.method == "PUT":
+        username = request.json.get("username", None)
+        if not username:
+            return jsonify({"msg": "An username must be entered."}), 400
+        user = User.query.filter_by(email = username).first().id
+        tutor = Tutor.query.filter_by(user_id = user).first()
+        if not user:
+            return jsonify({"error": "Username not found"}), 404
+        if not tutor:
+            return jsonify({"error": "Tutor not found"}), 400
+        serialize = Tutor.__table__.columns.keys()
+        missing = []  
+        for item in serialize:           
+            if item != "id" and item != "user_id" and item != "children":
+                if item not in request.json:
+                    missing.append(item)
+        if missing != []:
+            return jsonify({"msg": "Not all camps",
+                                "missing": missing}), 404
+        else:
+            for item in serialize:
+                change = request.json.get(item,None)
+                if item != "id" and item != "user_id" and item != "children" and change != "":
+                    tutor.query.update({item: change})
+            db.session.commit()
+        return jsonify({"Changes": request.json}), 200
+
+    if request.method == "DELETE":
+        username = request.json.get("username", None)
+        password = request.json.get("password", None)
+        if not username or not password:
+            return jsonify({"msg": "An username and password must be entered."}), 400
+        user = User.query.filter_by(email = username).first()
+        if not user:
+            return jsonify({"msg": "User not found"}), 404
+        if user.password == password:
+            tutor = Tutor.query.filter_by(user_id = user.id).first()
+            if not tutor:
+                return jsonify({"error": "Tutor not found"}), 400
+            db.session.delete(tutor)
+            db.session.commit()
+            return jsonify({"removed": username + " as tutor"}), 200
+        else:
+            return jsonify({"msg": "Password is wrong."})
+
+@api.route("signup/tutor/child", methods=["POST", "PUT", "DELETE"])
+def signup_child():
+    if request.method == "POST":
+        username = request.json.get("username", None)        
+        if not username:
+            return jsonify({"msg": "An username must be entered."}), 400
+        user_id = User.query.filter_by(email = username).first().id
+        tutor_id = Tutor.query.filter_by(user_id = user_id).first().id
+        if not user_id:
+            return jsonify({"error": "Username not found"}), 404
+        if not tutor_id:
+            return jsonify({"error": "Tutor not found"}), 400
+        if tutor_id:
+            required = Child.__table__.columns.keys()
+            missing = []
+        for item in required:           
+            if item != "id":
+                if item not in request.json:
+                    missing.append(item)                    
+        if missing != []:
+            return jsonify({"msg": "Not all camps",
+                            "missing": missing}), 404
+        child = Child(name = request.json.get("name", None),
+                      lastname = request.json.get("lastname", None),
+                      parent = tutor_id,
+                      birth = request.json.get("birth", None))
+        db.session.add(child)
+        db.session.commit()
+
+        # Añadir a la tabla del padre
+        tutor = Tutor.query.filter_by(user_id = user_id).first()
+        tutor.children.append(child)
+        db.session.commit()
+        return jsonify({"added": username}), 200
+
+    if request.method == "PUT":
+        child_id = request.json.get("child_id", None)
+        checked_id = Child.query.filter_by(id = child_id).first()
+        if not child_id or not checked_id:
+            return jsonify({"msg": "You need to send a valid child_id."}), 400
+        required = Child.__table__.columns.keys()
+        missing = []  
+        for item in required:           
+            if item != "id" and item != "parent":
+                if item not in request.json:
+                    missing.append(item)
+        if missing != []:
+            return jsonify({"msg": "Not all camps",
+                                "missing": missing}), 404
+        else:
+            for item in required:
+                change = request.json.get(item,None)
+                if item != "id" and item != "parent" and change != "":
+                    checked_id.query.update({item: change})
+            db.session.commit()
+        return jsonify({"changes": request.json}), 200
+
+    if request.method == "DELETE":
+        child_id = request.json.get("child_id", None)
+        checked_id = Child.query.filter_by(id = child_id).first()
+        tutor = Tutor.query.filter_by(id = test.parent).first()
+        if not child_id or not checked_id:
+            return jsonify({"msg": "You need to send a valid child_id."}), 404
+        child_name = checked_id.name + " " + checked_id.lastname
+        tutor.children.remove(checked_id)
+        db.session.delete(checked_id)
+        db.session.commit()
+        return jsonify({"deleted": child_name}), 200
+    
+
+@api.route("signup/advertiser", methods=["GET", "POST", "PUT", "DELETE"])
+def advertiser():
+    if request.method == "GET":
+        username = request.json.get("username", None)
+        us_id = User.query.filter_by(email = username).first().id
+        if not username or not us_id:
+            return jsonfiy({"msg": "You must send a valid username"})
+        advertiser = Advertiser.query.filter_by(user_id = us_id).first()
+        return jsonify({"info": advertiser.serialize()})
+
+    if request.method == "POST":
+        username = request.json.get("username", None)
+        user = User.query.filter_by(email = username).first()
+        if not username or not user:
+            return jsonify({"msg": "You must send a valid username"}), 400
+        required = ["name", "lastname", "contact", "company"]
+        missing = []
+        for item in required:           
+            if item not in request.json:
+                missing.append(item)                    
+        if missing != []:
+            return jsonify({"msg": "Not all camps",
+                            "missing": missing}), 404
+        advertiser = Advertiser(name = request.json.get("name", None),
+                      lastname = request.json.get("lastname", None),
+                      contact = request.json.get("contact", None),
+                      company = request.json.get("company", None),
+                      user_id = user.id)  
+        db.session.add(advertiser)
+        db.session.commit()
+        return jsonify({"created": request.json.get("name", None) + " " + request.json.get("lastname",None) }), 200
+
+    if request.method == "PUT":
+        username = request.json.get("username", None)
+        if not username:
+            return jsonify({"msg": "An username must be entered."}), 400
+        user = User.query.filter_by(email = username).first().id
+        advert = Advertiser.query.filter_by(user_id = user).first()
+        if not user or not advert:
+            return jsonify({"msg": "You must send a valid username"}), 404
+        required = Advertiser.__table__.columns.keys()
+        missing = []  
+        for item in required:           
+            if item != "id" and item != "user_id":
+                if item not in request.json:
+                    missing.append(item)
+        if missing != []:
+            return jsonify({"msg": "Not all camps",
+                                "missing": missing}), 404
+        else:
+            for item in required:
+                change = request.json.get(item,None)
+                if item != "id" and item != "user_id" and change != "":
+                    advert.query.update({item: change})
+            db.session.commit()
+        return jsonify({"Changes": request.json}), 200
+
+    if request.method == "DELETE":
+        username = request.json.get("username", None)
+        password = request.json.get("password", None)
+        if not username or not password:
+            return jsonify({"msg": "An username and password must be entered."}), 400
+        user = User.query.filter_by(email = username).first()
+        if not user:
+            return jsonify({"msg": "User not found"}), 404
+        if user.password == password:
+            adv = Advertiser.query.filter_by(user_id = user.id).first()
+            db.session.delete(adv)
+            db.session.commit()
+            return jsonify({"removed": username + " as advertiser"}), 200
+        else:
+            return jsonify({"msg": "Password is wrong."}), 400
+
+
+@api.route("/event", methods=["GET", "POST", "PUT", "DELETE"])   
+def event():
+    if request.method == "GET":
+        event_id = request.json.get("event_id", None)
+        event = Event.query.filter_by(id = event_id).first()
+        if not event:
+            return jsonify({"msg": "Event not found"}), 404
+        participation = event.participants
+        response = []
+        for kid in participation:
+            response.append(kid.serialize())
+        return jsonify({"info": event.serialize(),
+                        "participants": response}), 200
+
+    if request.method == "POST":
+        username = request.json.get("username", None)
+        user = User.query.filter_by(email = username).first()
+        adver = Advertiser.query.filter_by(user_id = user.id).first()
+        required = Event.__table__.columns.keys()
+        if not user or not adver:
+            return jsonify({"msg": "You must send a valid username that is an advertiser"}), 400
+        missing = []
+        for item in required:
+            if item not in request.json and item != "id" and item != "id_advertiser" and item != score and item != score_amount and item != score_sum and item != done and item != participants:
+                missing.append(item)
+        if missing != []:
+            return jsonify({"missing": missing }), 400
+        event = Event(id_advertiser = adver.id,
+                      name = request.json.get("name", None),
+                      localization = request.json.get("localization", None),
+                      min_age = request.json.get("min_age", None),
+                      max_age = request.json.get("max_age", None),
+                      price = request.json.get("price", None),
+                      date = request.json.get("date", None),
+                      length = request.json.get("length",None),
+                      category = request.json.get("category", None),
+                      slots = request.json.get("slots", None),
+                      description = request.json.get("description", None),
+                      contact = request.json.get("contact", None),
+                      company = request.json.get("company", None),
+                      cloth = request.json.get("cloth", None),
+                      others = request.json.get("others", None))
+        db.session.add(event)   
+        db.session.commit()
+        return jsonify({"msg": "Event created"}), 200 
+
+    if request.method == "PUT":
+        event_id = request.json.get("event_id", None)
+        event = Event.request.json.get("event", None).first()
+        if not event:
+            return jsonify({"msg": "Event id not found"}), 404
+        possible = Event.__table__.columns.keys()
+        for item in request.json:
+            if item in possible and item != "event_id":
+                event.query.update({item: change})
+            elif item not in possible and item != "event_id":
+                return jsonify({"error": item + "can't be changed"}), 400
+        db.session.commit()
+        return jsonify({"msg": "Event modified"}), 200
+
+    if request.method == "DELETE":
+        event_id = request.json.get("event_id", None)
+        event = Event.request.json.get("event", None).first()
+        if not event:
+           return jsonify({"msg": "Event id not found"}), 404 
+        db.session.delete(event)
+        db.session.commit()
+        return jsonify({"msg": "Event deleted"})
+        
+
+@api.route("/login", methods=["POST"])
+def login():
+    username = request.json.get("username", None)
+    password = request.json.get("password", None)
+    user = User.query.filter_by(email = username).first()
+    if not username or not password:
+        return jsonify({"msg": "You need to send username and password"}), 400
+    if not user:
+        return jsonify({"msg": "User doesn't exist"}), 404
+    if user and user.password == password:
+        access_token = create_access_token(identity=username)
+        return jsonify(access_token=access_token), 200
+    else:
+        return jsonify({"msg": "Error. Password is wrong."}), 400
+
+@api.route("/protected", methods=["GET"])
+@jwt_required()
+def protected():
+    # Access the identity of the current user with get_jwt_identity
+    current_user = get_jwt_identity()
+    if current_user:
+        return jsonify(logged_in_as=current_user), 200
+    else:
+        return jsonify({"msg": "Not authorized."}), 400
