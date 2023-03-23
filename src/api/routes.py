@@ -2,7 +2,7 @@
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
 from flask import Flask, request, jsonify, url_for, Blueprint
-from api.models import db, User, Tutor, Child, Advertiser, Event, childs, participants
+from api.models import db, User, Tutor, Child, Advertiser, Event, childs, Participants
 from api.utils import generate_sitemap, APIException
 
 from flask_jwt_extended import create_access_token
@@ -29,11 +29,16 @@ def signup():
         password = request.json.get("password", None)
         if not username or not password:
             return jsonify({"msg": "An username and password must be entered."}), 400
+        check_if_exist = User.query.filter_by(email = username).first()
+        if check_if_exist:
+            return jsonify({"msg": "Email in use"})
         user = User(email = username,
-                    password = password)
+                    password = password,
+                    is_tutor = request.json.get("is_tutor", None),
+                    is_advertiser = request.json.get("is_advertiser", None))
         db.session.add(user)
         db.session.commit()
-        return jsonify({"added": username}), 200
+        return jsonify({"username_added": username}), 200
     
     if request.method == "PUT":
         username = request.json.get("username", None)
@@ -54,6 +59,32 @@ def signup():
         if not user:
             return jsonify({"msg": "User not found"}), 404
         if user.password == password:
+            userid = user.id
+            tutor = Tutor.query.filter_by(user_id = userid).first()
+            advertiser = Advertiser.query.filter_by(user_id = userid).first()
+            if tutor:
+                if tutor.children:
+                    for kid in tutor.children:
+                        participant_id = Participants.query.filter_by(child_id = kid.id).first()
+                        if participant_id:
+                            db.session.delete(participant_id)
+                    to_remove = []
+                    for item in tutor.children:
+                        to_remove.append(item)
+                    for item in to_remove:
+                        for event in tutor.children:
+                            tutor.children.remove(item)
+                            db.session.delete(item)
+                db.session.delete(tutor)
+            if advertiser:         
+                if advertiser.events: 
+                    to_remove = []
+                    for item in advertiser.events:
+                        to_remove.append(item)
+                    for item in to_remove:
+                        for event in advertiser.events:
+                            advertiser.events.remove(item)
+                            db.session.delete(item) 
             db.session.delete(user)
             db.session.commit()
             return jsonify({"removed": username}), 200
@@ -91,11 +122,17 @@ def signup_tutor():
         query_id = User.query.filter_by(email = username).first()
         if not query_id:
             return jsonify({"error": "Username not found"}), 404
+        query_id.query.update({"is_tutor": True})
         id = query_id.id
-        tutor = Tutor(user_id = id)
+        tutor = Tutor(user_id = id,
+                      birth = request.json.get("birth", None),
+                      location = request.json.get("location", None),
+                      avatar = request.json.get("avatar", None),
+                      name = request.json.get("name", None),
+                      lastname = request.json.get("lastname", None))
         db.session.add(tutor)
         db.session.commit()
-        return jsonify({"added": username}), 200
+        return jsonify({"tutor_added": username}), 200
 
     if request.method == "PUT":
         username = request.json.get("username", None)
@@ -136,8 +173,21 @@ def signup_tutor():
             tutor = Tutor.query.filter_by(user_id = user.id).first()
             if not tutor:
                 return jsonify({"error": "Tutor not found"}), 400
-            db.session.delete(tutor)
-            db.session.commit()
+            if tutor:
+                if tutor.children:
+                    for kid in tutor.children:
+                        participant_id = Participants.query.filter_by(child_id = kid.id).first()
+                        if participant_id:
+                            db.session.delete(participant_id)
+                    to_remove = []
+                    for item in tutor.children:
+                        to_remove.append(item)
+                    for item in to_remove:
+                        for event in tutor.children:
+                            tutor.children.remove(item)
+                            db.session.delete(item)
+                db.session.delete(tutor)
+                db.session.commit()
             return jsonify({"removed": username + " as tutor"}), 200
         else:
             return jsonify({"msg": "Password is wrong."})
@@ -175,7 +225,7 @@ def signup_child():
         tutor = Tutor.query.filter_by(user_id = user_id).first()
         tutor.children.append(child)
         db.session.commit()
-        return jsonify({"added": username}), 200
+        return jsonify({"child_added": request.json.get("name", None)})
 
     if request.method == "PUT":
         child_id = request.json.get("child_id", None)
@@ -227,6 +277,7 @@ def advertiser():
         user = User.query.filter_by(email = username).first()
         if not username or not user:
             return jsonify({"msg": "You must send a valid username"}), 400
+        user.query.update({"is_advertiser": True})
         required = ["name", "lastname", "contact", "company"]
         missing = []
         for item in required:           
@@ -242,7 +293,7 @@ def advertiser():
                       user_id = user.id)  
         db.session.add(advertiser)
         db.session.commit()
-        return jsonify({"created": request.json.get("name", None) + " " + request.json.get("lastname",None) }), 200
+        return jsonify({"advertiser_added": request.json.get("name", None) + " " + request.json.get("lastname",None) }), 200
 
     if request.method == "PUT":
         username = request.json.get("username", None)
@@ -279,9 +330,19 @@ def advertiser():
             return jsonify({"msg": "User not found"}), 404
         if user.password == password:
             adv = Advertiser.query.filter_by(user_id = user.id).first()
-            db.session.delete(adv)
-            db.session.commit()
-            return jsonify({"removed": username + " as advertiser"}), 200
+            user.query.update({"is_advertiser": False})
+            if adv:         
+                if advertiser.events: 
+                    to_remove = []
+                    for item in advertiser.events:
+                        to_remove.append(item)
+                    for item in to_remove:
+                        for event in advertiser.events:
+                            advertiser.events.remove(item)
+                            db.session.delete(item)            
+                db.session.delete(adv)
+                db.session.commit()
+                return jsonify({"removed": username + " as advertiser"}), 200
         else:
             return jsonify({"msg": "Password is wrong."}), 400
 
@@ -296,7 +357,9 @@ def event():
         participation = event.participants
         response = []
         for kid in participation:
-            response.append(kid.serialize())
+            find_child = kid.child_id
+            found_child = Child.query.filter_by(id = find_child).first()
+            response.append(found_child.name + " " + found_child.lastname)
         return jsonify({"info": event.serialize(),
                         "participants": response}), 200
 
@@ -327,7 +390,10 @@ def event():
                       contact = request.json.get("contact", None),
                       company = request.json.get("company", None),
                       cloth = request.json.get("cloth", None),
-                      others = request.json.get("others", None))
+                      others = request.json.get("others", None),
+                      score = 0,
+                      score_amount = 0,
+                      score_sum = 0)
         db.session.add(event)   
         db.session.commit()
         return jsonify({"msg": "Event created"}), 200 
@@ -354,7 +420,58 @@ def event():
         db.session.delete(event)
         db.session.commit()
         return jsonify({"msg": "Event deleted"})
-        
+
+
+@api.route("/event/participant", methods=["POST", "PUT", "DELETE"])
+def participant():
+    required = ["event_id", "child_id", "was_there", "score_given"]
+    for item in request.json:
+        if item not in required:
+            return jsonify({"msg": "You must send all this values",
+                            "values": required}), 404
+    if len(request.json) != len(required):
+        return jsonify({"msg": "You must send all this values",
+                            "values": required}), 404
+    event_id = request.json.get("event_id", None)
+    event = Event.query.filter_by(id = event_id).first()
+    if not event:
+        return jsonify({"msg": "Event not found. Send event_id"}), 404
+    child_id = request.json.get("child_id", None)
+    child = Child.query.filter_by(id = child_id).first()
+    if not child:
+        return jsonify({"msg": "Child not found. Send child_id"}), 404   
+    if request.method == "POST":
+        participant = Participants(event_id = request.json.get("event_id", None),
+                                  child_id = request.json.get("child_id", None),
+                                  was_there = request.json.get("was_there", None))
+        db.session.add(participant)
+        db.session.commit()
+        return jsonify({"participant_added": child.id,
+                        "event": event.name}), 200
+
+    if request.method == "PUT":
+        participant_id = Participants.query.filter_by(event_id = event_id, child_id = child_id).first()
+        if not participant_id:
+            return jsonify({"msg": "Participant not found in event"})
+        participant_id.query.update({"was_there": request.json.get("was_there", None),
+                                     "score_given": request.json.get("score_given", None)})
+        event = Event.query.filter_by(id = event_id).first()
+        if request.json.get("score_given") > 1 and request.json.get("was_there",None) == True:
+            event.score_amount = event.score_amount + 1
+            event.score_sum = event.score_sum + request.json.get("score_given")
+            event.score = event.score_sum / event.score_amount
+        db.session.commit()
+        return jsonify({"msg": "Participant modified"}), 200
+
+    if request.method == "DELETE":
+        participant_id = Participants.query.filter_by(event_id = event_id, child_id = child_id).first()
+        child_id = Child.query.filter_by(id = participant_id.child_id).first()
+        name = child_id.name + " " + child_id.lastname
+        if not participant_id:
+            return jsonify({"msg": "Participant not found in event"}), 404
+        db.session.delete(participant_id)
+        db.session.commit()
+        return jsonify({"msg": "Deleted participant " + name}), 200
 
 @api.route("/login", methods=["POST"])
 def login():

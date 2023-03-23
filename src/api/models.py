@@ -8,12 +8,21 @@ childs = db.Table('childs',
     db.Column('child_id', db.Integer, db.ForeignKey('child.id'), primary_key=True)
 )
 
-participants = db.Table('participants',
-    db.Column('event_id', db.Integer, db.ForeignKey('event.id'), primary_key=True),
-    db.Column('child_id', db.Integer, db.ForeignKey('child.id'), primary_key=True),
-    db.Column('was_there', db.Boolean),
-    db.Column('score_given', db.Integer)
+eventhistory = db.Table('eventhistory',
+    db.Column('advertiser_id', db.Integer, db.ForeignKey('advertiser.id'), primary_key=True),
+    db.Column('event_id', db.Integer, db.ForeignKey('event.id'), primary_key=True)
 )
+class Participants(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    event_id = db.Column(db.Integer, db.ForeignKey('event.id'))
+    child_id = db.Column(db.Integer, db.ForeignKey('child.id'))
+    was_there = db.Column(db.Boolean)
+    score_given = db.Column(db.Integer)
+
+    #Relationships
+    event = db.relationship("Event")
+    child = db.relationship("Child")
+
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -94,9 +103,11 @@ class Advertiser(db.Model):
     avatar = db.Column(db.String(100), unique=False, nullable=True)
     company_image = db.Column(db.String(100), unique=False, nullable=True)
     others = db.Column(db.String(300), unique=False, nullable=True)
+    events = db.relationship('Event', secondary = eventhistory)  
 
      #Relationships
     user = db.relationship("User")
+   
 
     def serialize(self):
         return {
@@ -135,10 +146,11 @@ class Event(db.Model):
     company = db.Column(db.String(150), db.ForeignKey("advertiser.company"))
     cloth = db.Column(db.String(300), unique=False, nullable=True)
     others = db.Column(db.String(300), unique=False, nullable=True)
-    participants = db.relationship('Child', secondary = participants)
+    participants = db.Column(db.Integer, db.ForeignKey("participants.id"))
     
     # Relationships
     avertiser = db.relationship("Advertiser", foreign_keys = [id_advertiser])
+    participants = db.relationship("Participants")
 
     def serialize(self):
         return {
