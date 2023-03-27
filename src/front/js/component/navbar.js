@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import PekeFun from "../../img/pekefun1.png";
+import PekeFun from "../../img/pekefun2.png";
 import { Modal_login_signup } from "./modal_login_signup.js";
 import { Logout } from "./logout.js";
 
@@ -18,8 +18,8 @@ export const Navbar = () => {
   };
 
   return (
-    <div className="container">
-      <nav className="navbar navbar-expand-lg navbar-light bg-#19d8b6">
+    <div className="container-fluid">
+      <nav className="navbar navbar-expand-lg navbar-light bg-#19d8b6 ">
         <div className="container">
           <Link to="/" className="navbar-brand">
             <img src={PekeFun} alt="" width="200" height="200" />
@@ -89,7 +89,7 @@ export const Navbar = () => {
             </ul>
                   {/* Barra de búsqueda */}
           <form className="d-flex">
-          <input type="text" placeholder="Buscar..." className="form-control search-input" />
+          <input type="text" placeholder="..." className="form-control search-input" />
             <button className="btn btn-outline-success" type="submit">Buscar</button>
           </form>
 
