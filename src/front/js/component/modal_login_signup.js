@@ -45,6 +45,9 @@ export const Modal_login_signup = () => {
       if (isRegistered) {
         const token = await actions.login(email, password);
         if (token) {
+          // Almacenar el email en el localStorage con la key "username"
+          localStorage.setItem("username", email);
+  
           if (showTutorForm) {
             handleTutorFormSubmit(token);
           } 

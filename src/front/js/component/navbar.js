@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Modal_login_signup } from "./modal_login_signup.js";
 import { Logout } from "./logout.js";
+import { FavoritesDropdown } from "./favorites_dropdown.js";
 
 export const Navbar = () => {
 	return (
@@ -17,7 +18,7 @@ export const Navbar = () => {
 				</div>
 				<Modal_login_signup />
 				<Logout />
-
+				<FavoritesDropdown />
 			</div>
 		</nav>
 	);
