@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import PekeFun from "../../img/pekefun2.png";
 import { Modal_login_signup } from "./modal_login_signup.js";
 import { Logout } from "./logout.js";
+import { FavoritesDropdown } from "./favorites_dropdown.js";
 
 export const Navbar = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);

@@ -3,6 +3,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 		store: {
 			token: null,
 			username: null,
+			favorites: [],
+            selectFavorites: [],
+			selectEvent: [],
 			message: null,
 			demo: [
 				{
@@ -25,6 +28,24 @@ const getState = ({ getStore, getActions, setStore }) => {
 				children: []
 			},
 
+			eventData: {
+				name: "",
+				street: "",
+				city: "",
+				min_age: "",
+				max_age: "",
+				price: "",
+				date: "",
+				length: "",
+				category: "",
+				slots: "",
+				description: "",
+				contact: "",
+				company: "",
+				cloth: "",
+				others: "",
+			},
+
 			advertiserData: {
 				name: "",
 				lastName: "",
@@ -35,7 +56,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 				company: "",
 				working_since: "",
 				twitter: "",
-
 			},
 
 			childData: null,
@@ -74,6 +94,17 @@ const getState = ({ getStore, getActions, setStore }) => {
 				setStore({ demo: demo });
 			},
 
+			addFavorite: ({id, name}, favorites) => {
+                console.log("entró", {id, name});
+                setStore({ favorites: [...favorites, {name}]});
+            },
+
+            deleteFavorite: ({id, name}, favorites) => {
+                console.log("pedido de baja", {id, name});
+                const updatedFavorites = favorites.filter((favorite) => favorite.name !== name);
+                setStore({ favorites: updatedFavorites });
+            },
+
 			addChild: (childData) => {
 				const store = getStore();
 				const newChildren = [...store.tutorData.children, childData];
@@ -82,12 +113,26 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 
 			//Para sincronizar el token almacenado en el almacenamiento local (localStorage) con el estado de la aplicación (setStore)
-			syncToken: () => {
+			syncTokenAndEmail: () => {
 				const token = localStorage.getItem("token");
+				const email = localStorage.getItem("email");
 				console.log("App just loaded, synching the local storage");
-				if (token && token != "" && token != undefined) setStore({ token: token }); // Si el token existe y no está vacío ni es undefined, actualiza el estado de la aplicación con el token obtenido del almacenamiento local.
-
+			
+				let updatedStore = {};
+			
+				if (token && token !== "" && token !== "undefined") {
+					updatedStore.token = token;
+				}
+			
+				if (email && email !== "" && email !== "undefined") {
+					updatedStore.email = email;
+				}
+			
+				if (Object.keys(updatedStore).length > 0) {
+					setStore(updatedStore);
+				}
 			},
+	
 
 			login: async (email, password) => {
 
@@ -239,6 +284,70 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			},
 
+
+			/*FALTA EL GET EVENT y MODIFY EVENT*/
+
+			createEvent: async (email, eventData, token) => {
+				console.log("%%%%%%%%%%%%", email, eventData, "%%%%%%%%%%%%%");
+				try {
+					let user = {
+						"username": email,
+						"name": eventData.name,
+						"localization": eventData.street + ", " + eventData.city + ", Spain",
+						"min_age": eventData.min_age,
+						"max_age": eventData.max_age,
+						"price": eventData.price,
+						"date": eventData.date,
+						"length": eventData.length,
+						"category": eventData.category,
+						"slots": eventData.slots,
+						"description": eventData.description,
+						"contact": eventData.contact,
+						"company": eventData.company,
+						"cloth": eventData.cloth,
+						"others": eventData.others
+					};
+
+					let event = Object.assign({}, user, eventData);
+					console.log("+++++++++", event, "+++++++");
+					const eventRequestOptions = {
+						method: "POST",
+						headers: {
+							"Content-type": "application/json"
+						},
+						body: JSON.stringify(event)
+					};
+
+					const eventResp = await fetch(process.env.BACKEND_URL + "/api/event", eventRequestOptions);
+					const eventDataResp = await eventResp.json();
+					console.log("Evento creado OK!!!! Respuesta del back:", eventDataResp);
+
+				} catch (error) {
+					console.error("Error al crear el Evento:", error);
+				}
+			},
+
+			/*
+			getEvent: async (email, token) => {
+				try {
+					let user = { "username": email }
+					const tutorRequestOptions = {
+						method: "GET",
+						headers: {
+							"Content-type": "application/json"
+						},
+						body: JSON.stringify(user)
+					};		
+
+					const eventResp = await fetch(process.env.BACKEND_URL + "/api/event", eventRequestOptions);
+					const eventDataResp = await eventResp.json();
+					console.log("Evento creado OK!!!! Respuesta del back:", eventDataResp);
+
+				} catch (error) {
+					console.error("Error al crear el Evento:", error);
+				}
+			},*/
+
 			modifyTutor: async (email, tutorData, token) => {
 				try {
 					let user = { "username": email }
@@ -262,6 +371,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			},
 
+			
 			createAdvertiser: async (email, advertiserData) => {
 				try {
 					let user = {
@@ -296,7 +406,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 					console.error("Error al crear anunciante:", error);
 				}
 			},
-
 		}
 	};
 };
