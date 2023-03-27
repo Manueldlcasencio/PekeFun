@@ -38,6 +38,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 			},
 
+			childData: null,
+
 		},
 		actions: {
 			// Use getActions to call a function within a fuction
@@ -135,53 +137,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 						const data = await resp.json();
 						console.log("User data:", data);
-						
-						/*if (setShowTutorForm) {
-							console.log("*****PRUEBA*****")
-							actions.createTutor(email, tutorData, token)*/
-							/*let user = {"username": email}
-							let userTutor = Object.assign({}, user, tutorData)
-							console.log(userTutor)
-							const tutorRequestOptions = {
-								method: "POST",
-								headers: {
-									"Content-type": "application/json"
-								},
-								body: JSON.stringify(userTutor)
-							};
-				
-							const tutorResp = await fetch(process.env.BACKEND_URL + "/api/signup/tutor", tutorRequestOptions)
-							const tutorDataResp = await tutorResp.json();
-							console.log("Tutor data:", tutorDataResp);*/
-				
-							/*if (tutorResp.status === 200 && tutorData.children.length > 0) {
-								const childRequestOptions = {
-									method: "POST",
-									headers: {
-										"Content-type": "application/json"
-									},
-									body: JSON.stringify(tutorData.children)
-								};
-								const childResp = await fetch(process.env.BACKEND_URL + "/api/signup/tutor/child", childRequestOptions)
-								const childDataResp = await childResp.json();
-								console.log("Child data:", childDataResp);
-							}
-						}
-				
-						if (setShowAdvertiserForm === true) {
-							const advertiserRequestOptions = {
-								method: "POST",
-								headers: {
-									"Content-type": "application/json"
-								},
-								body: JSON.stringify(advertiserData)
-							};
-				
-							const advertiserResp = await fetch(process.env.BACKEND_URL + "/api/signup/advertiser", advertiserRequestOptions)
-							const advertiserDataResp = await advertiserResp.json();
-							console.log("Advertiser data:", advertiserDataResp);
-						}*/
-					
+
 						return true;
 					} else {
 						console.log("error en API/signup");
@@ -192,8 +148,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 					console.error("There has been an error creating a user")
 				}
 			},
-			
-			
 
 			getUserData:
 				async () => {
@@ -216,15 +170,21 @@ const getState = ({ getStore, getActions, setStore }) => {
 			logout: () => {
 				const token = localStorage.removeItem("token");
 				setStore({ token: null });
-			},
+			}, 
 
-			
-			createTutor: async (email, tutorData, token) => {
-				console.log("**************", email, tutorData, "**********")
+
+			createTutor: async (email, tutorData) => {
+				console.log("**************", email, tutorData, "**********");
 				try {
-					let user = {"username": email}
-					let userTutor = Object.assign({}, user, tutorData)
-					console.log(userTutor)
+					let user = {
+						"username": email,
+						"name": tutorData.name,
+						"lastname": tutorData.lastName,
+						"birth": tutorData.birthDate,
+						"location": tutorData.city
+					};
+					let userTutor = Object.assign({}, user, tutorData);
+					console.log("+++++++++", userTutor, "+++++++");
 					const tutorRequestOptions = {
 						method: "POST",
 						headers: {
@@ -232,10 +192,46 @@ const getState = ({ getStore, getActions, setStore }) => {
 						},
 						body: JSON.stringify(userTutor)
 					};
-		
-					const tutorResp = await fetch(process.env.BACKEND_URL + "/api/signup/tutor", tutorRequestOptions)
+
+					const tutorResp = await fetch(process.env.BACKEND_URL + "/api/signup/tutor", tutorRequestOptions);
 					const tutorDataResp = await tutorResp.json();
 					console.log("Tutor data:", tutorDataResp);
+
+					// Verificar si el tutor se creó con éxito
+					if (tutorResp.status === 200) {
+						// Añadir hijos (children) al tutor creado una vez que se creó
+						for (const child of tutorData.children) {
+							const childData = {
+								...child,
+								"name": child.name,
+								"username": email,
+								"lastname": child.lastName,
+								"preferences": child.preferences || "",
+								"avatar": child.avatar || "",
+								"school": child.school || "",
+								"others": child.others || "",
+								"parent": child.parent || "",
+								"birth": child.birth
+							};
+							
+							const childRequestOptions = {
+								method: "POST",
+								headers: {
+									"Content-type": "application/json"
+								},
+								body: JSON.stringify(childData)
+							};
+
+							const childResp = await fetch(process.env.BACKEND_URL + "/api/signup/tutor/child", childRequestOptions);
+							const childDataResp = await childResp.json();
+							console.log("Child data:", childDataResp);
+						}
+
+					} else {
+						console.error("Error al crear tutor:", tutorDataResp);
+						return false;
+					}
+
 					return true;
 
 				} catch (error) {
@@ -244,9 +240,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 
 			modifyTutor: async (email, tutorData, token) => {
-				console.log("$$$$$$", email, tutorData, "$$$$$$")
 				try {
-					let user = {"username": email}
+					let user = { "username": email }
 					let userTutor = Object.assign({}, user, tutorData)
 					console.log(userTutor)
 					const tutorRequestOptions = {
@@ -256,7 +251,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 						},
 						body: JSON.stringify(userTutor)
 					};
-		
+
 					const tutorResp = await fetch(process.env.BACKEND_URL + "/api/signup/tutor", tutorRequestOptions)
 					const tutorDataResp = await tutorResp.json();
 					console.log("Tutor data:", tutorDataResp);
@@ -267,21 +262,36 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			},
 
-			createAdvertiser: async (advertiserData, token) => {
+			createAdvertiser: async (email, advertiserData) => {
 				try {
-					const response = await fetch(process.env.BACKEND_URL + "/api/signup/advertiser", {
+					let user = {
+						"username": email,
+						"name": advertiserData.name,
+						"lastname": advertiserData.lastName,
+						"birth": advertiserData.birthDate,
+						"location": advertiserData.city,
+						"contact": advertiserData.contact,
+						"avatar": advertiserData.avatar,
+						"company": advertiserData.company,
+						"working_since": advertiserData.working_since,
+						"twitter": advertiserData.twitter
+					}
+
+					let userAdvertiser = Object.assign({}, user, advertiserData)
+					const advertiserRequestOptions = {
 						method: "POST",
 						headers: {
-							"Content-Type": "application/json",
-							"Authorization": `Bearer ${token}`,
+							"Content-type": "application/json"
 						},
-						body: JSON.stringify(advertiserData),
-					});
-					if (response.ok) {
-						console.log("RESPONSE RECIBIDA EN FRONT para Anunciante: OK)");
-					} else {
-						throw new Error("Error al crear anunciante");
-					}
+						body: JSON.stringify(userAdvertiser)
+					};
+
+					const advertiserResp = await fetch(process.env.BACKEND_URL + "/api/signup/advertiser", advertiserRequestOptions)
+					const advertiserDataResp = await advertiserResp.json();
+					console.log("advertiser data:", advertiserDataResp);
+
+					return true;
+
 				} catch (error) {
 					console.error("Error al crear anunciante:", error);
 				}
@@ -292,117 +302,3 @@ const getState = ({ getStore, getActions, setStore }) => {
 };
 
 export default getState;
-
-
-
-/* PRUEBA PARA CONEXION CON API:
-
-const getState = ({ getStore, getActions, setStore }) => {
-	return {
-		store: {
-			message: null,
-			demo: [
-				{
-					title: "FIRST",
-					background: "white",
-					initial: "white"
-				},
-				{
-					title: "SECOND",
-					background: "white",
-					initial: "white"
-				}
-			]
-		},
-		actions: {
-			// Use getActions to call a function within a fuction
-			exampleFunction: () => {
-				getActions().changeColor(0, "green");
-			},
-
-			getMessage: async () => {
-				try{
-					// fetching data from the backend
-					const resp = await fetch(process.env.BACKEND_URL + "/api/hello")
-					const data = await resp.json()
-					setStore({ message: data.message })
-					// don't forget to return something, that is how the async resolves
-					return data;
-				}catch(error){
-					console.log("Error loading message from backend", error)
-				}
-			},
-			changeColor: (index, color) => {
-				//get the store
-				const store = getStore();
-
-				//we have to loop the entire demo array to look for the respective index
-				//and change its color
-				const demo = store.demo.map((elm, i) => {
-					if (i === index) elm.background = color;
-					return elm;
-				});
-
-				//reset the global store
-				setStore({ demo: demo });
-			},
-
-			handleChange: (e, formType) => {
-				const store = getStore();
-				setStore({ [formType]: { ...store[formType], [e.target.name]: e.target.value } });
-			},
-
-			handleSignup: async (e) => {
-				e.preventDefault();
-				const store = getStore();
-
-				try {
-					const response = await fetch(process.env.BACKEND_URL + "/api/signup", {
-						method: "POST",
-						headers: {
-							"Content-Type": "application/json"
-						},
-						body: JSON.stringify(store.signup)
-					});
-
-					const data = await response.json();
-					if (response.ok) {
-						alert("Usuario registrado exitosamente!");
-					} else {
-						alert(data.msg);
-					}
-				} catch (error) {
-					console.log("Error al registrar usuario:", error);
-				}
-			},
-
-			handleLogin: async (e) => {
-				e.preventDefault();
-				const store = getStore();
-
-				try {
-					const response = await fetch(process.env.BACKEND_URL + "/api/login", {
-						method: "POST",
-						headers: {
-							"Content-Type": "application/json"
-						},
-						body: JSON.stringify(store.login)
-					});
-
-					const data = await response.json();
-					if (response.ok) {
-						sessionStorage.setItem("access_token", data.access_token);
-						alert("Inicio de sesión exitoso!");
-					} else {
-						alert(data.msg);
-					}
-				} catch (error) {
-					console.log("Error al iniciar sesión:", error);
-				}
-			}
-		}
-	};
-};
-
-export default getState;
-*/
