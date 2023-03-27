@@ -1,19 +1,9 @@
-import React, { Component } from "react";
-import GoogleMapReact from "google-map-react";
+import React, { useState } from "react";
 import "../../styles/social.css";
 
 export const Social_media = () => {
-  const defaultProps = {
-    center: {
-      lat: 10.99835602,
-      lng: 77.01502627,
-    },
-    zoom: 11,
-    greatPlaces: [
-      { id: "A", lat: 10.99835602, lng: 77.01502627 },
-      { id: "B", lat: 59.724, lng: 30.08 },
-    ],
-  };
+  const [count, setCount] = useState(0);
+  let place = ["Atocha, Madid", "Santa Justa, Sevilla"];
 
   return (
     <div className="social-div">
@@ -63,25 +53,43 @@ export const Social_media = () => {
           </div>
         </div>
         <div className="m-3 p-3 half">
-          <h5 className="text-center">Nuestros eventos</h5>
-          <div
-            className="map"
-            style={{ height: "390px", width: "100%", borderRadius: "25px" }}
-          >
-            <GoogleMapReact
-              bootstrapURLKeys={{
-                key: "AIzaSyAA0p9RXeAwigbbMWcrtJ6f0pl8pesrj8E",
-              }}
-              defaultCenter={defaultProps.center}
-              defaultZoom={defaultProps.zoom}
-            ></GoogleMapReact>
+          <h5 className="text-center">Algunos de nuestros eventos</h5>
+          <div className="container d-inline-flex">
+            <div width="5%" className="d-flex flex-column mx-2">
+              <button
+                type="button boton"
+                class="btn btn-success boton my-1"
+                onClick={() => {
+                  setCount(count + 1);
+                }}
+              >
+                Siguiente
+              </button>
+              <button
+                type="button"
+                class="btn btn-danger boton my-1"
+                onClick={() => {
+                  setCount(count - 1);
+                }}
+              >
+                Anterior
+              </button>
+            </div>
+            <iframe
+              loading="lazy"
+              width="75%"
+              height="380px"
+              allowfullscreen
+              src={
+                "https://www.google.com/maps/embed/v1/place?key=AIzaSyAA0p9RXeAwigbbMWcrtJ6f0pl8pesrj8E&q=" +
+                place[count]
+              }
+            />
           </div>
         </div>
-        <script
-          src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAA0p9RXeAwigbbMWcrtJ6f0pl8pesrj8E&callback=initMap&v=weekly"
-          defer
-        ></script>
       </div>
     </div>
   );
 };
+
+// Google API Key: AIzaSyAA0p9RXeAwigbbMWcrtJ6f0pl8pesrj8E

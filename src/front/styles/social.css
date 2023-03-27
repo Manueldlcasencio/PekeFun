@@ -1,59 +1,63 @@
 .social-div {
-    width: 100%;
-    margin-left: auto;
-    margin-right: auto;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .social-header {
-    width: 100%;
-    background-color: #feb823;
-    margin-left: auto;
-    margin-right: auto;
-    text-align: center;
-    padding: 5px;
-    box-shadow: inset 0 -3em 3em rgba(0, 0, 0, 0.1), 0 0 0 2px rgb(255, 255, 255),
-        0.3em 0.3em 1em rgba(0, 0, 0, 0.3);
+  width: 100%;
+  background-color: #feb823;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  padding: 5px;
+  box-shadow: inset 0 -3em 3em rgba(0, 0, 0, 0.1), 0 0 0 2px rgb(255, 255, 255),
+    0.3em 0.3em 1em rgba(0, 0, 0, 0.3);
 }
 
 .card-social {
-    width: 230px;
-    border-radius: 15px !important;
-    min-width: auto;
+  width: 230px;
+  border-radius: 15px !important;
+  min-width: auto;
 }
 
 .cardimg {
-    border-radius: 15px;
-    width: 225px;
-    height: 170px;
+  border-radius: 15px;
+  width: 225px;
+  height: 170px;
 }
 
 .half {
-    width: 50%;
-    height: 420px;
+  width: 50%;
+  height: 420px;
 }
 
 .text-just {
-    text-align: justify;
+  text-align: justify;
 }
 
 .map {
-    height: "390px";
-    width: "100%";
-    border-radius: 15px;
+  height: "390px";
+  width: "100%";
+  border-radius: 15px;
 }
 
 .item {
-    position: "absolute";
-    width: 40px;
-    height: 40px;
-    left: -20px;
-    top: -20px;
-    border: "5px solid #f44336";
-    border-radius: 40px;
-    background-color: "white";
-    text-align: "center";
-    color: "#3f51b5";
-    font-size: 16;
-    font-weight: "bold";
-    padding: 4;
+  position: "absolute";
+  width: 40px;
+  height: 40px;
+  left: -20px;
+  top: -20px;
+  border: "5px solid #f44336";
+  border-radius: 40px;
+  background-color: "white";
+  text-align: "center";
+  color: "#3f51b5";
+  font-size: 16;
+  font-weight: "bold";
+  padding: 4;
+}
+
+.boton {
+  width: 100px !important;
 }
