@@ -12,14 +12,15 @@ import { Footer } from "./component/footer";
 import { Contacto } from "./component/contacto";
 import { Categories } from "./component/categories";
 //import { Carousel } from "./bootstrap/dist/js/bootstrap.min.js";
+import { Social_media } from "./component/social_media.jsx"
 
 
 
 //create your first component
 const Layout = () => {
-    //the basename is used when your project is published in a subdirectory and not in the root of the domain
-    // you can set the basename on the .env file located at the root of this project, E.g: BASENAME=/react-hello-webapp/
-    const basename = process.env.BASENAME || "";
+  //the basename is used when your project is published in a subdirectory and not in the root of the domain
+  // you can set the basename on the .env file located at the root of this project, E.g: BASENAME=/react-hello-webapp/
+  const basename = process.env.BASENAME || "";
 
     return (
         <div>
@@ -35,12 +36,14 @@ const Layout = () => {
                         <Route element={<Categories />} path="/categories" />
 
                     </Routes>
+                    <Social_media />
                     <Footer />
                 </ScrollToTop>
             </BrowserRouter>
 
         </div>
     );
+
 };
 
 
