@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { Context } from "../store/appContext";
-import fondo from "../../img/fondo.png";
+import PekeFun from "../../img/fondo.png";
 import "../../styles/home.css";
 
 
@@ -10,9 +10,9 @@ export const Home = () => {
 
 	return (
 		<div className="text-center mt-5">
-			
+			<h1>***</h1>
 			<p>
-				<img src={fondo} />
+				<img src={PekeFun} />
 			</p>
 
 			{/* -INSERTO CARDS DE ACTIVIDADES EN EL HOME-
@@ -27,6 +27,7 @@ export const Home = () => {
 			</div>
 		</div>
 			*/}
+
 		</div>
 	);
 };
