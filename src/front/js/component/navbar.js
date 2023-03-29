@@ -5,6 +5,21 @@ import { Modal_login_signup } from "./modal_login_signup.js";
 import { Logout } from "./logout.js";
 import { FavoritesDropdown } from "./favorites_dropdown.js";
 
+const categorias = [
+  {
+    nombre: "Deportes",
+    actividades: ["Fútbol", "Escuelas de Surf", ]
+  },
+  {
+    nombre: "Categorias destacadas",
+    actividades: ["Campamentos de verano", "Baile", "Cocina"]
+  },
+  {
+    nombre: "Idiomas",
+    actividades: ["Inglés", "Francés", "Alemán"]
+  }
+];
+
 export const Navbar = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
@@ -47,8 +62,7 @@ export const Navbar = () => {
               </li>
 
               <li className="nav-item dropdown">
-                <Link
-                  to="/"
+                <Link to="/FavoritesDropdown"
                   className="nav-link dropdown-toggle"
                   id="navbarDropdown"
                   role="button"
@@ -56,30 +70,28 @@ export const Navbar = () => {
                   aria-expanded="false"
                 >
                   Actividades principales
-                </Link>
+                  </Link>
                 <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <li>
-                    <a className="dropdown-item" href="#">
-                      Deportes
-                    </a>
-                  </li>
-                  <li>
-                    <a className="dropdown-item" href="#">
-                      Campamentos
-                    </a>
-                  </li>
-                  <li>
-                 
-                  </li>
-                  <li>
-                    <a className="dropdown-item" href="#">
-                      Idiomas
-                    </a>
-                  </li>
-                  <li>
-                 
-                  </li>
-          
+                  {categorias.map((categoria) => (
+                    <li key={categoria.nombre}>
+                      <Link
+                        to={`/categorias/${categoria.nombre}`}
+                        className="dropdown-item"
+                      >
+                        {categoria.nombre}
+                      </Link>
+                      <div className="dropdown-divider"></div>
+                      {categoria.actividades.map((actividad) => (
+                        <Link
+                          to={`/categorias/${categoria.nombre}/${actividad}`}
+                          className="dropdown-item"
+                          key={actividad}
+                        >
+                          {actividad}
+                        </Link>
+                      ))}
+                    </li>
+                  ))}
                 </ul>
               </li>
               <li className="nav-item">
