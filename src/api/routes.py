@@ -266,11 +266,17 @@ def signup_child():
 def advertiser():
     if request.method == "GET":
         username = request.json.get("username", None)
+        if not username:
+            return jsonify({"msg": "You must send a valid username"}), 400
         us_id = User.query.filter_by(email = username).first().id
-        if not username or not us_id:
-            return jsonfiy({"msg": "You must send a valid username"})
+        if not username:
+            return jsonify({"msg": "You must send a valid username"}), 400
         advertiser = Advertiser.query.filter_by(user_id = us_id).first()
-        return jsonify({"info": advertiser.serialize()})
+        events = []
+        for event in advertiser.events:
+            events.append(event.serialize())
+        return jsonify({"info": advertiser.serialize(),
+                        "events": events})
 
     if request.method == "POST":
         username = request.json.get("username", None)
@@ -472,6 +478,60 @@ def participant():
         db.session.delete(participant_id)
         db.session.commit()
         return jsonify({"msg": "Deleted participant " + name}), 200
+
+
+@api.route("event/all", methods=["GET"])
+def eventall():
+    done = request.json.get("done")
+    category = request.json.get("category")
+    word = request.json.get("word")
+    if not str(done) != "" and not category and not word:
+        return jsonify({"msg": "You must send at least one.",
+                        "category": "name of the category",
+                        "done": "true, false (boolean) or all (string)",
+                        "word": "Word to filter names"}), 404
+    response = []
+    if str(done) != "" and not category and not word:
+        if done == False:
+            allactive = Event.query.filter_by(done = False).all()
+            for event in allactive:
+                response.append(event.serialize())
+        elif done == True:
+            unactive = Event.query.filter_by(done = True).all()
+            for event in unactive:
+                response.append(event.serialize())
+        elif done == "all":
+            allevent = Event.query.all()
+            for event in allevent:
+                response.append(event.serialize())
+    
+    if category and not word:
+        if str(done) != "":
+            filtered = Event.query.filter_by(done = done, category = category).all()
+            for event in filtered:
+                response.append(event.serialize())
+        else:
+            filtered = Event.query.filter_by(category = category).all()
+            for event in filtered:
+                response.append(event.serialize())
+
+    if word:
+        if str(done) != "" and category:
+            filtered = Event.query.filter_by(done = done, category = category).filter(Event.name.contains(word)).all()
+            for event in filtered:
+                response.append(event.serialize())
+        if str(done) != "" and not category:
+            filtered = Event.query.filter_by(done = done).filter(Event.name.contains(word)).all()
+            for event in filtered:
+                response.append(event.serialize())
+        else:
+            filtered = Event.query.filter(Event.name.contains(word)).all()
+            for event in filtered:
+                response.append(event.serialize())
+    return jsonify({"msg": response}), 200
+    
+
+
 
 @api.route("/login", methods=["POST"])
 def login():
