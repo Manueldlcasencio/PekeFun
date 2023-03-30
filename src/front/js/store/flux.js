@@ -57,7 +57,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				working_since: "",
 				twitter: "",
 			},
-
+			categories: ["Escuelas de Surf", "Clases de Teatro", "Campamentos de Verano", "Campings", "Parques Acuáticos", "Cocina", "Programación", "Música", "Fútbol", "Baile"],
 			childData: null,
 
 		},
@@ -327,26 +327,29 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			},
 
-			/*
-			getEvent: async (email, token) => {
+
+
+			//PARA UN EVENTO ESPECÍFICO, VER CÓMO CAPTURAR EL ID DEL EVENTO, PARA TODOS LOS EVENTOS SERÍA TAL COMO ESTÁ.
+			getEvents: async () => {
 				try {
-					let user = { "username": email }
-					const tutorRequestOptions = {
+					let event = { "done": "all" }
+					const eventsRequestOptions = {
 						method: "GET",
 						headers: {
 							"Content-type": "application/json"
 						},
-						body: JSON.stringify(user)
+						body: JSON.stringify(event)
 					};		
 
-					const eventResp = await fetch(process.env.BACKEND_URL + "/api/event", eventRequestOptions);
-					const eventDataResp = await eventResp.json();
-					console.log("Evento creado OK!!!! Respuesta del back:", eventDataResp);
+					const eventsResp = await fetch(process.env.BACKEND_URL + "/api/event/all", eventsRequestOptions);
+					const eventsDataResp = await eventsResp.json();
+					console.log("Info almacenada de los eventos:", eventsDataResp);
+
 
 				} catch (error) {
 					console.error("Error al crear el Evento:", error);
 				}
-			},*/
+			},
 
 			modifyTutor: async (email, tutorData, token) => {
 				try {
