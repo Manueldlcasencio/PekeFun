@@ -12,9 +12,8 @@ import { Footer } from "./component/footer";
 import { Contacto } from "./component/contacto";
 import { Categories } from "./component/categories";
 //import { Carousel } from "./bootstrap/dist/js/bootstrap.min.js";
-import { Social_media } from "./component/social_media.jsx"
-
-
+import { Social_media } from "./component/social_media.jsx";
+import { User_profile } from "./pages/user_profile.jsx";
 
 //create your first component
 const Layout = () => {
@@ -22,31 +21,25 @@ const Layout = () => {
   // you can set the basename on the .env file located at the root of this project, E.g: BASENAME=/react-hello-webapp/
   const basename = process.env.BASENAME || "";
 
-    return (
-        <div>
-            <BrowserRouter basename={basename}>
-                <ScrollToTop>
-                    <Navbar />
-                    <Routes>
-                        <Route element={<Home />} path="/" />
-                        <Route element={<Demo />} path="/demo" />
-                        <Route element={<Single />} path="/single/:theid" />
-                        <Route element={<h1>Not found!</h1>} />
-                        <Route element={<Contacto />} path="/contacto" />
-                        <Route element={<Categories />} path="/categories" />
-
-                    </Routes>
-                    <Social_media />
-                    <Footer />
-                </ScrollToTop>
-            </BrowserRouter>
-
-        </div>
-    );
-
+  return (
+    <div>
+      <BrowserRouter basename={basename}>
+        <ScrollToTop>
+          <Navbar />
+          <Routes>
+            <Route element={<Home />} path="/" />
+            <Route element={<Demo />} path="/demo" />
+            <Route element={<Single />} path="/single/:theid" />
+            <Route element={<h1>Not found!</h1>} />
+            <Route element={<Contacto />} path="/contacto" />
+            <Route element={<Categories />} path="/categories" />
+          </Routes>
+          <User_profile />
+          <Footer />
+        </ScrollToTop>
+      </BrowserRouter>
+    </div>
+  );
 };
 
-
-
 export default injectContext(Layout);
-
