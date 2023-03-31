@@ -8,6 +8,72 @@ export const Create_event_form = () => {
     name: "", street: "", city: "", min_age: "", max_age: "", price: "", date: "", length: "", category: "", slots: "", description: "", contact: "", company: "", cloth: "", others: ""
   });
   const email = localStorage.getItem('email');
+  
+  /*ARRAY DE PRUEBA (EVENTS ARRAY), BORRAR LUEGO!!!!!!*/
+  const eventsArray = [
+  {
+    name: "Fiesta de disfraces",
+    street: "Calle de la Esperanza",
+    city: "Madrid",
+    min_age: 5,
+    max_age: 12,
+    price: 10,
+    date: "2023-04-20",
+    length: 3,
+    category: "Fiestas",
+    slots: 50,
+    description: "Ven a divertirte en nuestra fiesta de disfraces para niños.",
+    contact: "info@eventos-niños.es",
+    company: "Eventos Niños",
+    cloth: "Disfraz",
+    others: "Traer merienda"
+  },
+  {
+    name: "Taller de pintura",
+    street: "Calle del Sol",
+    city: "Barcelona",
+    min_age: 6,
+    max_age: 14,
+    price: 15,
+    date: "2023-05-10",
+    length: 2,
+    category: "Arte",
+    slots: 20,
+    description: "Aprende a pintar con acuarelas en nuestro taller de pintura para niños.",
+    contact: "talleres@arte-niños.es",
+    company: "Arte Niños",
+    cloth: "Ropa cómoda",
+    others: "Todos los materiales incluidos"
+  },
+  {
+    name: "Clase de baile",
+    street: "Calle de la Luna",
+    city: "Valencia",
+    min_age: 4,
+    max_age: 10,
+    price: 5,
+    date: "2023-04-30",
+    length: 1,
+    category: "Danza",
+    slots: 15,
+    description: "Diviértete aprendiendo a bailar en nuestra clase de baile para niños.",
+    contact: "info@danza-niños.es",
+    company: "Danza Niños",
+    cloth: "Ropa de baile",
+    others: "Zapatillas de baile"
+  }
+];
+
+//formula para prueba de array A BORRAR!!!
+const handleTestEvents = () => {
+  const email = localStorage.getItem('username');
+  const token = localStorage.getItem('token')
+
+  eventsArray.forEach(event => {
+    actions.createEvent(email, event, token);
+  });
+};
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -157,6 +223,9 @@ export const Create_event_form = () => {
 
       <div className="col-12">
         <button className="btn btn-primary" type="submit">Publicar mi evento!</button>
+        <button className="btn btn-secondary" type="button" onClick={handleTestEvents}> /*BORRAR LUEGO!!!!!!!!*/
+          Enviar eventos de prueba
+        </button>
       </div>
     </form>
   );

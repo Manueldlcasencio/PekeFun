@@ -6,6 +6,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			favorites: [],
             selectFavorites: [],
 			selectEvent: [],
+			selectCategory: null,
 			message: null,
 			demo: [
 				{
@@ -288,10 +289,10 @@ const getState = ({ getStore, getActions, setStore }) => {
 			/*FALTA EL GET EVENT y MODIFY EVENT*/
 
 			createEvent: async (email, eventData, token) => {
-				console.log("%%%%%%%%%%%%", email, eventData, "%%%%%%%%%%%%%");
 				try {
 					let user = {
-						"username": email,
+						"username": email}
+					let eventObj = {
 						"name": eventData.name,
 						"localization": eventData.street + ", " + eventData.city + ", Spain",
 						"min_age": eventData.min_age,
@@ -302,18 +303,16 @@ const getState = ({ getStore, getActions, setStore }) => {
 						"category": eventData.category,
 						"slots": eventData.slots,
 						"description": eventData.description,
-						"contact": eventData.contact,
-						"company": eventData.company,
 						"cloth": eventData.cloth,
 						"others": eventData.others
 					};
 
-					let event = Object.assign({}, user, eventData);
-					console.log("+++++++++", event, "+++++++");
+					let event = Object.assign({}, user, eventObj);
 					const eventRequestOptions = {
 						method: "POST",
 						headers: {
-							"Content-type": "application/json"
+							"Content-type": "application/json",
+							//"Authorization": "Bearer " + token
 						},
 						body: JSON.stringify(event)
 					};
@@ -327,29 +326,41 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			},
 
-
-
-			//PARA UN EVENTO ESPECÍFICO, VER CÓMO CAPTURAR EL ID DEL EVENTO, PARA TODOS LOS EVENTOS SERÍA TAL COMO ESTÁ.
+	
 			getEvents: async () => {
 				try {
-					let event = { "done": "all" }
-					const eventsRequestOptions = {
-						method: "GET",
-						headers: {
-							"Content-type": "application/json"
-						},
-						body: JSON.stringify(event)
-					};		
-
-					const eventsResp = await fetch(process.env.BACKEND_URL + "/api/event/all", eventsRequestOptions);
+					const params = new URLSearchParams({
+						done: "all",
+						// Modificar/agregar otros parámetros de ser necesario, como palabra de búsqueda (word) o categoría (category)
+					});
+			
+					const eventsResp = await fetch(`${process.env.BACKEND_URL}/api/event/all?${params.toString()}`);
+			
 					const eventsDataResp = await eventsResp.json();
 					console.log("Info almacenada de los eventos:", eventsDataResp);
-
-
+			
 				} catch (error) {
-					console.error("Error al crear el Evento:", error);
+					console.error("Error al obtener los eventos:", error);
 				}
 			},
+
+			searchEvents: async (selectCategory) => {
+				try {
+					const params = new URLSearchParams({
+						category: selectCategory,
+						// Modificar/agregar otros parámetros de ser necesario, como palabra de búsqueda (word) o categoría (category)
+					});
+			
+					const eventsResp = await fetch(`${process.env.BACKEND_URL}/api/event/all?${params.toString()}`);
+			
+					const eventsDataResp = await eventsResp.json();
+					console.log("Eventos almacenados en esta categoría:", eventsDataResp);
+			
+				} catch (error) {
+					console.error("Error al obtener los eventos de esta categoría:", error);
+				}
+			},
+			
 
 			modifyTutor: async (email, tutorData, token) => {
 				try {
