@@ -378,7 +378,7 @@ def event():
             return jsonify({"msg": "You must send a valid username that is an advertiser"}), 400
         missing = []
         for item in required:
-            if item not in request.json and item != "id" and item != "id_advertiser" and item != score and item != score_amount and item != score_sum and item != done and item != participants:
+            if item not in request.json and item != "id" and item != "id_advertiser" and item != "score" and item != "score_amount" and item != "score_sum" and item != "done" and item != "participants" and item != "company" and item != "contact":
                 missing.append(item)
         if missing != []:
             return jsonify({"missing": missing }), 400
@@ -393,10 +393,9 @@ def event():
                       category = request.json.get("category", None),
                       slots = request.json.get("slots", None),
                       description = request.json.get("description", None),
-                      contact = request.json.get("contact", None),
-                      company = request.json.get("company", None),
                       cloth = request.json.get("cloth", None),
                       others = request.json.get("others", None),
+                      done = False,
                       score = 0,
                       score_amount = 0,
                       score_sum = 0)
