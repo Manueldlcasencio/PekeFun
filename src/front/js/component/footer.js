@@ -35,13 +35,13 @@ export const Footer = () => {
 
             <ul className="list-unstyled mt-3">
               <li>
-                <a href="#" className="text-decoration-none text-white"><i className="bi bi-facebook"></i></a>
+                <Link to="/" className="text-decoration-none text-white"><i className="bi bi-facebook"></i></Link>
               </li>
               <li>
-                <a href="#" className="text-decoration-none text-white"><i className="bi bi-twitter"></i></a>
+                <Link to="/" className="text-decoration-none text-white"><i className="bi bi-twitter"></i></Link>
               </li>
               <li>
-                <a href="#" className="text-decoration-none text-white"><i className="bi bi-instagram"></i></a>
+                <Link to="/" className="text-decoration-none text-white"><i className="bi bi-instagram"></i></Link>
               </li>
             </ul>
           </div>
@@ -50,8 +50,12 @@ export const Footer = () => {
 
       <div className="text-center p-3" style={{ backgroundColor: "#feb823" }}>
         © 2023 PekeFun. Todos los derechos reservados.
+        <div>
+          <Link to="/" className="text-decoration-none text-white me-3"><i className="bi bi-facebook"></i></Link>
+          <Link to="/" className="text-decoration-none text-white me-3"><i className="bi bi-twitter"></i></Link>
+          <Link to="/" className="text-decoration-none text-white"><i className="bi bi-instagram"></i></Link>
+        </div>
       </div>
     </footer>
   );
 };
-

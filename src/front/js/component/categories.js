@@ -4,6 +4,9 @@ import Surf from "../../img/surf.png";
 import Campamento from "../../img/campamento.png";
 import Teatro from "../../img/teatro1.png";
 import Acuatico from "../../img/acuatico.png";
+import Baile from "../../img/baile.png";
+import Cocina from "../../img/cocina.png";
+import Futbol from "../../img/futbol.png";
 import { Link } from "react-router-dom";
 
 export const Categories = () => {
@@ -13,115 +16,98 @@ export const Categories = () => {
     setIndex(selectedIndex);
   };
 
+  const items = [
+    {
+      image: Surf,
+      url: "/surfcamp",
+    },
+    {
+      image: Campamento,
+      url: "/campamento",
+    },
+    {
+      image: Teatro,
+      url: "/teatro",
+    },
+    {
+      image: Acuatico,
+      url: "/acuatico",
+    },
+    {
+      image: Baile,
+      url: "/baile",
+    },
+    {
+      image: Futbol,
+      url: "/futbol",
+    },
+
+    {
+      image: Cocina,
+      url: "/cocina",
+    },
+
+    {
+      image: Cocina,
+      url: "/cocina",
+    },
+
+    {
+      image: Cocina,
+      url: "/cocina",
+    },
+
+    {
+      image: Cocina,
+      url: "/cocina",
+    },
+
+
+
+  ];
+
+  const itemsToRender = [];
+
+  for (let i = 0; i < items.length; i += 3) {
+    const item = (
+      <Carousel.Item key={i}>
+        <div className="d-flex justify-content-between">
+          <div className="w-30">
+            <Link to={items[i].url}>
+              <img className="d-block w-100" src={items[i].image} alt={i} />
+            </Link>
+          </div>
+          <div className="w-30">
+            {i + 1 < items.length && (
+              <Link to={items[i + 1].url}>
+                <img
+                  className="d-block w-100"
+                  src={items[i + 1].image}
+                  alt={i + 1}
+                />
+              </Link>
+            )}
+          </div>
+          <div className="w-30">
+            {i + 2 < items.length && (
+              <Link to={items[i + 2].url}>
+                <img
+                  className="d-block w-100"
+                  src={items[i + 2].image}
+                  alt={i + 2}
+                />
+              </Link>
+            )}
+          </div>
+        </div>
+      </Carousel.Item>
+    );
+    itemsToRender.push(item);
+  }
+
   return (
-    <div className="container d-flex justify-content-center ">
-      <div className="w-75">
-        <Carousel activeIndex={index} onSelect={handleSelect} slide={true}>
-          <Carousel.Item>
-            <img className="d-block w-100" src={Surf} alt="First slide" />
-            <Carousel.Caption>
-              <Link to="/" style={{ textDecoration: "none" }}>
-                <h3
-                  style={{
-                    color: "#0B6152",
-                    textShadow: "2px 2px 8px #fff",
-                  }}
-                >
-                  Escuelas de Surf
-                </h3>
-              </Link>
-            </Carousel.Caption>
-          </Carousel.Item>
-
-          <Carousel.Item>
-            <img className="d-block w-100" src={Teatro} alt="Second slide" />
-            <Carousel.Caption>
-              <Link to="/" style={{ textDecoration: "none" }}>
-                <h3
-                  style={{
-                    color: "#0B6152",
-                    textShadow: "2px 2px 8px #fff",
-                  }}
-                >
-                  Clases de Teatro
-                </h3>
-              </Link>
-            </Carousel.Caption>
-          </Carousel.Item>
-
-          <Carousel.Item>
-            <img
-              className="d-block w-100"
-              src={Campamento}
-              alt="Third slide"
-            />
-            <Carousel.Caption>
-              <Link to="/" style={{ textDecoration: "none" }}>
-                <h3
-                  style={{
-                    color: "#0B6152",
-                    textShadow: "2px 2px 8px #fff",
-                  }}
-                >
-                  Campamentos de Verano{" "}
-                </h3>
-              </Link>
-            </Carousel.Caption>
-          </Carousel.Item>
-
-          <Carousel.Item>
-            <img className="d-block w-100" src={Surf} alt="Fourth slide" />
-            <Carousel.Caption>
-              <Link to="/" style={{ textDecoration: "none" }}>
-                <h3
-                  style={{
-                    color: "#0B6152",
-                    textShadow: "2px 2px 8px #fff",
-                  }}
-                >
-                  Campings
-                </h3>
-              </Link>
-            </Carousel.Caption>
-          </Carousel.Item>
-
-          <Carousel.Item>
-            <img className="d-block w-100" src={Surf} alt="Fifth slide" />
-            <Carousel.Caption>
-              <Link to="/" style={{ textDecoration: "none" }}>
-                <h3
-                  style={{
-                    color: "#0B6152",
-                    textShadow: "2px 2px 8px #fff",
-                  }}
-                >
-                  Parques Acuáticos
-                </h3>
-              </Link>
-            </Carousel.Caption>
-          </Carousel.Item>
-
-          <Carousel.Item>
-            <img className="d-block w-100" src={Surf} alt="Fifth slide" />
-            <Carousel.Caption>
-              <Link to="/" style={{ textDecoration: "none" }}>
-                <h3
-                  style={{
-                    color: "#0B6152",
-                    textShadow: "2px 2px 8px #fff",
-                  }}
-                >
-                  Baile 
-                </h3>
-              </Link>
-            </Carousel.Caption>
-          </Carousel.Item>
-
-          
-
-          </Carousel>
-          
-          </div>
-          </div>
+    <Carousel activeIndex={index} onSelect={handleSelect}>
+      {itemsToRender}
+    </Carousel>
   );
-                };
+};

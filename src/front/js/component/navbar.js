@@ -22,6 +22,8 @@ const categorias = [
 
 export const Navbar = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [textSearch, setTextSearch] = useState(""); 
+
 
   const handleLogin = () => {
     // Aquí colocas la lógica para hacer login
@@ -31,6 +33,20 @@ export const Navbar = () => {
   const handleLogout = () => {
     // Aquí colocas la lógica para hacer logout
     setIsAuthenticated(false);
+  };
+
+  const handleSearch = () => {
+    // aqui logica busqueda 
+    // aqui utilizo el textSearch como word del endpoint 
+    console.log(textSearch);
+   
+    // aqui blanquea las variables
+    setTextSearch("");
+  };
+
+  const handleTextSearch = (e) => {
+    setTextSearch(e.target.value);
+    console.log(textSearch)
   };
 
   return (
@@ -101,10 +117,10 @@ export const Navbar = () => {
               </li>
             </ul>
                   {/* Barra de búsqueda */}
-          <form className="d-flex">
-          <input type="text" placeholder="..." className="form-control search-input" />
-            <button className="btn btn-outline-success" type="submit">Buscar</button>
-          </form>
+            <form className="d-flex">
+              <input type="text" placeholder="..." className="form-control search-input" value={textSearch} onChange={handleTextSearch} />
+              <button className="btn btn-outline-success" type="button" onClick={handleSearch}>Buscar</button>
+            </form>
 
             {isAuthenticated ? (
               <Logout handleLogout={handleLogout} />

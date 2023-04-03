@@ -114,6 +114,7 @@ button, .btn {
     margin-bottom: 20px;
   }
   
+  
   label {
     display: block;
     font-weight: bold;
@@ -130,6 +131,9 @@ button, .btn {
     outline: none;
   }
   
+
+
+
 /* Estilos para el buscador */
 .search-input {
   border-radius: 20px;
@@ -229,4 +233,9 @@ button, .btn {
 .footer-bottom a {
   color: #fff;
   font-size: 14px;
+}
+
+.carousel-img {
+  height: 400px;
+  width: 250px;
 }
