@@ -1,11 +1,81 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../../styles/social.css";
+import {
+  GoogleMap,
+  useJsApiLoader,
+  Marker,
+  InfoWindow,
+} from "@react-google-maps/api";
+
+const containerStyle = {
+  width: "800px",
+  height: "400px",
+};
+
+const center = {
+  lat: 40.398396,
+  lng: -3.681477,
+};
 
 export const Social_media = () => {
-  const [count, setCount] = useState(0);
-  let place = ["Atocha, Madid", "Santa Justa, Sevilla"];
+  const { isLoaded } = useJsApiLoader({
+    id: "google-map-script",
+    googleMapsApiKey: "AIzaSyAA0p9RXeAwigbbMWcrtJ6f0pl8pesrj8E",
+  });
 
-  return (
+  const [map, setMap] = React.useState(null);
+
+  const onLoad = React.useCallback(function callback(map) {
+    // This is just an example of getting and using the map instance!!! don't just blindly copy!
+    const bounds = new google.maps.LatLngBounds(center);
+    map.fitBounds(bounds);
+
+    setMap(map);
+  }, []);
+
+  const onUnmount = React.useCallback(function callback(map) {
+    setMap(null);
+  }, []);
+
+  const markers = [
+    {
+      id: 1,
+      name: "Retiro, Madrid",
+      position: { lat: 40.41342556732059, lng: -3.6809039679921103 },
+    },
+    {
+      id: 2,
+      name: "Plaza Mayor, Madrid",
+      position: { lat: 40.41529073310998, lng: -3.7073479258552293 },
+    },
+    {
+      id: 3,
+      name: "Ciudad Deportiva, Getafe",
+      position: { lat: 40.32453121223733, lng: -3.7119511963745686 },
+    },
+    {
+      id: 4,
+      name: "Media Makrt (Chamartin), Madrid",
+      position: { lat: 40.46221232575594, lng: -3.688854355139412 },
+    },
+  ];
+
+  const [activeMarker, setActiveMarker] = useState(null);
+
+  const handleActiveMarker = (marker) => {
+    if (marker === activeMarker) {
+      return;
+    }
+    setActiveMarker(marker);
+  };
+
+  const handleOnLoad = (map) => {
+    const bounds = new google.maps.LatLngBounds();
+    markers.forEach(({ position }) => bounds.extend(position));
+    map.fitBounds(bounds);
+  };
+
+  return isLoaded ? (
     <div className="social-div">
       <div className="social-header">
         <h3>Nuestra comunidad</h3>
@@ -56,39 +126,35 @@ export const Social_media = () => {
           <h5 className="text-center">Algunos de nuestros eventos</h5>
           <div className="container d-inline-flex">
             <div width="5%" className="d-flex flex-column mx-2">
-              <button
-                type="button boton"
-                class="btn btn-success boton my-1"
-                onClick={() => {
-                  setCount(count + 1);
-                }}
+              <GoogleMap
+                mapContainerStyle={containerStyle}
+                zoom={10}
+                onLoad={handleOnLoad}
+                onUnmount={onUnmount}
               >
-                Siguiente
-              </button>
-              <button
-                type="button"
-                class="btn btn-danger boton my-1"
-                onClick={() => {
-                  setCount(count - 1);
-                }}
-              >
-                Anterior
-              </button>
+                {/* Child components, such as markers, info windows, etc. */}
+                {markers.map(({ id, name, position }) => (
+                  <Marker
+                    key={id}
+                    position={position}
+                    onClick={() => handleActiveMarker(id)}
+                  >
+                    {activeMarker === id ? (
+                      <InfoWindow onCloseClick={() => setActiveMarker(null)}>
+                        <div>{name}</div>
+                      </InfoWindow>
+                    ) : null}
+                  </Marker>
+                ))}
+                <></>
+              </GoogleMap>
             </div>
-            <iframe
-              loading="lazy"
-              width="75%"
-              height="380px"
-              allowfullscreen
-              src={
-                "https://www.google.com/maps/embed/v1/place?key=AIzaSyAA0p9RXeAwigbbMWcrtJ6f0pl8pesrj8E&q=" +
-                place[count]
-              }
-            />
           </div>
         </div>
       </div>
     </div>
+  ) : (
+    <></>
   );
 };
 

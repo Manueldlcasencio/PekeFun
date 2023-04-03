@@ -485,13 +485,15 @@ def eventall():
     done = request.json.get("done")
     category = request.json.get("category")
     word = request.json.get("word")
-    if not str(done) != "" and not category and not word:
+    if str(done) != "all" and done != True and done != False:
+        return jsonify({"msg": "Error, done must be all, true or false"}), 400
+    if str(done) == "None" and not category and not word:
         return jsonify({"msg": "You must send at least one.",
                         "category": "name of the category",
                         "done": "true, false (boolean) or all (string)",
                         "word": "Word to filter names"}), 404
     response = []
-    if str(done) != "" and not category and not word:
+    if str(done) != "None" and not category and not word:
         if done == False:
             allactive = Event.query.filter_by(done = False).all()
             for event in allactive:
@@ -506,7 +508,7 @@ def eventall():
                 response.append(event.serialize())
     
     if category and not word:
-        if str(done) != "":
+        if str(done) != "None":
             filtered = Event.query.filter_by(done = done, category = category).all()
             for event in filtered:
                 response.append(event.serialize())
@@ -516,11 +518,11 @@ def eventall():
                 response.append(event.serialize())
 
     if word:
-        if str(done) != "" and category:
+        if str(done) != "None" and category:
             filtered = Event.query.filter_by(done = done, category = category).filter(Event.name.contains(word)).all()
             for event in filtered:
                 response.append(event.serialize())
-        if str(done) != "" and not category:
+        if str(done) != "None" and not category:
             filtered = Event.query.filter_by(done = done).filter(Event.name.contains(word)).all()
             for event in filtered:
                 response.append(event.serialize())
