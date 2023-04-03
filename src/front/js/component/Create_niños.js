@@ -1,6 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { Context } from "../store/appContext";
 
-const UserProfile = () => {
+
+const Niños = () => { 
+  const { store, actions } = useContext(Context);
   const [editable, setEditable] = useState(false);
   const [name, setName] = useState("Nombre");
   const [lastName, setLastName] = useState("Apellido");
@@ -116,4 +119,4 @@ const UserProfile = () => {
   );
 };
 
-export default UserProfile;
+export default Niños;

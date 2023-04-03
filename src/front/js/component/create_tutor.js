@@ -3,11 +3,15 @@ import { Context } from "../store/appContext";
 
 const Tutor = () => {
   const { store, actions } = useContext(Context);
+  // Consultar si tutor data trae todos los tutores o el actual
+  const tutorActual = store.tutorData; 
+  console.log(tutorActual);
   const [editable, setEditable] = useState(false);
-  const [nombre, setNombre] = useState("");
-  const [apellido, setApellido] = useState("");
+  const [nombre, setNombre] = useState(tutorActual.name);
+  const [apellido, setApellido] = useState(tutorActual.lastname);
   const [email, setEmail] = useState("");
   const [numeroContacto, setNumeroContacto] = useState("");
+  
 
   const handleEdit = (event) => {
     event.preventDefault();

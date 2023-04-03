@@ -3,9 +3,9 @@ import { Context } from "../store/appContext";
 import "../../styles/profile.css";
 import { Create_event_form } from "../component/create_event_form.js";
 import Anunciante from "../component/create_ad_form";
-import Usuario from "../component/create.user";
+import Usuario from "../component/create_user";
 import Tutor from "../component/create_tutor";
-import Niños from "../component/create_niños";
+import Niños from "../component/Create_niños";
 
 
 export const User_profile = () => {
