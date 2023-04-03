@@ -3,15 +3,16 @@ import { Context } from "../store/appContext";
 
 const Tutor = () => {
   const { store, actions } = useContext(Context);
-  // Consultar si tutor data trae todos los tutores o el actual
-  const tutorActual = store.tutorData; 
-  console.log(tutorActual);
+  const tutorActual = store.tutorData;
   const [editable, setEditable] = useState(false);
+  const [id, setId] = useState(tutorActual.id);
+  const [user_id, setUser_id] = useState(tutorActual.user_id);
+  const [birth, setBirth] = useState(tutorActual.birth);
+  const [location, setLocation] = useState(tutorActual.location);
+  const [children, setChildren] = useState(tutorActual.children);
+  const [avatar, setAvatar] = useState(tutorActual.avatar);
   const [nombre, setNombre] = useState(tutorActual.name);
   const [apellido, setApellido] = useState(tutorActual.lastname);
-  const [email, setEmail] = useState("");
-  const [numeroContacto, setNumeroContacto] = useState("");
-  
 
   const handleEdit = (event) => {
     event.preventDefault();
@@ -49,24 +50,46 @@ const Tutor = () => {
           />
         </div>
         <div className="form-group">
-          <label htmlFor="email">Email:</label>
+          <label htmlFor="birth">Fecha de nacimiento:</label>
           <input
-            type="email"
+            type="text"
             className="form-control"
-            id="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            id="birth"
+            value={birth}
+            onChange={(e) => setBirth(e.target.value)}
             disabled={!editable}
           />
         </div>
         <div className="form-group">
-          <label htmlFor="numeroContacto">Número de contacto:</label>
+          <label htmlFor="location">Ubicación:</label>
           <input
             type="text"
             className="form-control"
-            id="numeroContacto"
-            value={numeroContacto}
-            onChange={(e) => setNumeroContacto(e.target.value)}
+            id="location"
+            value={location}
+            onChange={(e) => setLocation(e.target.value)}
+            disabled={!editable}
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="children">Cantidad de hijos:</label>
+          <input
+            type="text"
+            className="form-control"
+            id="children"
+            value={children}
+            onChange={(e) => setChildren(e.target.value)}
+            disabled={!editable}
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="avatar">Avatar:</label>
+          <input
+            type="text"
+            className="form-control"
+            id="avatar"
+            value={avatar}
+            onChange={(e) => setAvatar(e.target.value)}
             disabled={!editable}
           />
         </div>

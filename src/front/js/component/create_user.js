@@ -24,7 +24,7 @@ const Usuario = () => {
           <label htmlFor="username">Usuario:</label>
           <input
             type="text"
-            className="form-control"
+            className="form-control1"
             id="username"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
@@ -35,7 +35,7 @@ const Usuario = () => {
           <label htmlFor="password">Contraseña:</label>
           <input
             type="password"
-            className="form-control"
+            className="form-control1"
             id="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
