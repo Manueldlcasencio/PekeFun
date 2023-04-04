@@ -11,7 +11,7 @@ import { Navbar } from "./component/navbar";
 import { Footer } from "./component/footer";
 import { Contacto } from "./component/contacto";
 import { Categories } from "./component/categories";
-//import { Carousel } from "./bootstrap/dist/js/bootstrap.min.js";
+import { Events_more_info } from "./pages/events_more_info.js";
 import {User} from "./pages/user";
 
 
@@ -33,6 +33,7 @@ const Layout = () => {
                         <Route element={<Contacto />} path="/contacto" />
                         <Route element={<Categories />} path="/categories" />
                         <Route element={<User />} path="/user/:theid" />
+                        <Route element={<Events_more_info />} path="/event/:theid" />
                     </Routes>
                     <Footer />
                 </ScrollToTop>

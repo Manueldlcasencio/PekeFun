@@ -5,22 +5,11 @@ const getState = ({ getStore, getActions, setStore }) => {
 			username: null,
 			favorites: [],
             selectFavorites: [],
-			selectEvent: [],
-			selectCategory: null,
+			selectedEvent: null,
+			selectedCategory: null,
+			events_filtered: [],
 			message: null,
-			demo: [
-				{
-					title: "FIRST",
-					background: "white",
-					initial: "white"
-				},
-				{
-					title: "SECOND",
-					background: "white",
-					initial: "white"
-				}
-			],
-
+			
 			tutorData: {
 				name: "",
 				lastName: "",
@@ -60,41 +49,11 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 			categories: ["Escuelas de Surf", "Clases de Teatro", "Campamentos de Verano", "Campings", "Parques Acuáticos", "Cocina", "Programación", "Música", "Fútbol", "Baile"],
 			childData: null,
+			events: [],
 
 		},
 		actions: {
-			// Use getActions to call a function within a fuction
-			exampleFunction: () => {
-				getActions().changeColor(0, "green");
-			},
-
-			getMessage: async () => {
-				try {
-					// fetching data from the backend
-					const resp = await fetch(process.env.BACKEND_URL + "/api/hello")
-					const data = await resp.json()
-					setStore({ message: data.message })
-					// don't forget to return something, that is how the async resolves
-					return data;
-				} catch (error) {
-					console.log("Error loading message from backend", error)
-				}
-			},
-			changeColor: (index, color) => {
-				//get the store
-				const store = getStore();
-
-				//we have to loop the entire demo array to look for the respective index
-				//and change its color
-				const demo = store.demo.map((elm, i) => {
-					if (i === index) elm.background = color;
-					return elm;
-				});
-
-				//reset the global store
-				setStore({ demo: demo });
-			},
-
+			
 			addFavorite: ({id, name}, favorites) => {
                 console.log("entró", {id, name});
                 setStore({ favorites: [...favorites, {name}]});
@@ -285,13 +244,17 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			},
 
+			//PARA SELECCIONAR UN EVENTO ESPECÍFICO AL HACER CLIC EN CARD DESEADA:			
+			selectEvent: (event) => {
+				console.log("Event received in selectEvent:", event); 
+				setState({ ...state, selectedEvent: event })
+			},
 
 			/*FALTA EL GET EVENT y MODIFY EVENT*/
-
 			createEvent: async (email, eventData, token) => {
 				try {
 					let user = {
-						"username": email}
+						"username": email};
 					let eventObj = {
 						"name": eventData.name,
 						"localization": eventData.street + ", " + eventData.city + ", Spain",
@@ -317,7 +280,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 						body: JSON.stringify(event)
 					};
 
-					const eventResp = await fetch(process.env.BACKEND_URL + "/api/event", eventRequestOptions);
+					const eventResp = await fetch("https://3001-manueldlcasenci-pekefun-8ddm8lck07f.ws-eu93.gitpod.io/api/event", eventRequestOptions);
 					const eventDataResp = await eventResp.json();
 					console.log("Evento creado OK!!!! Respuesta del back:", eventDataResp);
 
@@ -326,28 +289,34 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			},
 
-	
+			//PARA RECUPERAR TODOS LOS EVENTOS EN LA API
+
 			getEvents: async () => {
 				try {
 					const params = new URLSearchParams({
-						done: "all",
-						// Modificar/agregar otros parámetros de ser necesario, como palabra de búsqueda (word) o categoría (category)
+						done: false,
+						
 					});
-			
-					const eventsResp = await fetch(`${process.env.BACKEND_URL}/api/event/all?${params.toString()}`);
-			
-					const eventsDataResp = await eventsResp.json();
-					console.log("Info almacenada de los eventos:", eventsDataResp);
-			
+			  
+				  const eventsResp = await fetch(`${process.env.BACKEND_URL}/api/event/all?${params.toString()}`);
+			  
+				  const eventsDataResp = await eventsResp.json();
+				  
+				  const store = getStore();
+				  const events = [...eventsDataResp.msg]; 
+				  setStore({ events });
+				  console.log("Info almacenada de los eventos:", events);
+			  
 				} catch (error) {
-					console.error("Error al obtener los eventos:", error);
+				  console.error("Error al obtener los eventos:", error);
 				}
 			},
+			  
 
 			searchEvents: async (selectCategory) => {
 				try {
 					const params = new URLSearchParams({
-						category: selectCategory,
+						category: selectedCategory,
 						// Modificar/agregar otros parámetros de ser necesario, como palabra de búsqueda (word) o categoría (category)
 					});
 			

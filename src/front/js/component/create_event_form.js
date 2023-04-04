@@ -223,7 +223,7 @@ const handleTestEvents = () => {
 
       <div className="col-12">
         <button className="btn btn-primary" type="submit">Publicar mi evento!</button>
-        <button className="btn btn-secondary" type="button" onClick={handleTestEvents}> /*BORRAR LUEGO!!!!!!!!*/
+        <button className="btn btn-secondary" type="button" onClick={handleTestEvents}> {/*BORRAR LUEGO!!!!!!!!*/}
           Enviar eventos de prueba
         </button>
       </div>

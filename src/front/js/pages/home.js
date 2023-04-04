@@ -3,7 +3,6 @@ import { Context } from "../store/appContext";
 import PekeFun from "../../img/fondo.png";
 import "../../styles/home.css";
 import {Social_media} from "../component/social_media.jsx"
-import { Create_event_form } from "../component/create_event_form.js"; //SOLO PRUEBA, BORRAR LUEGO
 import { Cards_activities } from "../component/cards_activities";
 
 
@@ -30,8 +29,8 @@ export const Home = () => {
 			</div>
 		</div>
 			*/}
-//INCLUIR LUEGO CARDS ACTIVITIES
-		<Create_event_form />
+
+		<Cards_activities />
 		<Social_media />
 		</div>
 	);

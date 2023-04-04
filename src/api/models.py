@@ -112,7 +112,7 @@ class Advertiser(db.Model):
     def serialize(self):
         return {
             "id": self.id,
-            "user id": self.user_id,
+            "user_id": self.user_id,
             "name": self.name,
             "lastname": self.lastname,
             "contact": self.contact,
@@ -154,11 +154,11 @@ class Event(db.Model):
 
     def serialize(self):
         return {
-            "event id": self.id,
-            "advertiser id": self.id_advertiser,
+            "event_id": self.id,
+            "advertiser_id": self.id_advertiser,
             "localization": self.localization,
-            "min age": self.min_age,
-            "max age": self.max_age,
+            "min_age": self.min_age,
+            "max_age": self.max_age,
             "price": self.price,
             "date": self.date,
             "length": self.length,
