@@ -10,9 +10,8 @@ import injectContext from "./store/appContext";
 import { Navbar } from "./component/navbar";
 import { Footer } from "./component/footer";
 import { Contacto } from "./component/contacto";
-import { Categories } from "./component/categories";
-//import { Carousel } from "./bootstrap/dist/js/bootstrap.min.js";
-import { Social_media } from "./component/social_media.jsx"
+import { Categories } from "./component/categories";  // CAROUSEL
+import { Social_media } from "./component/social_media.jsx";
 
 
 
@@ -36,7 +35,7 @@ const Layout = () => {
                         <Route element={<Categories />} path="/categories" />
 
                     </Routes>
-                    <Social_media />
+                {/* <Social_media /> */} 
                     <Footer />
                 </ScrollToTop>
             </BrowserRouter>

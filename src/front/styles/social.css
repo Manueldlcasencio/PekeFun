@@ -2,6 +2,7 @@
   width: 100%;
   margin-left: auto;
   margin-right: auto;
+  height: 80%;
 }
 
 .social-header {
@@ -19,6 +20,7 @@
   width: 230px;
   border-radius: 15px !important;
   min-width: auto;
+  height: 90%;
 }
 
 .cardimg {
