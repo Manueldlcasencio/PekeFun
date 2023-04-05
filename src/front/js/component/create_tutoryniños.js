@@ -3,6 +3,7 @@ import { Context } from "../store/appContext";
 
 
 const Tutor = () => {
+const { store, actions } = useContext(Context);
   const [tutorData, setTutorData] = useState({
     name: "",
     lastName: "",
@@ -81,19 +82,19 @@ const Tutor = () => {
               <label htmlFor={`childname-${index}`} className="form-label">
                 Nombres
               </label>
-              <input type="text" className="form-control" id={`childname-${index}`} name="name" placeholder="Nombres" value={child.name} onChange={(e) => handleInputChange(e)} disabled={!editable} />
+              <input type="text" className="form-control" id={`childname-${index}`} name="nameChild" placeholder="Nombres" value={child.name} onChange={(e) => handleInputChange(e)} disabled={!editable} />
             </div>
             <div className="col-md-6">
               <label htmlFor={`childLastName-${index}`} className="form-label">
                 Primer apellido
               </label>
-              <input type="text" className="form-control" id={`childLastName-${index}`} name="lastName" placeholder="Primer apellido" value={child.lastName} onChange={(e) => handleInputChange(e)} disabled={!editable} />
+              <input type="text" className="form-control" id={`childLastName-${index}`} name="lastnameChild" placeholder="Primer apellido" value={child.lastName} onChange={(e) => handleInputChange(e)} disabled={!editable} />
             </div>
             <div className="col-md-6">
               <label htmlFor={`childbirth-${index}`} className="form-label">
                 Fecha de nacimiento
               </label>
-              <input type="date" className="form-control" id={`childbirth-${index}`} name="birth" value={child.birth} onChange={(e) => handleInputChange(e)} disabled={!editable} />
+              <input type="date" className="form-control" id={`childbirth-${index}`} name="birthChild" value={child.birth} onChange={(e) => handleInputChange(e)} disabled={!editable} />
             </div>
           </div>
         ))}
