@@ -1,14 +1,16 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import PekeFun from "../../img/pekefun2.png";
+import Perfil from "../../img/perfil.png";
 import { Modal_login_signup } from "./modal_login_signup.js";
 import { Logout } from "./logout.js";
 import { FavoritesDropdown } from "./favorites_dropdown.js";
 
+
 const categorias = [
   {
     nombre: "Deportes",
-    actividades: ["Fútbol", "Escuelas de Surf",]
+    actividades: ["Fútbol", "Escuelas de Surf"]
   },
   {
     nombre: "Categorias destacadas",
@@ -38,8 +40,8 @@ export const Navbar = () => {
   const handleSearch = async () => {
     // aqui logica busqueda 
     // aqui utilizo el textSearch como word del endpoint {"done": false, "word": textSearch }
-    console.log(textSearch); 
-    const url = process.env.BACKEND_URL + "/event/all"; 
+    console.log(textSearch);
+    const url = process.env.BACKEND_URL + "/event/all";
     const requestOptions = {
       method: "POST",
       headers: {
@@ -58,7 +60,7 @@ export const Navbar = () => {
       }
       const data = await resp.json();
       console.log("ok", data);
-          //cuando regrese del endpoint actualizar el store events 
+      //cuando regrese del endpoint actualizar el store events 
       // setStore({ token: data.access_token })
 
       return true;
@@ -106,31 +108,6 @@ export const Navbar = () => {
                 </Link>
               </li>
 
-              <li className="nav-item dropdown" data-bs-toggle="dropdown" aria-expanded="false">
-  <Link to="/" className="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-    Actividades principales
-  </Link>
-  <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
-    {categorias.map((categoria) => (
-      <li key={categoria.nombre}>
-        <Link to={`/categorias/${categoria.nombre}`} className="dropdown-item">
-          {categoria.nombre}
-        </Link>
-        <div className="dropdown-divider"></div>
-        {categoria.actividades.map((actividad) => (
-          <Link
-            to={`/categorias/${categoria.nombre}/${actividad}`}
-            className="dropdown-item"
-            key={actividad}
-          >
-            {actividad}
-          </Link>
-        ))}
-      </li>
-    ))}
-  </ul>
-</li>
-
 
               <li className="nav-item">
                 <Link to="/contacto" className="nav-link">
@@ -143,6 +120,25 @@ export const Navbar = () => {
               <input type="text" placeholder="..." className="form-control search-input" value={textSearch} onChange={handleTextSearch} />
               <button className="btn btn-outline-success" type="button" onClick={handleSearch}>Buscar</button>
             </form>
+
+            <Link to="/" className="navbar-brand">
+            <img src={Perfil} alt="" width="200" height="200" />
+          </Link>
+
+          <button
+            className="navbar-toggler"
+            color=""
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span className="navbar-toggler-icon"></span>
+          </button>
+
+            
 
             {isAuthenticated ? (
               <Logout handleLogout={handleLogout} />
