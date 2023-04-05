@@ -1,108 +1,110 @@
 import React, { useContext, useState } from "react";
 import { Context } from "../store/appContext";
 
+
 const Tutor = () => {
-  const { store, actions } = useContext(Context);
-  const tutorActual = store.tutorData;
-  const [editable, setEditable] = useState(false);
-  const [id, setId] = useState(tutorActual.id);
-  const [user_id, setUser_id] = useState(tutorActual.user_id);
-  const [birth, setBirth] = useState(tutorActual.birth);
-  const [location, setLocation] = useState(tutorActual.location);
-  const [children, setChildren] = useState(tutorActual.children);
-  const [avatar, setAvatar] = useState(tutorActual.avatar);
-  const [nombre, setNombre] = useState(tutorActual.name);
-  const [apellido, setApellido] = useState(tutorActual.lastname);
+  const [tutorData, setTutorData] = useState({
+    name: "",
+    lastName: "",
+    birthDate: "",
+    city: "",
+    children: [{ name: "", lastName: "", birth: "" }],
+  });
+  const [editMode, setEditMode] = useState(false);
 
-  const handleEdit = (event) => {
-    event.preventDefault();
-    setEditable(true);
+  const handleInputChange = (e, index, isChild) => {
+    const { name, value } = e.target;
+    if (isChild) {
+      const children = [...tutorData.children];
+      children[index][name] = value;
+      setTutorData({ ...tutorData, children });
+    } else {
+      setTutorData({ ...tutorData, [name]: value });
+    }
   };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    setEditable(false);
+  const addChild = () => {
+    const children = [...tutorData.children, { name: "", lastName: "", birth: "" }];
+    setTutorData({ ...tutorData, children });
   };
 
+  const handleDeleteChild = (childIndex) => {
+    const children = [...tutorData.children];
+    children.splice(childIndex, 1);
+    setTutorData({ ...tutorData, children });
+  };
+
+  const handleEdit = () => {
+    setEditMode(true);
+  };
+
+  const handleSave = () => {
+    setEditMode(false);
+  };
   return (
-    <div className="anunciante-container">
-      <form onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label htmlFor="nombre">Nombre:</label>
-          <input
-            type="text"
-            className="form-control"
-            id="nombre"
-            value={nombre}
-            onChange={(e) => setNombre(e.target.value)}
-            disabled={!editable}
-          />
+    <div>
+      <h4 className="pt-3">Datos Tutor</h4>
+      <form>
+        <div className="mb-3">
+          <label htmlFor="name" className="form-label">
+            Nombre
+          </label>
+          <input type="text" className="form-control" id="name" name="name" placeholder="Nombres" value={tutorData.name} onChange={(e) => handleInputChange(e)} />
         </div>
-        <div className="form-group">
-          <label htmlFor="apellido">Apellido:</label>
-          <input
-            type="text"
-            className="form-control"
-            id="apellido"
-            value={apellido}
-            onChange={(e) => setApellido(e.target.value)}
-            disabled={!editable}
-          />
+        <div className="mb-3">
+          <label htmlFor="lastName" className="form-label">
+            Primer apellido
+          </label>
+          <input type="text" className="form-control" id="lastName" name="lastName" placeholder="Primer apellido" value={tutorData.lastName} onChange={(e) => handleInputChange(e)} />
         </div>
-        <div className="form-group">
-          <label htmlFor="birth">Fecha de nacimiento:</label>
-          <input
-            type="text"
-            className="form-control"
-            id="birth"
-            value={birth}
-            onChange={(e) => setBirth(e.target.value)}
-            disabled={!editable}
-          />
+        <div className="mb-3">
+          <label htmlFor="birthDate" className="form-label">
+            Fecha de nacimiento
+          </label>
+          <input type="date" className="form-control" id="birthDate" name="birthDate" value={tutorData.birthDate} onChange={(e) => handleInputChange(e)} />
         </div>
-        <div className="form-group">
-          <label htmlFor="location">Ubicación:</label>
-          <input
-            type="text"
-            className="form-control"
-            id="location"
-            value={location}
-            onChange={(e) => setLocation(e.target.value)}
-            disabled={!editable}
-          />
+        <div className="mb-3">
+          <label htmlFor="city" className="form-label">
+            Ciudad de residencia
+          </label>
+          <input type="text" className="form-control" id="city" name="city" placeholder="Ciudad de residencia" value={tutorData.city} onChange={(e) => handleInputChange(e)} />
         </div>
-        <div className="form-group">
-          <label htmlFor="children">Cantidad de hijos:</label>
-          <input
-            type="text"
-            className="form-control"
-            id="children"
-            value={children}
-            onChange={(e) => setChildren(e.target.value)}
-            disabled={!editable}
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="avatar">Avatar:</label>
-          <input
-            type="text"
-            className="form-control"
-            id="avatar"
-            value={avatar}
-            onChange={(e) => setAvatar(e.target.value)}
-            disabled={!editable}
-          />
-        </div>
-        <button type="submit" className="btn btn-primary" disabled={!editable}>
+        {tutorData.children.map((child, index) => (
+          <div key={index}>
+            <h5>Niño {index + 1}</h5>
+            <div className="mb-3">
+              <label htmlFor={`childname-${index}`} className="form-label">
+                Nombres
+              </label>
+              <input type="text" className="form-control" id={`childname-${index}`} name="name" placeholder="Nombres" value={child.name} onChange={(e) => handleInputChange(e, index, true)} />
+            </div>
+            <div className="mb-3">
+              <label htmlFor={`childLastName-${index}`} className="form-label">
+                Primer apellido
+              </label>
+              <input type="text" className="form-control" id={`childLastName-${index}`} name="lastName" placeholder="Primer apellido" value={child.lastName} onChange={(e) => handleInputChange(e, index, true)} />
+            </div>
+            <div className="mb-3">
+              <label htmlFor={`childbirth-${index}`} className="form-label">
+                Fecha de nacimiento
+              </label>
+              <input type="date" className="form-control" id={`childbirth-${index}`} name="birth" value={child.birth} onChange={(e) => handleInputChange(e, index, true)} />
+            </div>
+          </div>
+        ))}
+        <button type="button" className="btn btn-danger" onClick={() => handleDeleteChild(index)}>Eliminar niño</button>
+        <button type="button" className="btn btn-primary" onClick={addChild}>
+          Agregar otro niño
+        </button>
+        <button type="button" className="btn btn-primary" onClick={() => setEditMode(true)}>
+          Editar
+        </button>
+        <button type="submit" className="btn btn-success" disabled={!editMode} onClick={handleSave}>
           Guardar
         </button>
-        {!editable && (
-          <button type="button" className="btn btn-secondary" onClick={handleEdit}>
-            Editar
-          </button>
-        )}
       </form>
     </div>
+
   );
 };
 

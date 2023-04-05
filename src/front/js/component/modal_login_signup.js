@@ -149,7 +149,7 @@ export const Modal_login_signup = () => {
                     <form>
                       <div className="mb-3">
                         <label htmlFor="name" className="form-label">
-                          Nombres
+                          Nombre
                         </label>
                         <input type="text" className="form-control" id="name" name="name" placeholder="Nombres" value={tutorData.name} onChange={(e) => handleInputChange(e)} />
                       </div>

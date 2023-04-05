@@ -39,15 +39,19 @@ export const User_profile = () => {
 
                 <div className="tab-content" id="myTabContent">
                     <div className="tab-pane fade show active" id="tab1" role="tabpanel" aria-labelledby="tab1-tab">
+                    
                         <div className="container white-container ">
+                            
 
                             <Usuario />
                         </div>
                     </div>
                     <div className="tab-pane fade" id="tab2" role="tabpanel" aria-labelledby="tab2-tab">
                         <div className="container white-container">
+                        <div className="container">
 
                             <Tutor />
+                            </div>
                         </div>
 
                     </div>
