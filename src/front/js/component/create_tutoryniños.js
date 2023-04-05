@@ -3,7 +3,7 @@ import { Context } from "../store/appContext";
 
 
 const Tutor = () => {
-const { store, actions } = useContext(Context);
+  const { store, actions } = useContext(Context);
   const [tutorData, setTutorData] = useState({
     name: "",
     lastName: "",
@@ -48,14 +48,14 @@ const { store, actions } = useContext(Context);
 
   return (
     <div>
-      
-      
+
+
       <form className="row g-3 needs-validation">
         <div className="col-md-6">
           <label htmlFor="name" className="form-label">
             Nombre
           </label>
-          <input type="text" className="form-control" id="name" name="name" placeholder="Nombres" value={tutorData.name} onChange={(e) => handleInputChange(e)} disabled={!editable} /> 
+          <input type="text" className="form-control" id="name" name="name" placeholder="Nombres" value={tutorData.name} onChange={(e) => handleInputChange(e)} disabled={!editable} />
         </div>
         <div className="col-md-6">
           <label htmlFor="lastName" className="form-label">
@@ -98,11 +98,10 @@ const { store, actions } = useContext(Context);
             </div>
           </div>
         ))}
-        <button type="button" className="btn btn-danger" onClick={() => handleDeleteChild(index)}disabled={!editable}>Eliminar niño</button>
-<button type="button" className="btn btn-primary" onClick={addChild} disabled={!editable}>Agregar otro niño</button>
-<button onClick={handleEdit}>Editar</button>
-
-<button onClick={handleSubmit}>Guardar</button>
+        <button type="button" className="btn btn-danger" onClick={() => handleDeleteChild(index)} disabled={!editable}>Eliminar niño</button>
+        <button type="button" className="btn btn-primary" onClick={addChild} disabled={!editable}>Agregar otro niño</button>
+        <button onClick={handleEdit}>Editar</button>
+        <button onClick={handleSubmit}>Guardar</button>
 
 
 
