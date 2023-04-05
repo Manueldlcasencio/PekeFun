@@ -2,7 +2,6 @@
   width: 100%;
   margin-left: auto;
   margin-right: auto;
-  height: 80%;
 }
 
 .social-header {
@@ -20,7 +19,6 @@
   width: 230px;
   border-radius: 15px !important;
   min-width: auto;
-  height: 90%;
 }
 
 .cardimg {
@@ -62,4 +60,11 @@
 
 .boton {
   width: 100px !important;
+}
+
+#map {
+  height: 400px;
+  /* The height is 400 pixels */
+  width: 100%;
+  /* The width is the width of the web page */
 }
