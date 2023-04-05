@@ -24,18 +24,25 @@ export const Social_media = () => {
   });
 
   const [map, setMap] = React.useState(null);
+  const [activeMarker, setActiveMarker] = useState(null);
 
-  const onLoad = React.useCallback(function callback(map) {
-    // This is just an example of getting and using the map instance!!! don't just blindly copy!
-    const bounds = new google.maps.LatLngBounds(center);
-    map.fitBounds(bounds);
+  //Lógica del geocoding a partir de aquí
+  //*************************************
 
-    setMap(map);
-  }, []);
+  function getmarker() {
+    var address = "Santa Justa, Sevilla";
+    const geocoder = new google.maps.Geocoder();
+    geocoder.geocode({ address: address }, function (results, status) {
+      if (status == "OK") {
+        console.log(results[0].geometry.location);
+      } else {
+        console.log(status);
+      }
+    });
+  }
 
-  const onUnmount = React.useCallback(function callback(map) {
-    setMap(null);
-  }, []);
+  //Fin geocoding
+  //*************
 
   const markers = [
     {
@@ -59,8 +66,6 @@ export const Social_media = () => {
       position: { lat: 40.46221232575594, lng: -3.688854355139412 },
     },
   ];
-
-  const [activeMarker, setActiveMarker] = useState(null);
 
   const handleActiveMarker = (marker) => {
     if (marker === activeMarker) {
@@ -126,11 +131,19 @@ export const Social_media = () => {
           <h5 className="text-center">Algunos de nuestros eventos</h5>
           <div className="container d-inline-flex">
             <div width="5%" className="d-flex flex-column mx-2">
+              <button
+                type="button"
+                className="btn btn-primary"
+                onClick={() => {
+                  getmarker();
+                }}
+              >
+                Primary
+              </button>
               <GoogleMap
                 mapContainerStyle={containerStyle}
                 zoom={10}
                 onLoad={handleOnLoad}
-                onUnmount={onUnmount}
               >
                 {/* Child components, such as markers, info windows, etc. */}
                 {markers.map(({ id, name, position }) => (
