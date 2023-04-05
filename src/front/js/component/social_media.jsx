@@ -58,7 +58,7 @@ export const Social_media = () => {
             <div width="5%" className="d-flex flex-column mx-2">
               <button
                 type="button boton"
-                class="btn btn-success boton my-1"
+                className="btn btn-success boton my-1"
                 onClick={() => {
                   setCount(count + 1);
                 }}
@@ -67,7 +67,7 @@ export const Social_media = () => {
               </button>
               <button
                 type="button"
-                class="btn btn-danger boton my-1"
+                className="btn btn-danger boton my-1"
                 onClick={() => {
                   setCount(count - 1);
                 }}

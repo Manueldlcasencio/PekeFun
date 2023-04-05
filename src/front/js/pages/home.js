@@ -1,12 +1,18 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { Context } from "../store/appContext";
 import PekeFun from "../../img/fondo.png";
 import "../../styles/home.css";
-
+import {Social_media} from "../component/social_media.jsx"
+import { Cards_activities } from "../component/cards_activities";
 
 
 export const Home = () => {
 	const { store, actions } = useContext(Context);
+
+	//Para limpiar "selected category" y que se muestren todas las cards:
+    useEffect(() => {
+        actions.clearFilteredEvents();
+    }, []);
 
 	return (
 		<div className="text-center mt-5">
@@ -28,6 +34,8 @@ export const Home = () => {
 		</div>
 			*/}
 
+		<Cards_activities />
+		<Social_media />
 		</div>
 	);
 };
