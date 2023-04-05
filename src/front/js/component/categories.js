@@ -7,6 +7,9 @@ import Acuatico from "../../img/acuatico.png";
 import Baile from "../../img/baile.png";
 import Cocina from "../../img/cocina.png";
 import Futbol from "../../img/futbol.png";
+import Programacion from "../../img/programacion.png";
+import Musica from "../../img/musica.png";
+import Verano from "../../img/verano.png";
 import { Link } from "react-router-dom";
 
 export const Categories = () => {
@@ -21,13 +24,14 @@ export const Categories = () => {
       image: Surf,
       url: "/surfcamp",
     },
-    {
-      image: Campamento,
-      url: "/campamento",
+    { 
+      image: Verano,
+      url: "/verano",
+     
     },
     {
-      image: Teatro,
-      url: "/teatro",
+      image: Musica,
+      url: "/musica",
     },
     {
       image: Acuatico,
@@ -48,18 +52,21 @@ export const Categories = () => {
     },
 
     {
-      image: Cocina,
-      url: "/cocina",
+      image: Programacion,
+      url: "/programacion",
     },
 
     {
-      image: Cocina,
-      url: "/cocina",
+      image: Campamento,
+      url: "/campamento",
+      
     },
 
     {
-      image: Cocina,
-      url: "/cocina",
+      image: Teatro,
+      url: "/teatro",
+     
+    
     },
 
 
