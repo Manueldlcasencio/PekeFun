@@ -12,6 +12,9 @@ import Musica from "../../img/musica.png";
 import Verano from "../../img/verano.png";
 import { Link } from "react-router-dom";
 
+
+
+
 export const Categories = () => {
   const [index, setIndex] = useState(0);
 
