@@ -2,7 +2,10 @@ import React, { useContext } from "react";
 import { Context } from "../store/appContext";
 
 export const Events_more_info = () => {
-  const { store } = useContext(Context);
+  const { store, actions } = useContext(Context);
+
+  console.log('selectedEvent:', store.selectedEvent);
+
   const {
     event_id,
     name,
@@ -19,8 +22,6 @@ export const Events_more_info = () => {
   } = store.selectedEvent;
 
   console.log("VER AQUI!!!!!!!", store.selectedEvent, "VER AQUI!!!!!!")
-
-
 
 
   if (!store.selectedEvent) {
@@ -41,6 +42,7 @@ export const Events_more_info = () => {
       <p>{contact}</p>
       <p>{cloth}</p>
       <p>{others}</p>
+      <button type="button" className="btn btn-warning" onClick={() => actions.handleParticipantRegister()}>¡Inscribirse!</button>
     </div>
   );
 };

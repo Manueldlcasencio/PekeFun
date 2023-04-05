@@ -74,7 +74,6 @@ const handleTestEvents = () => {
   });
 };
 
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     const eventRegistered = await actions.createEvent(email, eventData);
