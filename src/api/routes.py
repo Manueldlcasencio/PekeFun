@@ -12,18 +12,8 @@ from flask_jwt_extended import jwt_required
 api = Blueprint('api', __name__)
 
 
-@api.route("/signup", methods=["POST", "PUT", "DELETE", "GET"])
-def signup():
-    if request.method == "GET":
-        username = request.json.get("username", None)
-        if not username:
-            return jsonify({"msg": "An username must be entered."}), 404
-        user = User.query.filter_by(email = username).first()
-        if user:
-            return jsonify({"info": user.serialize()}), 200
-        else:
-            return jsonify({"msg": "User doesn't exist."}), 404
-    
+@api.route("/signup", methods=["POST"])
+def signup():    
     if request.method == "POST":
         username = request.json.get("username", None)
         password = request.json.get("password", None)
@@ -39,14 +29,33 @@ def signup():
         db.session.add(user)
         db.session.commit()
         return jsonify({"username_added": username}), 200
-    
+
+
+@api.route("/signup/info", methods=["GET", "PUT", "DELETE"])
+@jwt_required()
+def signup_info():
+    if request.method == "GET":
+        username = request.args.get("username", None)
+        if not username:
+            return jsonify({"msg": "An username must be entered."}), 404
+        user = User.query.filter_by(email = username).first()
+        if user:
+            return jsonify({"info": user.serialize()}), 200
+        else:
+            return jsonify({"msg": "User doesn't exist."}), 404
+  
     if request.method == "PUT":
         username = request.json.get("username", None)
-        password = request.json.get("password", None)
-        if not username or not password:
-            return jsonify({"msg": "An username and password must be entered. Only the password will change."}), 400
+        old_password = request.json.get("old_password", None)
+        new_password = request.json.get("new_password", None)
+        if not username or not old_password or not new_password:
+            return jsonify({"msg": "Send username, old_password and new_password."}), 400
         user = User.query.filter_by(email = username).first()
-        user.password = password
+        if not user:
+            return jsonify({"msg": "User not found"}), 404
+        if user.password != old_password:
+            return jsonify({"msg": "Password don't match"}), 400
+        user.password = new_password
         db.session.commit()
         return jsonify({"msg": "Password has been updated"}), 200
 
@@ -92,10 +101,11 @@ def signup():
             return jsonify({"msg": "Password is wrong."}), 400
 
 # About tutors
-@api.route("/signup/tutor", methods=["POST", "PUT", "DELETE", "GET"])
-def signup_tutor():
+@api.route("/signup/tutor", methods=["GET", "POST", "PUT", "DELETE"])
+@jwt_required()
+def signup_tutor():  
     if request.method == "GET":
-        username = request.json.get("username", None)
+        username = request.args.get("username", None)
         if not username or username == "":
             return jsonify({"msg": "You must send a valid username"}), 400
         user = User.query.filter_by(email = username).first()
@@ -113,8 +123,6 @@ def signup_tutor():
                             "msg": basic_response}), 200
         else:
             return jsonify({"error": "Tutor not found"}), 400
-       
-    
     if request.method == "POST":
         username = request.json.get("username", None)        
         if not username:
@@ -192,7 +200,9 @@ def signup_tutor():
         else:
             return jsonify({"msg": "Password is wrong."})
 
+
 @api.route("signup/tutor/child", methods=["POST", "PUT", "DELETE"])
+@jwt_required()
 def signup_child():
     if request.method == "POST":
         username = request.json.get("username", None)        
@@ -261,11 +271,11 @@ def signup_child():
         db.session.commit()
         return jsonify({"deleted": child_name}), 200
     
-
 @api.route("signup/advertiser", methods=["GET", "POST", "PUT", "DELETE"])
+@jwt_required()
 def advertiser():
     if request.method == "GET":
-        username = request.json.get("username", None)
+        username = request.args.get("username", None)
         if not username:
             return jsonify({"msg": "You must send a valid username"}), 400
         us_id = User.query.filter_by(email = username).first().id
@@ -354,9 +364,10 @@ def advertiser():
 
 
 @api.route("/event", methods=["GET", "POST", "PUT", "DELETE"])   
+@jwt_required()
 def event():
     if request.method == "GET":
-        event_id = request.json.get("event_id", None)
+        event_id = request.args.get("event_id", None)
         event = Event.query.filter_by(id = event_id).first()
         if not event:
             return jsonify({"msg": "Event not found"}), 404
@@ -372,13 +383,15 @@ def event():
     if request.method == "POST":
         username = request.json.get("username", None)
         user = User.query.filter_by(email = username).first()
+        if not user:
+            return jsonify({"msg": "User not found"}), 404
         adver = Advertiser.query.filter_by(user_id = user.id).first()
         required = Event.__table__.columns.keys()
         if not user or not adver:
             return jsonify({"msg": "You must send a valid username that is an advertiser"}), 400
         missing = []
         for item in required:
-            if item not in request.json and item != "id" and item != "id_advertiser" and item != score and item != score_amount and item != score_sum and item != done and item != participants:
+            if item not in request.json and item != "id" and item != "id_advertiser" and item != "score" and item != "score_amount" and item != "score_sum" and item != "done" and item != "participants" and item != "company" and item != "contact":
                 missing.append(item)
         if missing != []:
             return jsonify({"missing": missing }), 400
@@ -393,10 +406,9 @@ def event():
                       category = request.json.get("category", None),
                       slots = request.json.get("slots", None),
                       description = request.json.get("description", None),
-                      contact = request.json.get("contact", None),
-                      company = request.json.get("company", None),
                       cloth = request.json.get("cloth", None),
                       others = request.json.get("others", None),
+                      done = False,
                       score = 0,
                       score_amount = 0,
                       score_sum = 0)
@@ -429,6 +441,7 @@ def event():
 
 
 @api.route("/event/participant", methods=["POST", "PUT", "DELETE"])
+@jwt_required()
 def participant():
     required = ["event_id", "child_id", "was_there", "score_given"]
     for item in request.json:
@@ -482,12 +495,10 @@ def participant():
 
 @api.route("event/all", methods=["GET"])
 def eventall():
-    done = request.json.get("done")
-    category = request.json.get("category")
-    word = request.json.get("word")
-    if str(done) != "all" and done != True and done != False:
-        return jsonify({"msg": "Error, done must be all, true or false"}), 400
-    if str(done) == "None" and not category and not word:
+    done = request.args.get("done")
+    category = request.args.get("category")
+    word = request.args.get("word")
+    if not str(done) != "" and not category and not word:
         return jsonify({"msg": "You must send at least one.",
                         "category": "name of the category",
                         "done": "true, false (boolean) or all (string)",
@@ -531,17 +542,15 @@ def eventall():
             for event in filtered:
                 response.append(event.serialize())
     return jsonify({"msg": response}), 200
-    
-
 
 
 @api.route("/login", methods=["POST"])
 def login():
     username = request.json.get("username", None)
     password = request.json.get("password", None)
-    user = User.query.filter_by(email = username).first()
     if not username or not password:
         return jsonify({"msg": "You need to send username and password"}), 400
+    user = User.query.filter_by(email = username).first()
     if not user:
         return jsonify({"msg": "User doesn't exist"}), 404
     if user and user.password == password:
