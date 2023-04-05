@@ -1,7 +1,18 @@
 import React, { useState } from "react";
 import { Carousel } from "react-bootstrap";
-import PekeFun from "../../img/pekefun1.png";
+import Surf from "../../img/surf.png";
+import Campamento from "../../img/campamento.png";
+import Teatro from "../../img/teatro1.png";
+import Acuatico from "../../img/acuatico.png";
+import Baile from "../../img/baile.png";
+import Cocina from "../../img/cocina.png";
+import Futbol from "../../img/futbol.png";
+import Programacion from "../../img/programacion.png";
+import Musica from "../../img/musica.png";
+import Verano from "../../img/verano.png";
 import { Link } from "react-router-dom";
+
+
 
 
 export const Categories = () => {
@@ -11,97 +22,102 @@ export const Categories = () => {
     setIndex(selectedIndex);
   };
 
+  const items = [
+    {
+      image: Surf,
+      url: "/surfcamp",
+    },
+    { 
+      image: Verano,
+      url: "/verano",
+     
+    },
+    {
+      image: Musica,
+      url: "/musica",
+    },
+    {
+      image: Acuatico,
+      url: "/acuatico",
+    },
+    {
+      image: Baile,
+      url: "/baile",
+    },
+    {
+      image: Futbol,
+      url: "/futbol",
+    },
+
+    {
+      image: Cocina,
+      url: "/cocina",
+    },
+
+    {
+      image: Programacion,
+      url: "/programacion",
+    },
+
+    {
+      image: Campamento,
+      url: "/campamento",
+      
+    },
+
+    {
+      image: Teatro,
+      url: "/teatro",
+     
+    
+    },
+
+
+
+  ];
+
+  const itemsToRender = [];
+
+  for (let i = 0; i < items.length; i += 3) {
+    const item = (
+      <Carousel.Item key={i}>
+        <div className="d-flex justify-content-between">
+          <div className="w-30">
+            <Link to={items[i].url}>
+              <img className="d-block w-100" src={items[i].image} alt={i} />
+            </Link>
+          </div>
+          <div className="w-30">
+            {i + 1 < items.length && (
+              <Link to={items[i + 1].url}>
+                <img
+                  className="d-block w-100"
+                  src={items[i + 1].image}
+                  alt={i + 1}
+                />
+              </Link>
+            )}
+          </div>
+          <div className="w-30">
+            {i + 2 < items.length && (
+              <Link to={items[i + 2].url}>
+                <img
+                  className="d-block w-100"
+                  src={items[i + 2].image}
+                  alt={i + 2}
+                />
+              </Link>
+            )}
+          </div>
+        </div>
+      </Carousel.Item>
+    );
+    itemsToRender.push(item);
+  }
+
   return (
-    <div className="container-sm d-flex justify-content-center">
-      <div className="w-50">
-        <Carousel activeIndex={index} onSelect={handleSelect}>
-<Carousel.Item>
-            <img
-              className="d-block w-100"
-              src={PekeFun}
-              alt="First slide"
-            />
-            <Carousel.Caption>
-              <Link to="/categoryOne" style={{ textDecoration: "none" }}>
-                <h3 style={{ color: "#0B6152", textShadow: "2px 2px 8px #fff" }}>
-              Escuelas de Surf</h3>          
-              </Link>
-            </Carousel.Caption>
-          </Carousel.Item>
-
-          <Carousel.Item>
-            <img
-              className="d-block w-100"
-              src={PekeFun}
-              alt="First slide"
-            />
-            <Carousel.Caption>
-              <Link to="/categoryTwo">
-              <h3>Clases de Teatro</h3>
-              </Link>
-            </Carousel.Caption>
-          </Carousel.Item>
-
-          <Carousel.Item>
-            <img
-              className="d-block w-100"
-              src={PekeFun}
-              alt="First slide"
-            />
-            <Carousel.Caption>
-              <Link to="/">
-              <h3>Campamentos de Verano </h3>
-              </Link>
-            </Carousel.Caption>
-          </Carousel.Item>
-
-          <Carousel.Item>
-            <img
-              className="d-block w-100"
-              src={PekeFun}
-              alt="First slide"
-            />
-            <Carousel.Caption>
-              <Link to="/">
-              <h3>Campings</h3>
-              </Link>
-            </Carousel.Caption>
-          </Carousel.Item>
-
-          <Carousel.Item>
-            <img
-              className="d-block w-100"
-              src={PekeFun}
-              alt="First slide"
-            />
-            <Carousel.Caption>
-              <Link to="/">
-              <h3>Parques Acúaticos</h3>
-              </Link>
-            </Carousel.Caption>
-          </Carousel.Item>
-
-          <Carousel.Item>
-            <img
-              className="d-block w-100"
-              src={PekeFun}
-              alt="First slide"
-            />
-
-            <Carousel.Caption>
-              <Link to="/">
-              <h3>Baile</h3>
-              </Link>
-            </Carousel.Caption>
-          </Carousel.Item>
-
-          
-  
-
-        </Carousel>
-      </div>
-    </div>
+    <Carousel activeIndex={index} onSelect={handleSelect}>
+      {itemsToRender}
+    </Carousel>
   );
 };
-
-

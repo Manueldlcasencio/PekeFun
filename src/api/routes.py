@@ -498,18 +498,18 @@ def eventall():
     done = request.args.get("done")
     category = request.args.get("category")
     word = request.args.get("word")
-    if not str(done) != "" and not category and not word:
+    if not done and not category and not word:
         return jsonify({"msg": "You must send at least one.",
                         "category": "name of the category",
-                        "done": "true, false (boolean) or all (string)",
+                        "done": "true, false or all (string)",
                         "word": "Word to filter names"}), 404
     response = []
-    if str(done) != "None" and not category and not word:
-        if done == False:
+    if done and not category and not word:
+        if done == "false":
             allactive = Event.query.filter_by(done = False).all()
             for event in allactive:
                 response.append(event.serialize())
-        elif done == True:
+        elif done == "true":
             unactive = Event.query.filter_by(done = True).all()
             for event in unactive:
                 response.append(event.serialize())
@@ -517,9 +517,8 @@ def eventall():
             allevent = Event.query.all()
             for event in allevent:
                 response.append(event.serialize())
-    
     if category and not word:
-        if str(done) != "None":
+        if done:
             filtered = Event.query.filter_by(done = done, category = category).all()
             for event in filtered:
                 response.append(event.serialize())
@@ -527,13 +526,12 @@ def eventall():
             filtered = Event.query.filter_by(category = category).all()
             for event in filtered:
                 response.append(event.serialize())
-
     if word:
-        if str(done) != "None" and category:
+        if done and category:
             filtered = Event.query.filter_by(done = done, category = category).filter(Event.name.contains(word)).all()
             for event in filtered:
                 response.append(event.serialize())
-        if str(done) != "None" and not category:
+        if done and not category:
             filtered = Event.query.filter_by(done = done).filter(Event.name.contains(word)).all()
             for event in filtered:
                 response.append(event.serialize())

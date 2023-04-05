@@ -5,21 +5,11 @@ const getState = ({ getStore, getActions, setStore }) => {
 			username: null,
 			favorites: [],
             selectFavorites: [],
-			selectEvent: [],
+			selectedEvent: null,
+			selectedCategory: null,
+			events_filtered: [],
 			message: null,
-			demo: [
-				{
-					title: "FIRST",
-					background: "white",
-					initial: "white"
-				},
-				{
-					title: "SECOND",
-					background: "white",
-					initial: "white"
-				}
-			],
-
+			
 			tutorData: {
 				name: "",
 				lastName: "",
@@ -29,6 +19,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 
 			eventData: {
+				event_id: "",
 				name: "",
 				street: "",
 				city: "",
@@ -58,42 +49,24 @@ const getState = ({ getStore, getActions, setStore }) => {
 				twitter: "",
 			},
 
+			participantData: {
+				name: "",
+				lastName: "",
+				birthDate: "",
+			},
+
+			categories: ["Escuelas de Surf", "Clases de Teatro", "Campamentos de Verano", "Campings", "Parques Acuáticos", "Cocina", "Programación", "Música", "Fútbol", "Baile"],
 			childData: null,
+			events: [],
 
 		},
 		actions: {
-			// Use getActions to call a function within a fuction
-			exampleFunction: () => {
-				getActions().changeColor(0, "green");
+
+			//******************************VARIOS BÁSICOS P/MANEJO DE FRONT (SIN CONEX. A API)*************************** */
+			clearFilteredEvents: () => {
+				setStore({ events_filtered: [],});
 			},
-
-			getMessage: async () => {
-				try {
-					// fetching data from the backend
-					const resp = await fetch(process.env.BACKEND_URL + "/api/hello")
-					const data = await resp.json()
-					setStore({ message: data.message })
-					// don't forget to return something, that is how the async resolves
-					return data;
-				} catch (error) {
-					console.log("Error loading message from backend", error)
-				}
-			},
-			changeColor: (index, color) => {
-				//get the store
-				const store = getStore();
-
-				//we have to loop the entire demo array to look for the respective index
-				//and change its color
-				const demo = store.demo.map((elm, i) => {
-					if (i === index) elm.background = color;
-					return elm;
-				});
-
-				//reset the global store
-				setStore({ demo: demo });
-			},
-
+			
 			addFavorite: ({id, name}, favorites) => {
                 console.log("entró", {id, name});
                 setStore({ favorites: [...favorites, {name}]});
@@ -105,13 +78,9 @@ const getState = ({ getStore, getActions, setStore }) => {
                 setStore({ favorites: updatedFavorites });
             },
 
-			addChild: (childData) => {
-				const store = getStore();
-				const newChildren = [...store.tutorData.children, childData];
-				setStore({ tutorData: { ...store.tutorData, children: newChildren } });
-			},
-
-
+			
+			//************************************SECCIÓN TOKEN, LOGIN, LOGOUT, SIGN UP USER************************************/
+			
 			//Para sincronizar el token almacenado en el almacenamiento local (localStorage) con el estado de la aplicación (setStore)
 			syncTokenAndEmail: () => {
 				const token = localStorage.getItem("token");
@@ -133,7 +102,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			},
 	
-
 			login: async (email, password) => {
 
 				const requestOptions = {
@@ -164,6 +132,13 @@ const getState = ({ getStore, getActions, setStore }) => {
 					console.error("There has been an error login in")
 				}
 			},
+
+			logout: () => {
+				const token = localStorage.removeItem("token");
+				const username = localStorage.removeItem("username");
+				setStore({ username: null});
+				setStore({ token: null });
+			}, 
 
 			register: async (email, password, setShowTutorForm, setShowAdvertiserForm, tutorData, advertiserData) => {
 				const requestOptions = {
@@ -212,12 +187,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 					}
 				},
 
-			logout: () => {
-				const token = localStorage.removeItem("token");
-				setStore({ token: null });
-			}, 
 
-
+			//*****************************************SECCION TUTOR Y "CHILDRENS"****************************************/
 			createTutor: async (email, tutorData) => {
 				console.log("**************", email, tutorData, "**********");
 				try {
@@ -284,70 +255,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			},
 
-
-			/*FALTA EL GET EVENT y MODIFY EVENT*/
-
-			createEvent: async (email, eventData, token) => {
-				console.log("%%%%%%%%%%%%", email, eventData, "%%%%%%%%%%%%%");
-				try {
-					let user = {
-						"username": email,
-						"name": eventData.name,
-						"localization": eventData.street + ", " + eventData.city + ", Spain",
-						"min_age": eventData.min_age,
-						"max_age": eventData.max_age,
-						"price": eventData.price,
-						"date": eventData.date,
-						"length": eventData.length,
-						"category": eventData.category,
-						"slots": eventData.slots,
-						"description": eventData.description,
-						"contact": eventData.contact,
-						"company": eventData.company,
-						"cloth": eventData.cloth,
-						"others": eventData.others
-					};
-
-					let event = Object.assign({}, user, eventData);
-					console.log("+++++++++", event, "+++++++");
-					const eventRequestOptions = {
-						method: "POST",
-						headers: {
-							"Content-type": "application/json"
-						},
-						body: JSON.stringify(event)
-					};
-
-					const eventResp = await fetch(process.env.BACKEND_URL + "/api/event", eventRequestOptions);
-					const eventDataResp = await eventResp.json();
-					console.log("Evento creado OK!!!! Respuesta del back:", eventDataResp);
-
-				} catch (error) {
-					console.error("Error al crear el Evento:", error);
-				}
-			},
-
-			/*
-			getEvent: async (email, token) => {
-				try {
-					let user = { "username": email }
-					const tutorRequestOptions = {
-						method: "GET",
-						headers: {
-							"Content-type": "application/json"
-						},
-						body: JSON.stringify(user)
-					};		
-
-					const eventResp = await fetch(process.env.BACKEND_URL + "/api/event", eventRequestOptions);
-					const eventDataResp = await eventResp.json();
-					console.log("Evento creado OK!!!! Respuesta del back:", eventDataResp);
-
-				} catch (error) {
-					console.error("Error al crear el Evento:", error);
-				}
-			},*/
-
 			modifyTutor: async (email, tutorData, token) => {
 				try {
 					let user = { "username": email }
@@ -370,7 +277,97 @@ const getState = ({ getStore, getActions, setStore }) => {
 					console.error("Error al crear tutor:", error);
 				}
 			},
+	
+			addChild: (childData) => {
+				const store = getStore();
+				const newChildren = [...store.tutorData.children, childData];
+				setStore({ tutorData: { ...store.tutorData, children: newChildren } });
+			},
 
+			//******************************************SECCIÓN EVENTOS************************************************ */
+			createEvent: async (email, eventData, token) => {
+				try {
+					let user = {
+						"username": email};
+					let eventObj = {
+						"name": eventData.name,
+						"localization": eventData.street + ", " + eventData.city + ", Spain",
+						"min_age": eventData.min_age,
+						"max_age": eventData.max_age,
+						"price": eventData.price,
+						"date": eventData.date,
+						"length": eventData.length,
+						"category": eventData.category,
+						"slots": eventData.slots,
+						"description": eventData.description,
+						"cloth": eventData.cloth,
+						"others": eventData.others
+					};
+
+					let event = Object.assign({}, user, eventObj);
+					const eventRequestOptions = {
+						method: "POST",
+						headers: {
+							"Content-type": "application/json",
+							//"Authorization": "Bearer " + token
+						},
+						body: JSON.stringify(event)
+					};
+
+					const eventResp = await fetch(process.env.BACKEND_URL + "/api/event", eventRequestOptions);
+					const eventDataResp = await eventResp.json();
+					console.log("Evento creado OK!!!! Respuesta del back:", eventDataResp);
+
+				} catch (error) {
+					console.error("Error al crear el Evento:", error);
+				}
+			},
+
+			getEvents: async () => {
+				try {
+					const params = new URLSearchParams({
+						done: false,
+						
+					});
+			  
+				  const eventsResp = await fetch(`${process.env.BACKEND_URL}/api/event/all?${params.toString()}`);
+			  
+				  const eventsDataResp = await eventsResp.json();
+				  
+				  const store = getStore();
+				  const events = [...eventsDataResp.msg]; 
+				  setStore({ events });
+				  console.log("Info almacenada de los eventos:", events);
+			  
+				} catch (error) {
+				  console.error("Error al obtener los eventos:", error);
+				}
+			},
+
+			//PARA SELECCIONAR UN EVENTO ESPECÍFICO AL HACER CLIC EN CARD DESEADA:			
+			selectEvent: (event) => {
+				console.log("Event received in selectEvent:", event);
+				setStore({ ...getStore(), selectedEvent: event, });
+			},
+
+			//PARA FILTRAR EVENTOS POR CATEGORÍA (AGREGAR EN EL ONCLICK AL CAROUSEL Y EN LA VISTA DE LAS CARDS RENDERIZAR EVENTOS DE FILTERED EVENTS)
+			filterEventsByCategory: (selectedCategory) => {
+				const store = getStore();
+				const events_filtered = store.events.filter(event => event.category === selectedCategory);
+				setStore({ events_filtered: events_filtered });
+			},
+			
+			//PARA FILTRAR EVENTOS POR BÙSQUEDA MEDIANTE STRING:
+			filterEventsByKeyword: (keyword) => {
+				const store = getStore();
+				const events_filtered = store.events.filter(event => 
+					event.name.toLowerCase().includes(keyword.toLowerCase()) ||
+					event.description.toLowerCase().includes(keyword.toLowerCase())
+				);
+				setStore({ events_filtered: events_filtered });
+			},
+			
+			//**********************************************SECCIÓN ANUNCIANTE************************************************ */	
 			
 			createAdvertiser: async (email, advertiserData) => {
 				try {
@@ -406,6 +403,46 @@ const getState = ({ getStore, getActions, setStore }) => {
 					console.error("Error al crear anunciante:", error);
 				}
 			},
+
+			//*************************************************SECCIÓN PARTICIPANTES*******************************************/
+/*
+			handleParticipantRegister: async () => {
+				const token = localStorage.getItem("token");
+				const email = localStorage.getItem("email");
+
+
+
+
+			
+				let updatedStore = {};
+			
+				if (token && token !== "" && token !== "undefined") {
+					updatedStore.token = token;
+				}
+			
+				if (email && email !== "" && email !== "undefined") {
+					updatedStore.email = email;
+				}
+			
+				if (Object.keys(updatedStore).length > 0) {
+					setStore(updatedStore);
+				}
+			},
+
+				let tutorParticipant = Object.assign({}, participant, children)
+				const tutorParticipantRequestOptions = {
+					method: "POST",
+					headers: {
+						"Content-type": "application/json"
+					},
+					body: JSON.stringify(tutorParticipant)
+				};
+
+			}
+				
+
+				console.log("prueba de clic");
+			}*/
 		}
 	};
 };
