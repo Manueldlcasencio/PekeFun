@@ -18,13 +18,13 @@ const Usuario = () => {
   };
 
   return (
-    <div className="anunciante-container">
+    <div className="container">
       <form onSubmit={handleSubmit}>
         <div className="form-group">
-          <label htmlFor="username">Usuario:</label>
+          <label htmlFor="username" className="form-label">Usuario:</label>
           <input
             type="text"
-            className="form-control1"
+            className="form-control"
             id="username"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
@@ -32,10 +32,10 @@ const Usuario = () => {
           />
         </div>
         <div className="form-group">
-          <label htmlFor="password">Contraseña:</label>
+          <label htmlFor="password" className="form-label">Contraseña:</label>
           <input
             type="password"
-            className="form-control1"
+            className="form-control"
             id="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
