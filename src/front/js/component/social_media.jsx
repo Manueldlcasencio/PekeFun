@@ -7,65 +7,72 @@ import {
   InfoWindow,
 } from "@react-google-maps/api";
 
-const containerStyle = {
-  width: "800px",
-  height: "400px",
-};
-
-const center = {
-  lat: 40.398396,
-  lng: -3.681477,
-};
-
 export const Social_media = () => {
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
     googleMapsApiKey: "AIzaSyAA0p9RXeAwigbbMWcrtJ6f0pl8pesrj8E",
   });
 
-  const [map, setMap] = React.useState(null);
   const [activeMarker, setActiveMarker] = useState(null);
+  const [markers, setMarkers] = useState([]);
+
+  const containerStyle = {
+    width: "800px",
+    height: "400px",
+  };
 
   //Lógica del geocoding a partir de aquí
   //*************************************
 
-  function getmarker() {
-    var address = "Santa Justa, Sevilla";
+  async function getmarker(address) {
     const geocoder = new google.maps.Geocoder();
-    geocoder.geocode({ address: address }, function (results, status) {
-      if (status == "OK") {
-        console.log(results[0].geometry.location);
-      } else {
-        console.log(status);
-      }
+    return new Promise((resolve, reject) => {
+      geocoder.geocode({ address: address }, function (results, status) {
+        if (status == "OK") {
+          let loc = {
+            lat: results[0].geometry.location.lat(),
+            lng: results[0].geometry.location.lng(),
+          };
+          console.log(loc);
+          resolve(loc);
+        } else {
+          console.log(status);
+          reject(status);
+        }
+      });
     });
   }
 
+  async function marking_map() {
+    if (markers.length < 1) {
+      let addresses = [
+        "Retiro, Madrid",
+        "Plaza Mayor, Madrid",
+        "Ciudad deportiva, Getafe",
+        "Media Markt Chamartin, Madrid",
+        "Santa Justa, Sevilla",
+      ];
+      try {
+        const positions = await Promise.all(
+          addresses.map(async (place) => {
+            const position = await getmarker(place);
+            return { name: place, position };
+          })
+        );
+        setMarkers(
+          positions.map((item, index) => ({
+            id: index,
+            name: item.name,
+            position: item.position,
+          }))
+        );
+      } catch (error) {
+        console.error("Error fetching marker positions:", error);
+      }
+    }
+  }
   //Fin geocoding
   //*************
-
-  const markers = [
-    {
-      id: 1,
-      name: "Retiro, Madrid",
-      position: { lat: 40.41342556732059, lng: -3.6809039679921103 },
-    },
-    {
-      id: 2,
-      name: "Plaza Mayor, Madrid",
-      position: { lat: 40.41529073310998, lng: -3.7073479258552293 },
-    },
-    {
-      id: 3,
-      name: "Ciudad Deportiva, Getafe",
-      position: { lat: 40.32453121223733, lng: -3.7119511963745686 },
-    },
-    {
-      id: 4,
-      name: "Media Makrt (Chamartin), Madrid",
-      position: { lat: 40.46221232575594, lng: -3.688854355139412 },
-    },
-  ];
 
   const handleActiveMarker = (marker) => {
     if (marker === activeMarker) {
@@ -76,9 +83,27 @@ export const Social_media = () => {
 
   const handleOnLoad = (map) => {
     const bounds = new google.maps.LatLngBounds();
-    markers.forEach(({ position }) => bounds.extend(position));
-    map.fitBounds(bounds);
+    marking_map();
+    console.log("Pre-Checker");
+    const Checker = () => {
+      if (localStorage.getItem("map") == "[]") {
+        console.log("***TEST***", markers),
+          setTimeout(function () {
+            Checker();
+          }, 100);
+      } else {
+        console.log("***Post-Checker");
+        let aux = JSON.parse(localStorage.getItem("map"));
+        console.log("**AUX**", aux);
+        aux.forEach(({ position }) => bounds.extend(position));
+        map.fitBounds(bounds);
+      }
+    };
+    Checker();
   };
+
+  console.log("Markers", markers);
+  localStorage.setItem("map", JSON.stringify(markers));
 
   return isLoaded ? (
     <div className="social-div">
@@ -131,15 +156,6 @@ export const Social_media = () => {
           <h5 className="text-center">Algunos de nuestros eventos</h5>
           <div className="container d-inline-flex">
             <div width="5%" className="d-flex flex-column mx-2">
-              <button
-                type="button"
-                className="btn btn-primary"
-                onClick={() => {
-                  getmarker();
-                }}
-              >
-                Primary
-              </button>
               <GoogleMap
                 mapContainerStyle={containerStyle}
                 zoom={10}
