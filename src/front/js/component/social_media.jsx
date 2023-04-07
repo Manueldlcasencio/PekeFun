@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useContext } from "react";
+import { Context } from "../store/appContext.js";
 import "../../styles/social.css";
 import {
   GoogleMap,
@@ -15,14 +16,17 @@ export const Social_media = () => {
 
   const [activeMarker, setActiveMarker] = useState(null);
   const [markers, setMarkers] = useState([]);
+  const [event, setEvent] = useState([]);
+
+  const { store } = useContext(Context);
 
   const containerStyle = {
     width: "800px",
     height: "400px",
   };
 
-  //Lógica del geocoding a partir de aquí
-  //*************************************
+  //Lógica del geocoding
+  //********************
 
   async function getmarker(address) {
     const geocoder = new google.maps.Geocoder();
@@ -33,25 +37,26 @@ export const Social_media = () => {
             lat: results[0].geometry.location.lat(),
             lng: results[0].geometry.location.lng(),
           };
-          console.log(loc);
           resolve(loc);
         } else {
-          console.log(status);
           reject(status);
         }
       });
     });
   }
+  let addresses = [];
+  if (store.events.length > 1 && event.length == 0) {
+    setEvent(store.events);
+  }
+  if (event.length > 1) {
+    event.forEach((address) => {
+      addresses.push(address.localization);
+    });
+  }
 
   async function marking_map() {
-    if (markers.length < 1) {
-      let addresses = [
-        "Retiro, Madrid",
-        "Plaza Mayor, Madrid",
-        "Ciudad deportiva, Getafe",
-        "Media Markt Chamartin, Madrid",
-        "Santa Justa, Sevilla",
-      ];
+    if (markers.length < 1 && addresses.length > 0) {
+      console.log("TRY");
       try {
         const positions = await Promise.all(
           addresses.map(async (place) => {
@@ -84,17 +89,13 @@ export const Social_media = () => {
   const handleOnLoad = (map) => {
     const bounds = new google.maps.LatLngBounds();
     marking_map();
-    console.log("Pre-Checker");
     const Checker = () => {
       if (localStorage.getItem("map") == "[]") {
-        console.log("***TEST***", markers),
-          setTimeout(function () {
-            Checker();
-          }, 100);
+        setTimeout(function () {
+          Checker();
+        }, 100);
       } else {
-        console.log("***Post-Checker");
         let aux = JSON.parse(localStorage.getItem("map"));
-        console.log("**AUX**", aux);
         aux.forEach(({ position }) => bounds.extend(position));
         map.fitBounds(bounds);
       }
@@ -102,11 +103,35 @@ export const Social_media = () => {
     Checker();
   };
 
-  console.log("Markers", markers);
   localStorage.setItem("map", JSON.stringify(markers));
 
+  //Carga de mapa retrasada
+  const mapa = (
+    <GoogleMap
+      mapContainerStyle={containerStyle}
+      zoom={10}
+      onLoad={handleOnLoad}
+    >
+      {/* Child components, such as markers, info windows, etc. */}
+      {markers.map(({ id, name, position }) => (
+        <Marker
+          key={id}
+          position={position}
+          onClick={() => handleActiveMarker(id)}
+        >
+          {activeMarker === id ? (
+            <InfoWindow onCloseClick={() => setActiveMarker(null)}>
+              <div>{name}</div>
+            </InfoWindow>
+          ) : null}
+        </Marker>
+      ))}
+      <></>
+    </GoogleMap>
+  );
+
   return isLoaded ? (
-    <div className="social-div">
+    <div className="social-div my-4">
       <div className="social-header">
         <h3>Nuestra comunidad</h3>
       </div>
@@ -156,27 +181,7 @@ export const Social_media = () => {
           <h5 className="text-center">Algunos de nuestros eventos</h5>
           <div className="container d-inline-flex">
             <div width="5%" className="d-flex flex-column mx-2">
-              <GoogleMap
-                mapContainerStyle={containerStyle}
-                zoom={10}
-                onLoad={handleOnLoad}
-              >
-                {/* Child components, such as markers, info windows, etc. */}
-                {markers.map(({ id, name, position }) => (
-                  <Marker
-                    key={id}
-                    position={position}
-                    onClick={() => handleActiveMarker(id)}
-                  >
-                    {activeMarker === id ? (
-                      <InfoWindow onCloseClick={() => setActiveMarker(null)}>
-                        <div>{name}</div>
-                      </InfoWindow>
-                    ) : null}
-                  </Marker>
-                ))}
-                <></>
-              </GoogleMap>
+              {event.length > 1 ? mapa : <h4>Cargando</h4>}
             </div>
           </div>
         </div>
