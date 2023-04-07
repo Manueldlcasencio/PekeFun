@@ -4,6 +4,7 @@ import PekeFun from "../../img/fondo.png";
 import "../../styles/home.css";
 import {Social_media} from "../component/social_media.jsx"
 import { Cards_activities } from "../component/cards_activities";
+import { Create_event_form } from "../component/create_event_form";
 
 
 export const Home = () => {
@@ -21,21 +22,13 @@ export const Home = () => {
 				<img src={PekeFun} />
 			</p>
 
-			{/* -INSERTO CARDS DE ACTIVIDADES EN EL HOME-
-			<div className="container bg-dark mb-3">
-            <h1 className="text-light text-center pt-4">Characters</h1>
-			<div className="row row-cols-1 row-cols-md-3 row-cols-xl-5 g-2">
-				{   people.map((e, i)=>{
-                        let card = <CardPeople key= {i} id={i+1} name = {e.name} height = {e.height} birth_year = {e.birth_year} hair_color = {e.hair_color} eye_color = {e.eye_color} />
-                        return card;
-                    })
-                }
-			</div>
-		</div>
-			*/}
-
 		<Cards_activities />
+		<Create_event_form />
+		<button className="btn btn-secondary" type="button" onClick={() => actions.getTutorData()}> {/*BORRAR LUEGO!!!!!!!!*/}
+          recuperar info del tutor
+        </button>
 		<Social_media />
+
 		</div>
 	);
 };
