@@ -1,0 +1,16 @@
+.no-nav {
+    margin-top: 90px;
+    width: 60%;
+}
+
+.inner {
+    background-color: #feb823;
+}
+
+.tutorkid {
+    background-color: lightgray;
+    width: 100%;
+    border-radius: 5px;
+    font-size: 16px;
+    padding: 10px;
+}
