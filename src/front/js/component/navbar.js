@@ -137,6 +137,7 @@ export const Navbar = () => {
           >
             <span className="navbar-toggler-icon"></span>
           </button>
+          <Logout/>
 
             
 

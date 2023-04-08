@@ -108,36 +108,108 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 	
 			login: async (email, password) => {
-
 				const requestOptions = {
-					method: "POST",
-					headers: {
-						"Content-type": "application/json"
-					},
-					body: JSON.stringify({
-						"username": email,
-						"password": password
-					})
+				  method: "POST",
+				  headers: {
+					"Content-type": "application/json"
+				  },
+				  body: JSON.stringify({
+					"username": email,
+					"password": password
+				  })
 				};
 				try {
-					const resp = await fetch(process.env.BACKEND_URL + "/api/login", requestOptions)
-					if (resp.status != 200) {
-						console.log("actions.login: error");
-						return false;
-					}
-					const data = await resp.json();
-					console.log("ok", data);
-					localStorage.setItem("token", data.access_token);
-
-					setStore({ token: data.access_token })
-
-					return true;
+				  const resp = await fetch(process.env.BACKEND_URL + "/api/login", requestOptions)
+				  if (resp.status != 200) {
+					console.log("actions.login: error", resp.status, await resp.text());
+					return false;
+				  }
+				  const data = await resp.json();
+				  console.log("ok", data);
+				  localStorage.setItem("token", data.access_token);
+				  localStorage.setItem("username", email);
+				
+				  setStore({ token: data.access_token })
+				
+				  return true;
 				}
 				catch (error) {
-					console.error("There has been an error login in")
+				  console.error("There has been an error login in", error)
 				}
 			},
-
+			
+			getUserInfo: async () => {
+				const username = localStorage.getItem("username");
+				const token = localStorage.getItem("token");
+			  
+				if (!username || username === "") {
+				  console.error("No se encuentra el nombre de usuario en el localStorage");
+				  return;
+				}
+				try {
+				  const params = new URLSearchParams({
+					"username": username,
+				  });
+			  
+				  const res = await fetch(`${process.env.BACKEND_URL}/api/signup/info?${params.toString()}`, {
+					headers: {
+					  Authorization: `Bearer ${token}`
+					},
+				  });
+			  
+				  if (!res.ok) {
+					console.error(`Error en la solicitud: ${res.status}`);
+					return;
+				  }
+				  const data = await res.json();
+				  setStore({ userData: data });
+				  console.log("ESTA INFO DEL USUARIO ESTÁ ALMACENADA EN EL STORE DE FLUX, EN userData:", getStore().userData);
+			  
+				  if (getStore().userData.info.advertiser === true) {
+					try {
+					  const params = new URLSearchParams({ 
+						"username": username,
+					  });
+					  const res1 = await fetch(`${process.env.BACKEND_URL}/api/signup/advertiser?${params.toString()}`, {
+						headers: {
+						  Authorization: `Bearer ${token}`
+						},
+					  });
+					  const dataAdvertiser = await res1.json();
+					  setStore({ advertiserData: dataAdvertiser });
+					  console.log("ESTA INFO DEL ANUNCIANTE ESTÁ ALMACENADA EN EL STORE DE FLUX, EN advertiserData:", getStore().advertiserData); // Agrega los paréntesis a 'getStore()'
+					
+					} catch (error) {
+					  console.error("Error al intentar recuperar los datos del anunciante del back:", error);
+					  return;
+					}
+				  }
+				  if (getStore().userData.info.tutor === true) {
+					try {
+					  const params = new URLSearchParams({
+						"username": username,
+					  });
+					  const res = await fetch(`${process.env.BACKEND_URL}/api/signup/tutor?${params.toString()}`, {
+						headers: {
+						  Authorization: `Bearer ${token}`
+						},
+					  });
+			  
+					  const dataTutor = await res.json();
+					  setStore({ tutorData: dataTutor });
+					  console.log("ESTA INFO DEL TUTOR ESTÁ ALMACENADA EN EL STORE DE FLUX, EN tutorData:", getStore().tutorData);
+					
+					} catch (error) {
+					  console.error("Error al intentar recuperar los datos del tutor del back:", error);
+					  return;
+					}
+				  }
+				} catch (error) {
+				  console.error("Error al intentar recuperar los datos del usuario:", error);
+				  return;
+				}
+			},
+						  
 			logout: () => {
 				const token = localStorage.removeItem("token");
 				const username = localStorage.removeItem("username");
@@ -173,7 +245,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					console.error("There has been an error creating a user")
 				}
 			},
-
+/*
 			getUserData: async () => {
 				const store = getStore();
 				const username = localStorage.getItem("username");
@@ -212,7 +284,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					};
 				}
 				
-			},
+			},*/
 
 
 
