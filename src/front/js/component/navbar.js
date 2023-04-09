@@ -139,8 +139,6 @@ export const Navbar = () => {
           </button>
           <Logout/>
 
-            
-
             {isAuthenticated ? (
               <Logout handleLogout={handleLogout} />
             ) : (

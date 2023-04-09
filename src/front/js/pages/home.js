@@ -4,7 +4,7 @@ import PekeFun from "../../img/fondo.png";
 import "../../styles/home.css";
 import {Social_media} from "../component/social_media.jsx"
 import { Cards_activities } from "../component/cards_activities";
-import { Create_event_form } from "../component/create_event_form";
+//import { Create_event_form } from "../component/create_event_form";
 
 
 export const Home = () => {
@@ -23,10 +23,12 @@ export const Home = () => {
 			</p>
 
 		<Cards_activities />
-		<Create_event_form />
-		<button className="btn btn-secondary" type="button" onClick={() => actions.getTutorData()}> {/*BORRAR LUEGO!!!!!!!!*/}
+
+		{/*<Create_event_form />
+		<button className="btn btn-secondary" type="button" onClick={() => actions.getTutorData()}> 
           recuperar info del tutor
-        </button>
+        </button> */}
+
 		<Social_media />
 
 		</div>

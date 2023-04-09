@@ -1,5 +1,3 @@
-import { Child_Selection_Modal } from "../component/child_selection_modal";
-
 const getState = ({ getStore, getActions, setStore }) => {
 	return {
 		store: {
@@ -108,6 +106,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 	
 			login: async (email, password) => {
+				const actions = getActions();
 				const requestOptions = {
 				  method: "POST",
 				  headers: {
@@ -130,6 +129,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 				  localStorage.setItem("username", email);
 				
 				  setStore({ token: data.access_token })
+
+				  actions.getUserInfo();
 				
 				  return true;
 				}
@@ -189,14 +190,18 @@ const getState = ({ getStore, getActions, setStore }) => {
 					  const params = new URLSearchParams({
 						"username": username,
 					  });
-					  const res = await fetch(`${process.env.BACKEND_URL}/api/signup/tutor?${params.toString()}`, {
+					  const res2 = await fetch(`${process.env.BACKEND_URL}/api/signup/tutor?${params.toString()}`, {
 						headers: {
 						  Authorization: `Bearer ${token}`
 						},
 					  });
-			  
-					  const dataTutor = await res.json();
-					  setStore({ tutorData: dataTutor });
+					  
+					  const dataTutor = await res2.json();
+					  console.log("Data recibida del servidor al recuperar info del tutor ya registrado:", dataTutor);
+				  
+					  setStore({...getStore(),	tutorData: { ...dataTutor.msg, children: dataTutor.kids,},});
+					  
+					  
 					  console.log("ESTA INFO DEL TUTOR ESTÁ ALMACENADA EN EL STORE DE FLUX, EN tutorData:", getStore().tutorData);
 					
 					} catch (error) {
@@ -245,48 +250,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 					console.error("There has been an error creating a user")
 				}
 			},
-/*
-			getUserData: async () => {
-				const store = getStore();
-				const username = localStorage.getItem("username");
-				const token = localStorage.getItem("token");
-			
-				if (!username || username === "") {
-					console.error("No se encuentra el nombre de usuario en el localStorage");
-					return;
-				}
-			
-				try {
-					const params = new URLSearchParams({
-						"username": username,
-					});
-			
-					const res = await fetch(`${process.env.BACKEND_URL}/api/signup/info?${params.toString()}`, {
-						headers: {
-							Authorization: `Bearer ${token}`
-
-						},
-					});
-			
-					if (!res.ok) {
-						console.error(`Error en la solicitud: ${res.status}`);
-						return;
-					}
-			
-					const data = await res.json();
-					setStore({ tutorData: data });
-					return data;
-				} catch (error) {
-					console.error("Error al intentar recuperar los datos del usuario:", error);
-					return {
-					  is_tutor: false,
-					  children: [],
-					};
-				}
-				
-			},*/
-
-
 
 			//*****************************************SECCION TUTOR Y "CHILDRENS"****************************************/
 			createTutor: async (email, tutorData) => {
@@ -562,22 +525,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 				});
 			},
 			  
-			handleParticipantRegister: () => {
-				const store = getStore();
-				const token = localStorage.getItem("token");
 			  
-				if (!token || token === "" || token === "undefined") {
-				  return <Modal_login_signup />;
-				}
-			  
-				const userData = getActions().getUserData();
-			  
-				if (userData.is_tutor && userData.children.length !== 0) {
-				  <Child_Selection_Modal/>
-				}
-			},
-			  
-			handleChildSelectionSubmit: async (selectedChildren) => {
+			handleChildSelectionSubmit: async (onHide, selectedChildren, onSuccess = () => {}) => {
 				const store = getStore();
 				const token = localStorage.getItem("token");
 				const eventId = store.selectedEvent.id;
@@ -586,7 +535,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				onHide();
 				try {
 					for (const child of selectedChildren) {
-						const response = await fetch("/api/event/participant", {
+						const response = await fetch(process.env.BACKEND_URL + "/api/event/participant", {
 							method: "POST",
 							headers: {
 								"Content-Type": "application/json",
@@ -603,7 +552,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 						if (response.ok) {
 							const data = await response.json();
 							console.log(`Inscripción correcta de ${data.participant_added} al evento ${data.event}`);
-						} else {
+							onSuccess();
+						  } else {
 							console.error("Error al inscribir el niño en el evento");
 						}
 					}

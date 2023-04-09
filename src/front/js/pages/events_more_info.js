@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { Context } from "../store/appContext";
 import { Modal_login_signup } from "../component/modal_login_signup.js";
 import {Child_Selection_Modal} from "../component/child_selection_modal.js";
@@ -6,19 +6,37 @@ import {Child_Selection_Modal} from "../component/child_selection_modal.js";
 export const Events_more_info = () => {
   const { store, actions } = useContext(Context);
   const [showModal, setShowModal] = useState(false);
+  const [showLoginSignupModal, setShowLoginSignupModal] = useState(false);
 
+  useEffect(() => {
+    console.log("showModal value:", showModal);
+  }, [showModal]);
+  
+  useEffect(() => {
+    console.log("store.tutorData.children:", store.tutorData.children);
+  }, [store.tutorData.children]);
+  
   const handleShowModal = () => setShowModal(true);
   const handleHideModal = () => setShowModal(false);
   
   const handleParticipantRegisterClick = async () => {
-  const userData = await actions.getUserData();
-  if (userData.is_tutor && userData.children.length !== 0) {
-    handleShowModal();
-  } else {
-    actions.handleParticipantRegister();
-  }
-};  
+    const token = localStorage.getItem("token");
+  
+    if (!token || token === "" || token === "undefined") {
+      setShowLoginSignupModal(true); 
+      return;
+    }
+  
+    const userData = store.userData;
+    const children = store.tutorData.children.length != 0 ? store.tutorData.children : [];
 
+    if (userData.info.tutor && children.length !== 0) {
+      handleShowModal(); 
+    } else {
+      console.log("no hay niños registrados");
+    }
+  };
+  
   console.log('selectedEvent:', store.selectedEvent);
 
   const {
@@ -36,14 +54,11 @@ export const Events_more_info = () => {
     others,
   } = store.selectedEvent;
 
-  console.log("VER AQUI!!!!!!!", store.selectedEvent, "VER AQUI!!!!!!")
-  console.log("childList en Events_more_info:", store.userData.children);
-
-
   if (!store.selectedEvent) {
     return <h3>No hay evento seleccionado</h3>;
   } 
 
+  console.log("tutorData en Events_more_info:", store.tutorData);
   return (
     <div>
       <h1>{name}</h1>
@@ -58,11 +73,10 @@ export const Events_more_info = () => {
       <p>{cloth}</p>
       <p>{others}</p>
       <button type="button" className="btn btn-warning" onClick={handleParticipantRegisterClick}>¡Inscribirse!</button>
-
+     
       <Child_Selection_Modal show={showModal} onHide={handleHideModal} childList={store.tutorData.children} />
-
-      // Verificar que userChildren esté disponible en el store
-
+      <Modal_login_signup show={showLoginSignupModal} onHide={() => setShowLoginSignupModal(false)} />
+    
     </div>
   );
 };
