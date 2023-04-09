@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState, useEffect, useRef } from "react";
 import { Navigate } from "react-router-dom";
 import { Context } from "../store/appContext";
 import "../../styles/home.css";
@@ -7,11 +7,13 @@ import "../../styles/user.css";
 
 export const User = () => {
   const { store } = useContext(Context);
+  const ref = useRef();
   const [protect, setProtect] = useState();
   const [username, setUsername] = useState();
   const [info, setInfo] = useState();
   const [infotutor, setInfotutor] = useState();
   const [infochild, setInfochild] = useState();
+  const [childselect, setChildselect] = useState();
 
   //UseState por tipo
   const [userform, setUserform] = useState({
@@ -20,6 +22,7 @@ export const User = () => {
     new_password: "",
   });
   const [tutorform, setTutorform] = useState({});
+  const [childformsend, setChildformsend] = useState();
 
   // Fetchs de información
   async function isPrivate() {
@@ -142,6 +145,26 @@ export const User = () => {
     }
   };
 
+  let child = () => {
+    if (info != undefined) {
+      if (info.tutor == true)
+        return (
+          <button
+            className="nav-link"
+            id="nav-child-tab"
+            data-bs-toggle="tab"
+            data-bs-target="#nav-child"
+            type="button"
+            role="tab"
+            aria-controls="nav-child"
+            aria-selected="false"
+          >
+            Hijos/as
+          </button>
+        );
+    }
+  };
+
   //Variables para contenido
   function useristutor() {
     if (info != undefined) {
@@ -203,7 +226,6 @@ export const User = () => {
   );
 
   function showkidsname() {
-    console.log("infochild", infochild);
     let kids_names = "";
     kids_names = infochild.map((e) => (
       <p className="tutorkid" key={e.id}>
@@ -300,6 +322,178 @@ export const User = () => {
     </form>
   );
 
+  function generatechild() {
+    let kids_on_select = "";
+    kids_on_select = infochild.map((e, index) => (
+      <option value={index} key={e.id}>
+        {e.name} {e.lastname}
+      </option>
+    ));
+    return kids_on_select;
+  }
+
+  let childform = (
+    <form>
+      <div className="mb-3">
+        <label htmlFor="tutorname" className="form-label">
+          Nombre
+        </label>
+        <input
+          type="string"
+          className="form-control"
+          id="tutorname"
+          objkey="name"
+          aria-describedby="emailHelp"
+          onChange={handlechildform}
+          placeholder={
+            childselect != undefined ? infochild[childselect].name : ""
+          }
+        />
+      </div>
+      <div className="mb-3">
+        <label htmlFor="tutorname" className="form-label">
+          Apellidos
+        </label>
+        <input
+          type="string"
+          className="form-control"
+          id="tutorname"
+          objkey="lastname"
+          aria-describedby="emailHelp"
+          onChange={handlechildform}
+          placeholder={
+            childselect != undefined ? infochild[childselect].lastname : ""
+          }
+        />
+      </div>
+      <div className="mb-3">
+        <label htmlFor="tutorname" className="form-label">
+          Fecha de Nacimiento
+        </label>
+        <input
+          type="string"
+          className="form-control"
+          id="childbirth"
+          objkey="birth"
+          ref={ref}
+          aria-describedby="emailHelp"
+          onChange={handlechildform}
+          placeholder={
+            childselect != undefined ? infochild[childselect].birth : ""
+          }
+          onFocus={
+            childselect != undefined ? () => (ref.current.type = "date") : ""
+          }
+          onBlur={
+            childselect != undefined ? () => (ref.current.type = "text") : ""
+          }
+        />
+      </div>
+      <div className="mb-3">
+        <label htmlFor="tutorname" className="form-label">
+          Preferencias
+        </label>
+        <input
+          type="string"
+          className="form-control"
+          id="tutorname"
+          objkey="preferences"
+          aria-describedby="emailHelp"
+          onChange={handlechildform}
+          placeholder={
+            childselect != undefined ? infochild[childselect].preferences : ""
+          }
+        />
+      </div>
+      <div className="mb-3">
+        <label htmlFor="tutorname" className="form-label">
+          Avatar
+        </label>
+        <input
+          type="string"
+          className="form-control"
+          id="tutorname"
+          objkey="avatar"
+          aria-describedby="emailHelp"
+          onChange={handlechildform}
+          placeholder={
+            childselect != undefined ? infochild[childselect].avatar : ""
+          }
+        />
+      </div>
+      <div className="mb-3">
+        <label htmlFor="tutorname" className="form-label">
+          Escuela/Instituto
+        </label>
+        <input
+          type="string"
+          className="form-control"
+          id="tutorname"
+          objkey="school"
+          aria-describedby="emailHelp"
+          onChange={handlechildform}
+          placeholder={
+            childselect != undefined ? infochild[childselect].school : ""
+          }
+        />
+      </div>
+      <div className="mb-3">
+        <label htmlFor="tutorname" className="form-label">
+          Otros
+        </label>
+        <input
+          type="string"
+          className="form-control"
+          id="tutorname"
+          objkey="others"
+          aria-describedby="emailHelp"
+          onChange={handlechildform}
+          placeholder={
+            childselect != undefined ? infochild[childselect].others : ""
+          }
+        />
+        <div className="container form-text" id="childotherhelper">
+          Ponga aquí datos como alergias, intolerancias u otros que los
+          responsables del evento deban conocer.
+        </div>
+      </div>
+      <button
+        type="submit"
+        className="btn btn-primary mx-1"
+        onClick={usersubmit}
+      >
+        Cambiar datos
+      </button>
+      <button
+        type="submit"
+        className="btn btn-primary mx-1"
+        onClick={usersubmit}
+      >
+        Eliminar
+      </button>
+    </form>
+  );
+
+  let contentchild = (
+    <div>
+      <select
+        className="form-select my-1"
+        aria-label="Default select example"
+        id="childselect"
+        onChange={handleselect}
+      >
+        <option defaultValue value="0">
+          Elige cual quieres modificar
+        </option>
+        {infochild != undefined ? generatechild() : ""}
+      </select>
+      <button type="button" className="btn btn-success my-2">
+        Añadir
+      </button>
+      {childselect != undefined ? childform : ""}
+    </div>
+  );
+
   //Funciones de gestión de botones usuario
   function handleoldpassword(e) {
     setUserform({ ...userform, old_password: e.target.value });
@@ -316,6 +510,27 @@ export const User = () => {
     //Llamar función del flux. Parametro = userform
     //Si status 200
     userhelper.innerHTML = "<p>¡Contraseña actualizada!</p>";
+  }
+
+  function handleselect(e) {
+    setChildselect(e.target.value);
+    setChildformsend({
+      name: infochild[e.target.value].name,
+      lastname: infochild[e.target.value].lastname,
+      birth: infochild[e.target.value].birth,
+      preferences: infochild[e.target.value].preferences,
+      avatar: infochild[e.target.value].avatar,
+      school: infochild[e.target.value].school,
+      others: infochild[e.target.value].others,
+    });
+  }
+
+  //Gestión de cambios en niño
+  function handlechildform(e) {
+    setChildformsend({
+      ...childformsend,
+      [e.target.getAttribute("objkey")]: e.target.value,
+    });
   }
 
   return (
@@ -336,6 +551,7 @@ export const User = () => {
           </button>
           {tutor()}
           {advertiser()}
+          {child()}
         </div>
       </nav>
       {/* Contenido tabs */}
@@ -372,12 +588,18 @@ export const User = () => {
         </div>
         <div
           className="tab-pane fade"
-          id="nav-contact"
+          id="nav-child"
           role="tabpanel"
-          aria-labelledby="nav-contact-tab"
+          aria-labelledby="nav-child-tab"
           tabIndex="0"
         >
-          Tab 2
+          <div className="container-fluid py-2">
+            <h4>
+              Bienvenido, {info != undefined ? info.email : "Desconocido"}.
+              ¿Quieres cambiar los datos de tus hijos/as?
+            </h4>
+            {contentchild}
+          </div>
         </div>
       </div>
     </div>
