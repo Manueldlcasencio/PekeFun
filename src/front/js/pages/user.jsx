@@ -14,6 +14,8 @@ export const User = () => {
   const [infotutor, setInfotutor] = useState();
   const [infochild, setInfochild] = useState();
   const [childselect, setChildselect] = useState();
+  const [infoanunciante, setInfoanunciante] = useState();
+  const [infoevent, setInfoevent] = useState();
 
   //UseState por tipo
   const [userform, setUserform] = useState({
@@ -23,6 +25,7 @@ export const User = () => {
   });
   const [tutorform, setTutorform] = useState({});
   const [childformsend, setChildformsend] = useState();
+  const [adverform, setAdverform] = useState({});
 
   // Fetchs de información
   async function isPrivate() {
@@ -92,12 +95,54 @@ export const User = () => {
     }
   }
 
+  async function getInfoAnunciante() {
+    try {
+      const requestOptions = {
+        method: "GET",
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("token"),
+        },
+      };
+      const params = new URLSearchParams({ username: username });
+      const data = await fetch(
+        `https://3001-manueldlcasenci-pekefun-p4270miz633.ws-eu93.gitpod.io/api/signup/advertiser?${params.toString()}`,
+        requestOptions
+      );
+      const response = await data.json();
+      return (
+        setInfoanunciante(response.info),
+        setInfoevent(response.events),
+        setAdverform({
+          ...adverform,
+          name: response.info.name,
+          lastname: response.info.lastname,
+          contact: response.info.contact,
+          company: response.info.contact,
+          company: response.info.contact,
+          company: response.info.company,
+          working_since: response.info.working_since,
+          description: response.info.description,
+          twitter: response.info.twitter,
+          avatar: response.info.avatar,
+          company_image: response.info.company_image,
+          others: response.info.others,
+        })
+      );
+    } catch (error) {
+      let details = { Username: username, Error: error };
+      console.log("Error en fetch user", details);
+    }
+  }
+
   useEffect(() => {
     isPrivate();
   }, []);
 
   if (username != undefined && info == undefined) getUserInfo();
   if (info != undefined && infotutor == undefined) getInfoTutor();
+  if (info != undefined && infoanunciante == undefined) getInfoAnunciante();
+
+  console.log("Niños", infochild);
 
   //Comprobación de logeo (zona privada)
   if (protect != undefined && protect != 200) {
@@ -131,12 +176,12 @@ export const User = () => {
         return (
           <button
             className="nav-link"
-            id="nav-profile-tab"
+            id="nav-advertiser-tab"
             data-bs-toggle="tab"
-            data-bs-target="#nav-profile"
+            data-bs-target="#nav-advertiser"
             type="button"
             role="tab"
-            aria-controls="nav-profile"
+            aria-controls="nav-advertiser"
             aria-selected="false"
           >
             Anunciante
@@ -346,7 +391,9 @@ export const User = () => {
           aria-describedby="emailHelp"
           onChange={handlechildform}
           placeholder={
-            childselect != undefined ? infochild[childselect].name : ""
+            childselect != undefined && childselect != 99
+              ? infochild[childselect].name
+              : ""
           }
         />
       </div>
@@ -362,7 +409,9 @@ export const User = () => {
           aria-describedby="emailHelp"
           onChange={handlechildform}
           placeholder={
-            childselect != undefined ? infochild[childselect].lastname : ""
+            childselect != undefined && childselect != 99
+              ? infochild[childselect].lastname
+              : ""
           }
         />
       </div>
@@ -379,13 +428,19 @@ export const User = () => {
           aria-describedby="emailHelp"
           onChange={handlechildform}
           placeholder={
-            childselect != undefined ? infochild[childselect].birth : ""
+            childselect != undefined && childselect != 99
+              ? infochild[childselect].birth
+              : ""
           }
           onFocus={
-            childselect != undefined ? () => (ref.current.type = "date") : ""
+            childselect != undefined && childselect != 99
+              ? () => (ref.current.type = "date")
+              : () => <h2></h2>
           }
           onBlur={
-            childselect != undefined ? () => (ref.current.type = "text") : ""
+            childselect != undefined && childselect != 99
+              ? () => (ref.current.type = "text")
+              : () => <h2></h2>
           }
         />
       </div>
@@ -401,7 +456,9 @@ export const User = () => {
           aria-describedby="emailHelp"
           onChange={handlechildform}
           placeholder={
-            childselect != undefined ? infochild[childselect].preferences : ""
+            childselect != undefined && childselect != 99
+              ? infochild[childselect].preferences
+              : ""
           }
         />
       </div>
@@ -417,7 +474,9 @@ export const User = () => {
           aria-describedby="emailHelp"
           onChange={handlechildform}
           placeholder={
-            childselect != undefined ? infochild[childselect].avatar : ""
+            childselect != undefined && childselect != 99
+              ? infochild[childselect].avatar
+              : ""
           }
         />
       </div>
@@ -433,7 +492,9 @@ export const User = () => {
           aria-describedby="emailHelp"
           onChange={handlechildform}
           placeholder={
-            childselect != undefined ? infochild[childselect].school : ""
+            childselect != undefined && childselect != 99
+              ? infochild[childselect].school
+              : ""
           }
         />
       </div>
@@ -449,7 +510,9 @@ export const User = () => {
           aria-describedby="emailHelp"
           onChange={handlechildform}
           placeholder={
-            childselect != undefined ? infochild[childselect].others : ""
+            childselect != undefined && childselect != 99
+              ? infochild[childselect].others
+              : ""
           }
         />
         <div className="container form-text" id="childotherhelper">
@@ -482,7 +545,7 @@ export const User = () => {
         id="childselect"
         onChange={handleselect}
       >
-        <option defaultValue value="0">
+        <option defaultValue value="99">
           Elige cual quieres modificar
         </option>
         {infochild != undefined ? generatechild() : ""}
@@ -490,19 +553,188 @@ export const User = () => {
       <button type="button" className="btn btn-success my-2">
         Añadir
       </button>
-      {childselect != undefined ? childform : ""}
+      {childselect != undefined && childselect != 99 ? childform : ""}
     </div>
   );
 
-  //Funciones de gestión de botones usuario
-  function handleoldpassword(e) {
-    setUserform({ ...userform, old_password: e.target.value });
-  }
+  let contentanunciante = (
+    <form>
+      <div className="mb-3">
+        <label htmlFor="tutorname" className="form-label">
+          Nombre
+        </label>
+        <input
+          type="string"
+          className="form-control"
+          id="anunciantename"
+          objkey="name"
+          aria-describedby="emailHelp"
+          onChange={handleadverform}
+          placeholder={infoanunciante != undefined ? infoanunciante.name : ""}
+        />
+      </div>
+      <div className="mb-3">
+        <label htmlFor="tutorname" className="form-label">
+          Apellidos
+        </label>
+        <input
+          type="string"
+          className="form-control"
+          id="anunciantename"
+          objkey="lastname"
+          aria-describedby="emailHelp"
+          onChange={handleadverform}
+          placeholder={
+            infoanunciante != undefined ? infoanunciante.lastname : ""
+          }
+        />
+      </div>
+      <div className="mb-3">
+        <label htmlFor="tutorname" className="form-label">
+          Contacto
+        </label>
+        <input
+          type="string"
+          className="form-control"
+          id="anunciantename"
+          objkey="contact"
+          aria-describedby="emailHelp"
+          onChange={handleadverform}
+          placeholder={
+            infoanunciante != undefined ? infoanunciante.contact : ""
+          }
+        />
+      </div>
+      <div className="mb-3">
+        <label htmlFor="tutorname" className="form-label">
+          Organiza como
+        </label>
+        <input
+          type="string"
+          className="form-control"
+          id="anunciantename"
+          objkey="company"
+          aria-describedby="emailHelp"
+          onChange={handleadverform}
+          placeholder={
+            infoanunciante != undefined ? infoanunciante.company : ""
+          }
+        />
+      </div>
+      <div className="mb-3">
+        <label htmlFor="tutorname" className="form-label">
+          En activo desde
+        </label>
+        <input
+          type="date"
+          className="form-control"
+          id="anunciantename"
+          ref={ref}
+          objkey="working_since"
+          aria-describedby="emailHelp"
+          onChange={handleadverform}
+          placeholder={
+            infoanunciante != undefined ? infoanunciante.working_since : ""
+          }
+          onFocus={
+            infoanunciante != undefined
+              ? () => (ref.current.type = "date")
+              : () => <h2></h2>
+          }
+          onBlur={
+            infoanunciante != undefined
+              ? () => (ref.current.type = "text")
+              : () => <h2></h2>
+          }
+        />
+      </div>
+      <div className="mb-3">
+        <label htmlFor="tutorname" className="form-label">
+          Descripción propia/de la organización
+        </label>
+        <input
+          type="string"
+          className="form-control"
+          id="anunciantename"
+          objkey="description"
+          aria-describedby="emailHelp"
+          onChange={handleadverform}
+          placeholder={
+            infoanunciante != undefined ? infoanunciante.description : ""
+          }
+        />
+      </div>
+      <div className="mb-3">
+        <label htmlFor="tutorname" className="form-label">
+          Twitter
+        </label>
+        <input
+          type="string"
+          className="form-control"
+          id="anunciantename"
+          objkey="twitter"
+          aria-describedby="emailHelp"
+          onChange={handleadverform}
+          placeholder={
+            infoanunciante != undefined ? infoanunciante.twitter : ""
+          }
+        />
+      </div>
+      <div className="mb-3">
+        <label htmlFor="tutorname" className="form-label">
+          Avatar
+        </label>
+        <input
+          type="string"
+          className="form-control"
+          id="anunciantename"
+          objkey="avatar"
+          aria-describedby="emailHelp"
+          onChange={handleadverform}
+          placeholder={infoanunciante != undefined ? infoanunciante.avatar : ""}
+        />
+      </div>
+      <div className="mb-3">
+        <label htmlFor="tutorname" className="form-label">
+          Imagen de la organización
+        </label>
+        <input
+          type="string"
+          className="form-control"
+          id="anunciantename"
+          objkey="company_image"
+          aria-describedby="emailHelp"
+          onChange={handleadverform}
+          placeholder={
+            infoanunciante != undefined ? infoanunciante.company_image : ""
+          }
+        />
+      </div>
+      <div className="mb-3">
+        <label htmlFor="tutorname" className="form-label">
+          Otros
+        </label>
+        <input
+          type="string"
+          className="form-control"
+          id="anunciantename"
+          objkey="others"
+          aria-describedby="emailHelp"
+          onChange={handleadverform}
+          placeholder={infoanunciante != undefined ? infoanunciante.others : ""}
+        />
+      </div>
+      <button
+        type="submit"
+        className="btn btn-primary mx-1"
+        onClick={usersubmit}
+      >
+        Cambiar datos
+      </button>
+    </form>
+  );
 
-  function handlenewpassword(e) {
-    setUserform({ ...userform, new_password: e.target.value });
-  }
-
+  //Funciones de gestión de botones
   function usersubmit(e) {
     e.preventDefault();
     useroldpassword.value = "";
@@ -514,23 +746,39 @@ export const User = () => {
 
   function handleselect(e) {
     setChildselect(e.target.value);
-    setChildformsend({
-      name: infochild[e.target.value].name,
-      lastname: infochild[e.target.value].lastname,
-      birth: infochild[e.target.value].birth,
-      preferences: infochild[e.target.value].preferences,
-      avatar: infochild[e.target.value].avatar,
-      school: infochild[e.target.value].school,
-      others: infochild[e.target.value].others,
-    });
+    if (e.target.value != 99)
+      setChildformsend({
+        name: infochild[e.target.value].name,
+        lastname: infochild[e.target.value].lastname,
+        birth: infochild[e.target.value].birth,
+        preferences: infochild[e.target.value].preferences,
+        avatar: infochild[e.target.value].avatar,
+        school: infochild[e.target.value].school,
+        others: infochild[e.target.value].others,
+      });
   }
 
-  //Gestión de cambios en niño
+  //Gestión de cambios
   function handlechildform(e) {
     setChildformsend({
       ...childformsend,
       [e.target.getAttribute("objkey")]: e.target.value,
     });
+  }
+
+  function handleadverform(e) {
+    setAdverform({
+      ...adverform,
+      [e.target.getAttribute("objkey")]: e.target.value,
+    });
+  }
+
+  function handleoldpassword(e) {
+    setUserform({ ...userform, old_password: e.target.value });
+  }
+
+  function handlenewpassword(e) {
+    setUserform({ ...userform, new_password: e.target.value });
   }
 
   return (
@@ -599,6 +847,21 @@ export const User = () => {
               ¿Quieres cambiar los datos de tus hijos/as?
             </h4>
             {contentchild}
+          </div>
+        </div>
+        <div
+          className="tab-pane fade"
+          id="nav-advertiser"
+          role="tabpanel"
+          aria-labelledby="nav-advertiser-tab"
+          tabIndex="0"
+        >
+          <div className="container-fluid py-2">
+            <h4>
+              Bienvenido, {info != undefined ? info.email : "Desconocido"}.
+              ¿Quieres cambiar tus datos de anunciante?
+            </h4>
+            {contentanunciante}
           </div>
         </div>
       </div>
