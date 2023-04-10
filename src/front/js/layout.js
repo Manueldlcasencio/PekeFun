@@ -13,6 +13,7 @@ import { Contacto } from "./component/contacto";
 import { Categories } from "./component/categories";
 import { Events_more_info } from "./pages/events_more_info.js";
 import {User} from "./pages/user.jsx";
+import { Cards_activities } from "./component/cards_activities.js";
 
 
 
@@ -35,6 +36,7 @@ const Layout = () => {
                         <Route element={<Categories />} path="/categories" />
                         <Route element={<User />} path="/user" />
                         <Route element={<Events_more_info />} path="/event/:theid" />
+                        <Route element={<Cards_activities />} path="/categories/cards" /> 
                     </Routes>
                     <Footer />
                 </ScrollToTop>

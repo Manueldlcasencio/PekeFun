@@ -89,6 +89,8 @@
         "react-dom": "^16.8.4",
         "react-modal": "^3.16.1",
         "react-polyfills": "0.0.1",
+        "react-responsive": "^9.0.2",
+        "react-responsive-carousel": "^3.2.23",
         "react-router-dom": "^6.3.0",
         "react-toastify": "^9.1.2"
     }

@@ -1,0 +1,11 @@
+.card {
+    overflow-wrap: break-word;
+  }
+  
+  .card-text {
+    text-align: justify;
+  }
+  
+  .card .d-flex {
+    justify-content: center;
+  }

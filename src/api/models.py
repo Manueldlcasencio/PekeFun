@@ -157,6 +157,7 @@ class Event(db.Model):
         return {
             "event_id": self.id,
             "advertiser_id": self.id_advertiser,
+            "name": self.name,
             "localization": self.localization,
             "min_age": self.min_age,
             "max_age": self.max_age,

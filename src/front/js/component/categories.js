@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Carousel } from "react-bootstrap";
 import Surf from "../../img/surf.png";
 import Campamento from "../../img/campamento.png";
@@ -10,71 +10,91 @@ import Futbol from "../../img/futbol.png";
 import Programacion from "../../img/programacion.png";
 import Musica from "../../img/musica.png";
 import Verano from "../../img/verano.png";
-import { Link } from "react-router-dom";
-
+import { Context } from "../store/appContext.js";
+import { Link, Navigate } from "react-router-dom";
 
 
 
 export const Categories = () => {
+  const { store, actions } = useContext(Context);
   const [index, setIndex] = useState(0);
 
   const handleSelect = (selectedIndex, e) => {
     setIndex(selectedIndex);
   };
 
+//["Escuelas de Surf", "Clases de Teatro", "Campamentos de Verano", "Campings", "Parques Acuáticos", "Cocina", "Programación", "Música", "Fútbol", "Baile"],
+		
+
   const items = [
     {
       image: Surf,
       url: "/surfcamp",
+      cat: "Escuelas de Surf",
     },
     { 
       image: Verano,
       url: "/verano",
+      cat: "Campamentos de Verano",
      
     },
     {
       image: Musica,
       url: "/musica",
+      cat: "musica",
     },
     {
       image: Acuatico,
       url: "/acuatico",
+      cat:"acuatico",
     },
     {
       image: Baile,
       url: "/baile",
+      cat: "baile",
     },
     {
       image: Futbol,
       url: "/futbol",
+      cat: "futbol",
+
     },
 
     {
       image: Cocina,
       url: "/cocina",
+      cat: "cocina",
     },
 
     {
       image: Programacion,
       url: "/programacion",
+      cat: "programacion",
     },
 
     {
       image: Campamento,
       url: "/campamento",
+      cat: "campamento",
       
     },
 
     {
       image: Teatro,
       url: "/teatro",
-     
+     cat: "Clases de Teatro",
     
     },
 
 
 
   ];
+ const mostrarCards = (selectedCategory) => {
+  console.log(selectedCategory);
+  actions.filterEventsByCategory(selectedCategory); 
+  console.log(store.events_filtered);
+  return <Navigate to="/" />;
+ };
 
   const itemsToRender = [];
 
@@ -83,30 +103,33 @@ export const Categories = () => {
       <Carousel.Item key={i}>
         <div className="d-flex justify-content-between">
           <div className="w-30">
-            <Link to={items[i].url}>
-              <img className="d-block w-100" src={items[i].image} alt={i} />
-            </Link>
+          {/*  <Link to={items[i].url}> */}
+          <span onClick={()=> mostrarCards(items[i].cat)}>
+          <img className="d-block w-100"  src={items[i].image} alt={i} />
+          </span>
+            {/*  </Link> */}
           </div>
           <div className="w-30">
             {i + 1 < items.length && (
-              <Link to={items[i + 1].url}>
+                <span onClick={()=> mostrarCards(items[i+1].cat)}>
                 <img
                   className="d-block w-100"
                   src={items[i + 1].image}
                   alt={i + 1}
                 />
-              </Link>
+               </span>
             )}
           </div>
           <div className="w-30">
             {i + 2 < items.length && (
-              <Link to={items[i + 2].url}>
+              <span onClick={()=> mostrarCards(items[i+2].cat)}>
+
                 <img
                   className="d-block w-100"
                   src={items[i + 2].image}
                   alt={i + 2}
                 />
-              </Link>
+              </span>
             )}
           </div>
         </div>

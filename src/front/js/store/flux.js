@@ -251,6 +251,30 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			},
 
+			deleteUser: async (email, password, token) => {
+				const store = getStore();
+				console.log(email);
+				try {
+					const userRequestOptions = {
+						method: "DELETE",
+						headers: {
+							"Content-type": "application/json",
+							Authorization: `Bearer ${store.token}`
+						},
+						body: JSON.stringify({"username": email, "password": password})};
+					
+					const userResp = await fetch(process.env.BACKEND_URL + "/api/signup/info", userRequestOptions)
+					
+					const userDelResp = await userResp.json();
+					console.log(userDelResp);
+					
+					return true;
+
+				} catch (error) {
+					console.error("Error al intentar eliminar el usuario:", error);
+				}
+			},
+
 			//*****************************************SECCION TUTOR Y "CHILDRENS"****************************************/
 			createTutor: async (email, tutorData) => {
 				const store = getStore();
@@ -462,8 +486,10 @@ const getState = ({ getStore, getActions, setStore }) => {
 			//PARA FILTRAR EVENTOS POR CATEGORÍA (AGREGAR EN EL ONCLICK AL CAROUSEL Y EN LA VISTA DE LAS CARDS RENDERIZAR EVENTOS DE FILTERED EVENTS)
 			filterEventsByCategory: (selectedCategory) => {
 				const store = getStore();
+				console.log(selectedCategory);
 				const events_filtered = store.events.filter(event => event.category === selectedCategory);
 				setStore({ events_filtered: events_filtered });
+				console.log(store.events_filtered);
 			},
 			
 			//PARA FILTRAR EVENTOS POR BÙSQUEDA MEDIANTE STRING:

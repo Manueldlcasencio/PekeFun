@@ -74,9 +74,10 @@ def signup_info():
             if tutor:
                 if tutor.children:
                     for kid in tutor.children:
-                        participant_id = Participants.query.filter_by(child_id = kid.id).first()
+                        participant_id = Participants.query.filter_by(child_id = kid.id).all()
                         if participant_id:
-                            db.session.delete(participant_id)
+                            for id in participant_id:
+                                db.session.delete(id)
                     to_remove = []
                     for item in tutor.children:
                         to_remove.append(item)
@@ -85,21 +86,22 @@ def signup_info():
                             tutor.children.remove(item)
                             db.session.delete(item)
                 db.session.delete(tutor)
-            if advertiser:         
-                if advertiser.events: 
+            if advertiser:
+                advertiser_events = Event.query.filter_by(id_advertiser = advertiser.id).all()
+                if advertiser_events:
                     to_remove = []
-                    for item in advertiser.events:
+                    for item in advertiser_events:
                         to_remove.append(item)
                     for item in to_remove:
-                        for event in advertiser.events:
-                            advertiser.events.remove(item)
-                            db.session.delete(item) 
+                        for event in advertiser_events:
+                            db.session.delete(item)
+                db.session.delete(advertiser)
             db.session.delete(user)
             db.session.commit()
             return jsonify({"removed": username}), 200
         else:
             return jsonify({"msg": "Password is wrong."}), 400
-
+            
 # About tutors
 @api.route("/signup/tutor", methods=["GET", "POST", "PUT", "DELETE"])
 @jwt_required()
