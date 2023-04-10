@@ -133,6 +133,7 @@ class Event(db.Model):
     min_age = db.Column(db.Integer, unique=False, nullable=False)
     max_age = db.Column(db.Integer, unique=False, nullable=False)
     price = db.Column(db.Integer, unique=False, nullable=False)
+    image = db.Column(db.String, unique=False)
     date = db.Column(db.DateTime, unique=False, nullable=False)
     length = db.Column(db.Integer, unique=False, nullable=True)
     category = db.Column(db.String(200), unique=False, nullable=False)
@@ -160,6 +161,7 @@ class Event(db.Model):
             "min_age": self.min_age,
             "max_age": self.max_age,
             "price": self.price,
+            "image":self.image,
             "date": self.date,
             "length": self.length,
             "category": self.category,

@@ -37,7 +37,7 @@ export const User = () => {
         },
       };
       const data = await fetch(
-        `https://3001-manueldlcasenci-pekefun-p4270miz633.ws-eu93.gitpod.io/api/protected`,
+        process.env.BACKEND_URL + "/api/protected",
         requestOptions
       );
       setProtect(data.status);
@@ -59,7 +59,7 @@ export const User = () => {
       };
       const params = new URLSearchParams({ username: username });
       const data = await fetch(
-        `https://3001-manueldlcasenci-pekefun-p4270miz633.ws-eu93.gitpod.io/api/signup/info?${params.toString()}`,
+        `${process.env.BACKEND_URL}/api/signup/info?${params.toString()}`,
         requestOptions
       );
       const response = await data.json();
@@ -80,7 +80,7 @@ export const User = () => {
       };
       const params = new URLSearchParams({ username: username });
       const data = await fetch(
-        `https://3001-manueldlcasenci-pekefun-p4270miz633.ws-eu93.gitpod.io/api/signup/tutor?${params.toString()}`,
+        `${process.env.BACKEND_URL}/api/signup/tutor?${params.toString()}`,
         requestOptions
       );
       const response = await data.json();
@@ -105,7 +105,7 @@ export const User = () => {
       };
       const params = new URLSearchParams({ username: username });
       const data = await fetch(
-        `https://3001-manueldlcasenci-pekefun-p4270miz633.ws-eu93.gitpod.io/api/signup/advertiser?${params.toString()}`,
+        `${process.env.BACKEND_URL}/api/signup/advertiser?${params.toString()}`,
         requestOptions
       );
       const response = await data.json();

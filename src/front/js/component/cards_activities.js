@@ -23,7 +23,7 @@ export const Cards_activities = ({ event_id, name, description, date, length, ca
             {events.slice(0, 12).map((event, index) => (
                 <div key={index} className="col">
                     <div className="card m-1 p-1">
-                        <img src="https://picsum.photos/id/501/180/120" className="card-img-top" alt="..." />
+                        <img src={event.image} className="card-img-top" alt="..." />
                         <div className="card-body">
                             <h5 className="card-title">{event.name}</h5>
                             <p className="card-text">{event.description.slice(0, 100)}...</p>

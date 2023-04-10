@@ -12,7 +12,7 @@ import { Footer } from "./component/footer";
 import { Contacto } from "./component/contacto";
 import { Categories } from "./component/categories";
 import { Events_more_info } from "./pages/events_more_info.js";
-import {User} from "./pages/user";
+import {User} from "./pages/user.jsx";
 
 
 
@@ -33,7 +33,7 @@ const Layout = () => {
                         <Route element={<h1>Not found!</h1>} />
                         <Route element={<Contacto />} path="/contacto" />
                         <Route element={<Categories />} path="/categories" />
-                        <Route element={<User />} path="/user/:theid" />
+                        <Route element={<User />} path="/user" />
                         <Route element={<Events_more_info />} path="/event/:theid" />
                     </Routes>
                     <Footer />
