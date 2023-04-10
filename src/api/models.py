@@ -117,11 +117,11 @@ class Advertiser(db.Model):
             "lastname": self.lastname,
             "contact": self.contact,
             "company": self.company,
-            "working since": self.working_since,
+            "working_since": self.working_since,
             "description": self.description,
             "twitter": self.twitter,
             "avatar": self.avatar,
-            "company image": self.company_image,
+            "company_image": self.company_image,
             "others": self.others
         }
 

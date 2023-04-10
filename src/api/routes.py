@@ -117,8 +117,15 @@ def signup_tutor():
             kids = tutor.children
             json_kids = []
             for kid in kids:
+                kid_event = Participants.query.filter_by(child_id = kid.id).all()
+                kid_events = []
+                for event in kid_event:
+                    specific_event = Event.query.filter_by(id = event.event_id).first()
+                    kid_events.append(specific_event.serialize())
                 temp_kids = kid.serialize()
+                temp_kids["events"] = kid_events
                 json_kids.append(temp_kids)
+                print(kid_events)
             return jsonify({"kids": json_kids,
                             "msg": basic_response}), 200
         else:
