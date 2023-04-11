@@ -5,7 +5,7 @@ import { Context } from "../store/appContext.js";
 export const Create_event_form = () => {
   const { actions } = useContext(Context);
   const [eventData, setEventData] = useState({
-    name: "", street: "", city: "", min_age: "", max_age: "", price: "", date: "", length: "", category: "", slots: "", description: "", contact: "", company: "", cloth: "", others: ""
+    name: "", street: "", city: "", min_age: "", max_age: "", price: "", image: "", date: "", length: "", category: "", slots: "", description: "", contact: "", company: "", cloth: "", others: ""
   });
   const email = localStorage.getItem('email');
   
@@ -107,7 +107,7 @@ export const Create_event_form = () => {
       min_age: 6,
       max_age: 14,
       price: 25,
-      image: "hhttps://www.mundocreati.com/wp-content/uploads/2019/11/tallerdecocina_mundocreati.jpg",
+      image: "https://www.alcalanorte.com/wp-content/uploads/2018/12/shutterstock_167288825-1200x675.jpg",
       date: "2023-05-18",
       length: 2,
       category: "Cocina",
@@ -289,6 +289,14 @@ const handleTestEvents = () => {
         <input type="number" className="form-control" id="max_age" name="max_age" value={eventData.max_age} onChange={handleInputChange} required />
         <div className="invalid-feedback">
           Por favor, ingrese una edad máxima válida.
+        </div>
+      </div>
+
+      <div className="col-md-6">
+        <label htmlFor="price" className="form-label">URL de una Imagen del evento</label>
+        <input type="number" className="form-control" id="price" name="price" value={eventData.image} onChange={handleInputChange} />
+        <div className="invalid-feedback">
+          Por favor, ingrese un link válido para su imagen
         </div>
       </div>
 

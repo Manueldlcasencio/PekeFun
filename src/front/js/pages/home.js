@@ -5,6 +5,7 @@ import "../../styles/home.css";
 import { Social_media } from "../component/social_media.jsx";
 import { Cards_activities } from "../component/cards_activities";
 import { Categories } from "../component/categories.js";
+import { Create_event_form } from "../component/create_event_form.js";
 
 export const Home = () => {
     const { store, actions } = useContext(Context);
@@ -44,8 +45,8 @@ export const Home = () => {
 		<Cards_activities />
 		<Categories />
 
-		{/*<Create_event_form />
-		<button className="btn btn-secondary" type="button" onClick={() => actions.getTutorData()}> 
+	{/*<Create_event_form />*/}
+		{/*<button className="btn btn-secondary" type="button" onClick={() => actions.getTutorData()}> 
           recuperar info del tutor
         </button> */}
 

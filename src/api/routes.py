@@ -410,6 +410,7 @@ def event():
                       min_age = request.json.get("min_age", None),
                       max_age = request.json.get("max_age", None),
                       price = request.json.get("price", None),
+                      image = request.json.get("image", None),
                       date = request.json.get("date", None),
                       length = request.json.get("length",None),
                       category = request.json.get("category", None),
