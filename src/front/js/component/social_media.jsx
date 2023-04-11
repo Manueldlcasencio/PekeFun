@@ -146,13 +146,13 @@ export const Social_media = () => {
                 className="card-img-top cardimg p-1 mx-auto"
                 alt="Kids around a fire"
               />
-              <div className="card-body">
+              <div className="card-body d-flex flex-column">
                 <h5 className="card-title">Camping y salud</h5>
                 <p className="card-text text-just">
                   Niños y adultos pueden pasarlo muy bien en una jornada al aire
                   libre, pero, ¿qué beneficios...
                 </p>
-                <a href="#" className="btn btn-primary">
+                <a href="#" className="btn btn-primary mt-auto">
                   Ver más
                 </a>
               </div>
@@ -164,13 +164,13 @@ export const Social_media = () => {
                 className="card-img-top cardimg p-1 mx-auto"
                 alt="..."
               />
-              <div className="card-body">
+              <div className="card-body d-flex flex-column">
                 <h5 className="card-title">Torneo ADS</h5>
                 <p className="card-text text-just">
                   Tras un campeonato difícil, los chicos consiguieron hacerse
                   con la victoria en el torneo...
                 </p>
-                <a href="#" className="btn btn-primary">
+                <a href="#" className="btn btn-primary mt-auto">
                   Ver más
                 </a>
               </div>

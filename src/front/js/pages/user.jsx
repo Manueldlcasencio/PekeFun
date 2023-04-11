@@ -1,12 +1,13 @@
 import React, { useContext, useState, useEffect, useRef } from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { Context } from "../store/appContext";
 import "../../styles/home.css";
 
 import "../../styles/user.css";
+import { event } from "jquery";
 
 export const User = () => {
-  const { store } = useContext(Context);
+  const { store, actions } = useContext(Context);
   const ref = useRef();
   const [protect, setProtect] = useState();
   const [username, setUsername] = useState();
@@ -65,7 +66,7 @@ export const User = () => {
       const response = await data.json();
       setInfo(response.info), setUserform({ ...userform, username: username });
     } catch (error) {
-      let details = { Username: "test", Error: error };
+      let details = { Error: error };
       console.log("Error en fetch user", details);
     }
   }
@@ -142,8 +143,6 @@ export const User = () => {
   if (info != undefined && infotutor == undefined) getInfoTutor();
   if (info != undefined && infoanunciante == undefined) getInfoAnunciante();
 
-  console.log("Niños", infochild);
-
   //Comprobación de logeo (zona privada)
   if (protect != undefined && protect != 200) {
     return <Navigate to="/" />;
@@ -210,6 +209,25 @@ export const User = () => {
     }
   };
 
+  let events = () => {
+    if (info != undefined) {
+      if (info.advertiser == true)
+        return (
+          <button
+            className="nav-link"
+            id="nav-events-tab"
+            data-bs-toggle="tab"
+            data-bs-target="#nav-events"
+            type="button"
+            role="tab"
+            aria-controls="nav-events"
+            aria-selected="false"
+          >
+            Eventos
+          </button>
+        );
+    }
+  };
   //Variables para contenido
   function useristutor() {
     if (info != undefined) {
@@ -289,10 +307,11 @@ export const User = () => {
         </label>
         <input
           type="string"
+          objkey="name"
           className="form-control"
           id="tutorname"
           aria-describedby="emailHelp"
-          onChange={handleoldpassword}
+          onChange={handletutorform}
           placeholder={infotutor != undefined ? infotutor.name : ""}
         />
       </div>
@@ -304,7 +323,8 @@ export const User = () => {
           type="string"
           className="form-control"
           id="usernewpassword"
-          onChange={handlenewpassword}
+          objkey="lastname"
+          onChange={handletutorform}
           placeholder={infotutor != undefined ? infotutor.lastname : ""}
         />
       </div>
@@ -314,9 +334,10 @@ export const User = () => {
         </label>
         <input
           type="string"
+          objkey="location"
           className="form-control"
           id="usernewpassword"
-          onChange={handlenewpassword}
+          onChange={handletutorform}
           placeholder={infotutor != undefined ? infotutor.location : ""}
         />
       </div>
@@ -326,9 +347,10 @@ export const User = () => {
         </label>
         <input
           type="date"
+          objkey="birth"
           className="form-control"
           id="usernewpassword"
-          onChange={handlenewpassword}
+          onChange={handletutorform}
           placeholder={infotutor != undefined ? infotutor.birth : ""}
         />
       </div>
@@ -339,8 +361,9 @@ export const User = () => {
         <input
           type="string"
           className="form-control"
+          objkey="avatar"
           id="usernewpassword"
-          onChange={handlenewpassword}
+          onChange={handletutorform}
           placeholder={infotutor != undefined ? infotutor.avatar : ""}
         />
       </div>
@@ -355,7 +378,7 @@ export const User = () => {
         <button
           type="submit"
           className="btn btn-primary mx-1"
-          onClick={usersubmit}
+          onClick={tutorsubmit}
         >
           Cambiar datos
         </button>
@@ -376,7 +399,7 @@ export const User = () => {
     ));
     return kids_on_select;
   }
-
+  //////////////////////////
   let childform = (
     <form>
       <div className="mb-3">
@@ -386,12 +409,11 @@ export const User = () => {
         <input
           type="string"
           className="form-control"
-          id="tutorname"
           objkey="name"
           aria-describedby="emailHelp"
           onChange={handlechildform}
           placeholder={
-            childselect != undefined && childselect != 99
+            childselect != undefined && childselect != 99 && childselect != 98
               ? infochild[childselect].name
               : ""
           }
@@ -404,12 +426,11 @@ export const User = () => {
         <input
           type="string"
           className="form-control"
-          id="tutorname"
           objkey="lastname"
           aria-describedby="emailHelp"
           onChange={handlechildform}
           placeholder={
-            childselect != undefined && childselect != 99
+            childselect != undefined && childselect != 99 && childselect != 98
               ? infochild[childselect].lastname
               : ""
           }
@@ -422,23 +443,22 @@ export const User = () => {
         <input
           type="string"
           className="form-control"
-          id="childbirth"
           objkey="birth"
           ref={ref}
           aria-describedby="emailHelp"
           onChange={handlechildform}
           placeholder={
-            childselect != undefined && childselect != 99
+            childselect != undefined && childselect != 99 && childselect != 98
               ? infochild[childselect].birth
               : ""
           }
           onFocus={
-            childselect != undefined && childselect != 99
+            childselect != undefined && childselect != 99 && childselect != 98
               ? () => (ref.current.type = "date")
               : () => <h2></h2>
           }
           onBlur={
-            childselect != undefined && childselect != 99
+            childselect != undefined && childselect != 99 && childselect != 98
               ? () => (ref.current.type = "text")
               : () => <h2></h2>
           }
@@ -451,12 +471,11 @@ export const User = () => {
         <input
           type="string"
           className="form-control"
-          id="tutorname"
           objkey="preferences"
           aria-describedby="emailHelp"
           onChange={handlechildform}
           placeholder={
-            childselect != undefined && childselect != 99
+            childselect != undefined && childselect != 99 && childselect != 98
               ? infochild[childselect].preferences
               : ""
           }
@@ -469,12 +488,11 @@ export const User = () => {
         <input
           type="string"
           className="form-control"
-          id="tutorname"
           objkey="avatar"
           aria-describedby="emailHelp"
           onChange={handlechildform}
           placeholder={
-            childselect != undefined && childselect != 99
+            childselect != undefined && childselect != 99 && childselect != 98
               ? infochild[childselect].avatar
               : ""
           }
@@ -487,12 +505,11 @@ export const User = () => {
         <input
           type="string"
           className="form-control"
-          id="tutorname"
           objkey="school"
           aria-describedby="emailHelp"
           onChange={handlechildform}
           placeholder={
-            childselect != undefined && childselect != 99
+            childselect != undefined && childselect != 99 && childselect != 98
               ? infochild[childselect].school
               : ""
           }
@@ -505,12 +522,11 @@ export const User = () => {
         <input
           type="string"
           className="form-control"
-          id="tutorname"
           objkey="others"
           aria-describedby="emailHelp"
           onChange={handlechildform}
           placeholder={
-            childselect != undefined && childselect != 99
+            childselect != undefined && childselect != 99 && childselect != 98
               ? infochild[childselect].others
               : ""
           }
@@ -523,18 +539,73 @@ export const User = () => {
       <button
         type="submit"
         className="btn btn-primary mx-1"
-        onClick={usersubmit}
+        onClick={childsubmit}
       >
-        Cambiar datos
+        {childselect == 98 ? "Añadir" : "Modificar datos"}
       </button>
-      <button
-        type="submit"
-        className="btn btn-primary mx-1"
-        onClick={usersubmit}
-      >
-        Eliminar
-      </button>
+      {childselect != 98 ? (
+        <button
+          type="submit"
+          className="btn btn-primary mx-1"
+          onClick={childdelete}
+        >
+          Eliminar
+        </button>
+      ) : (
+        ""
+      )}
     </form>
+  );
+
+  let childevent = "";
+
+  let navigate = useNavigate();
+  if (
+    infochild != undefined &&
+    childselect != 99 &&
+    childselect != 98 &&
+    childselect != undefined
+  ) {
+    childevent = infochild[childselect].events.map((e, index) => (
+      <div className="card card-social m-2" id="card-1" key={index}>
+        <img src={e.image} className="card-img-top cardimg p-1 mx-auto" />
+        <div className="card-body d-flex flex-column">
+          <h5 className="card-title">{e.name}</h5>
+          <p className="card-text text-just">{e.description}</p>
+          <button
+            onClick={() => {
+              actions.selectEvent({
+                id: e.event_id,
+                name: e.name,
+                description: e.description,
+                date: e.date,
+                length: e.length,
+                category: e.category,
+                slots: e.slots,
+                min_age: e.min_age,
+                max_age: e.max_age,
+                contact: e.contact,
+                cloth: e.cloth,
+                others: e.others,
+              }),
+                navigate(`/event/${e.event_id}`);
+            }}
+            className="btn btn-primary mt-auto"
+          >
+            Ver más
+          </button>
+        </div>
+      </div>
+    ));
+  }
+
+  let eventinchild = (
+    <div className="mt-2">
+      <h4>Eventos en los que participa</h4>
+      <div className="container d-inline-flex justify-content-center">
+        {childevent}
+      </div>
+    </div>
   );
 
   let contentchild = (
@@ -548,15 +619,15 @@ export const User = () => {
         <option defaultValue value="99">
           Elige cual quieres modificar
         </option>
+        <option value="98">Añadir un nuevo niño</option>
         {infochild != undefined ? generatechild() : ""}
       </select>
-      <button type="button" className="btn btn-success my-2">
-        Añadir
-      </button>
       {childselect != undefined && childselect != 99 ? childform : ""}
+      {childselect != undefined && childselect != 99 ? eventinchild : ""}
     </div>
   );
 
+  ////////////////////////////////////
   let contentanunciante = (
     <form>
       <div className="mb-3">
@@ -727,26 +798,153 @@ export const User = () => {
       <button
         type="submit"
         className="btn btn-primary mx-1"
-        onClick={usersubmit}
+        onClick={adversubmit}
       >
         Cambiar datos
       </button>
     </form>
   );
 
+  let contentevents = "";
+  if (infoevent != undefined)
+    contentevents = infoevent.map((e, index) => (
+      <div className="card card-social m-2" id="card-1" key={index}>
+        <img src={e.image} className="card-img-top cardimg p-1 mx-auto" />
+        <div className="card-body d-flex flex-column">
+          <h5 className="card-title">{e.name}</h5>
+          <p className="card-text text-just">{e.description}</p>
+          <button
+            onClick={() => {
+              actions.selectEvent({
+                id: e.event_id,
+                name: e.name,
+                description: e.description,
+                date: e.date,
+                length: e.length,
+                category: e.category,
+                slots: e.slots,
+                min_age: e.min_age,
+                max_age: e.max_age,
+                contact: e.contact,
+                cloth: e.cloth,
+                others: e.others,
+              }),
+                navigate(`/event/${e.event_id}`);
+            }}
+            className="btn btn-primary mt-auto"
+          >
+            Ver más
+          </button>
+          <button
+            className="btn btn-primary"
+            data-bs-toggle="modal"
+            data-bs-target={"#" + e.name + "modal"}
+            onClick={(e) => {
+              console.log("Boton", e.target.getAttribute("data-bs-target"));
+            }}
+          >
+            Editar
+          </button>
+        </div>
+        {/* Modal de edición */}
+        <div
+          className="modal fade"
+          id={e.name + "modal"}
+          tabIndex="-1"
+          aria-labelledby="exampleModalLabel"
+          aria-hidden="true"
+        >
+          <div className="modal-dialog">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h1 className="modal-title fs-5" id="exampleModalLabel">
+                  Editando {e.name}
+                </h1>
+                <button
+                  type="button"
+                  className="btn-close"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                ></button>
+              </div>
+              <div className="modal-body">
+                {/* Contenido del modal. Aquí debería invocar el componente de Pablo*/}
+                <form>
+                  <div className="mb-3">
+                    <label htmlFor="tutorname" className="form-label">
+                      Nombre
+                    </label>
+                    <input
+                      type="string"
+                      className="form-control"
+                      objkey="name"
+                      aria-describedby="emailHelp"
+                      onChange={handlechildform}
+                      placeholder={
+                        childselect != undefined &&
+                        childselect != 99 &&
+                        childselect != 98
+                          ? infochild[childselect].name
+                          : ""
+                      }
+                    />
+                  </div>
+                </form>
+              </div>
+              <div className="modal-footer">
+                <button
+                  type="button"
+                  className="btn btn-secondary"
+                  data-bs-dismiss="modal"
+                >
+                  Close
+                </button>
+                <button type="button" className="btn btn-primary">
+                  Save changes
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    ));
+
   //Funciones de gestión de botones
   function usersubmit(e) {
     e.preventDefault();
     useroldpassword.value = "";
     usernewpassword.value = "";
+    console.log("User Submit");
     //Llamar función del flux. Parametro = userform
     //Si status 200
     userhelper.innerHTML = "<p>¡Contraseña actualizada!</p>";
   }
 
+  function tutorsubmit(e) {
+    e.preventDefault();
+    console.log("Tutor Submit");
+    //Acción del flux - Enviar tutorform
+  }
+
+  function childsubmit(e) {
+    e.preventDefault();
+    //Si 98 crear, cualquier otro, modificar
+    console.log("Child submit");
+  }
+
+  function childdelete(e) {
+    e.preventDefault();
+    console.log("Child delete");
+  }
+
+  function adversubmit(e) {
+    e.preventDefault();
+    console.log("Adver submit");
+  }
+
   function handleselect(e) {
     setChildselect(e.target.value);
-    if (e.target.value != 99)
+    if (e.target.value != 99 && e.target.value != 98)
       setChildformsend({
         name: infochild[e.target.value].name,
         lastname: infochild[e.target.value].lastname,
@@ -762,6 +960,13 @@ export const User = () => {
   function handlechildform(e) {
     setChildformsend({
       ...childformsend,
+      [e.target.getAttribute("objkey")]: e.target.value,
+    });
+  }
+
+  function handletutorform(e) {
+    setTutorform({
+      ...tutorform,
       [e.target.getAttribute("objkey")]: e.target.value,
     });
   }
@@ -800,6 +1005,7 @@ export const User = () => {
           {tutor()}
           {advertiser()}
           {child()}
+          {events()}
         </div>
       </nav>
       {/* Contenido tabs */}
@@ -862,6 +1068,23 @@ export const User = () => {
               ¿Quieres cambiar tus datos de anunciante?
             </h4>
             {contentanunciante}
+          </div>
+        </div>
+        <div
+          className="tab-pane fade"
+          id="nav-events"
+          role="tabpanel"
+          aria-labelledby="nav-events-tab"
+          tabIndex="0"
+        >
+          <div className="container-fluid py-2">
+            <h4>
+              Bienvenido, {info != undefined ? info.email : "Desconocido"}.
+              ¿Quieres cambiar tus eventos?
+            </h4>
+            <div className="container d-inline-flex justify-content-center">
+              {contentevents}
+            </div>
           </div>
         </div>
       </div>
