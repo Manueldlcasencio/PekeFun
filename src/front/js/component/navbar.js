@@ -13,61 +13,14 @@ export const Navbar = () => {
   const { store, actions } = useContext(Context);
   const [textSearch, setTextSearch] = useState("");
 
-  /* 
-  
-  const filterEventsByKeyword = (keyword) => {
-    const store = getStore();
-    const events_filtered = store.events.filter(
-      (event) =>
-        event.name.toLowerCase().includes(keyword.toLowerCase()) ||
-        event.description.toLowerCase().includes(keyword.toLowerCase())
-    );
-    setStore({ events_filtered: events_filtered });
-  };
-  
-  */
-
-  const handleSearch = async () => {
-    // aqui logica busqueda 
-    // aqui utilizo el textSearch como word del endpoint {"done": false, "word": textSearch }
+  const handleSearch = () => {
     console.log(textSearch);
-    const url = process.env.BACKEND_URL + "/event/all";
-    const requestOptions = {
-      method: "POST",
-      headers: {
-        "Content-type": "application/json"
-      },
-      body: JSON.stringify({
-        "done": "false",
-        "word": textSearch,
-      })
-    };
-    try {
-      const resp = await fetch(url, requestOptions)
-      if (resp.status != 200) {
-        console.log("error: falló el fecth de event/all con word");
-        return false;
-      }
-      const data = await resp.json();
-      console.log("ok", data);
-      //cuando regrese del endpoint actualizar el store events 
-      // setStore({ token: data.access_token })
-
-      return true;
-    }
-    catch (error) {
-      console.error("There has been an error login in")
-    }
-
-    //hay que renderizar el componente de las cards_activities con los datos que devuelve el endpoint
-
-    // aqui blanquea las variables
+    actions.filterEventsByKeyword(textSearch);
     setTextSearch("");
   };
 
   const handleTextSearch = (e) => {
     setTextSearch(e.target.value);
-    console.log(textSearch)
   };
 
   return (
