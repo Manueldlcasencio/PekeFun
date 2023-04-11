@@ -23,8 +23,6 @@ export const Categories = () => {
     setIndex(selectedIndex);
   };
 
-//["Escuelas de Surf", "Clases de Teatro", "Campamentos de Verano", "Campings", "Parques Acuáticos", "Cocina", "Programación", "Música", "Fútbol", "Baile"],
-		
 
   const items = [
     {
@@ -41,41 +39,41 @@ export const Categories = () => {
     {
       image: Musica,
       url: "/musica",
-      cat: "musica",
+      cat: "Música",
     },
     {
       image: Acuatico,
       url: "/acuatico",
-      cat:"acuatico",
+      cat:"Parques Acuáticos",
     },
     {
       image: Baile,
       url: "/baile",
-      cat: "baile",
+      cat: "Baile",
     },
     {
       image: Futbol,
       url: "/futbol",
-      cat: "futbol",
+      cat: "Fútbol",
 
     },
 
     {
       image: Cocina,
       url: "/cocina",
-      cat: "cocina",
+      cat: "Cocina",
     },
 
     {
       image: Programacion,
       url: "/programacion",
-      cat: "programacion",
+      cat: "Programación",
     },
 
     {
       image: Campamento,
       url: "/campamento",
-      cat: "campamento",
+      cat: "Campings",
       
     },
 

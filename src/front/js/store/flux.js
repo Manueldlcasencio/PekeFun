@@ -253,7 +253,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 			deleteUser: async (email, password, token) => {
 				const store = getStore();
-				console.log(email);
 				try {
 					const userRequestOptions = {
 						method: "DELETE",
@@ -272,6 +271,32 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 				} catch (error) {
 					console.error("Error al intentar eliminar el usuario:", error);
+				}
+			},
+
+			changePassword: async (email, password, newPassword, token) => {
+				const store = getStore();
+				try {
+					let user = { "username": email,
+								 "old_password": password,
+								 "new_password": newPassword}
+					console.log(user);
+					const passRequestOptions = {
+						method: "PUT",
+						headers: {
+							"Content-type": "application/json",
+							Authorization: `Bearer ${store.token}`
+						},
+						body: JSON.stringify(user)
+					};
+
+					const changePassResp = await fetch(process.env.BACKEND_URL + "/api/signup/info", passRequestOptions)
+					const changePassResponse = await changePassResp.json();
+					console.log("Respuesta a pedido de cambio de contraseña:", changePassResponse);
+					return true;
+
+				} catch (error) {
+					console.error("Error al modificar la contraseña:", error);
 				}
 			},
 
@@ -374,6 +399,51 @@ const getState = ({ getStore, getActions, setStore }) => {
 				const store = getStore();
 				const newChildren = [...store.tutorData.children, childData];
 				setStore({ tutorData: { ...store.tutorData, children: newChildren } });
+			},
+			
+			//A REVISAR!!!!! SE CAMBIAN TODOS LOS REGISTROS DE NIÑOS!!!!!!
+			modifyChild: async (email, childToUpdate) => {
+				const store = getStore();
+				try {
+				  const childData = {
+					...childToUpdate,
+					"name": childToUpdate.name,
+					"username": email,
+					"lastname": childToUpdate.lastname,
+					"preferences": childToUpdate.preferences || "",
+					"avatar": childToUpdate.avatar || "",
+					"school": childToUpdate.school || "",
+					"others": childToUpdate.others || "",
+					"parent": childToUpdate.parent || "",
+					"birth": childToUpdate.birth,
+					"child_id": childToUpdate.id,
+				  };
+							  
+				  console.log(childData);
+				  const childrenRequestOptions = {
+					method: "PUT",
+					headers: {
+					  "Content-type": "application/json",
+					  Authorization: `Bearer ${store.token}`
+					},
+					body: JSON.stringify(childData)
+				  };
+			  
+				  const modifyChildrenResp = await fetch(`${process.env.BACKEND_URL}/api/signup/tutor/child/`, childrenRequestOptions);
+				  const modifiedChild = await modifyChildrenResp.json();
+				  console.log("Respuesta a pedido de actualización de datos de niño:", modifiedChild);
+			  
+				  const newChildrenData = store.tutorData.children.map(child =>
+					child.id === childToUpdate.id ? childData : child
+				  );
+			  
+				  setStore({ tutorData: { ...store.tutorData, children: newChildrenData } });
+			  
+				  return true;
+			  
+				} catch (error) {
+				  console.error("Error al intentar modificar datos del/de los niño/s:", error);
+				}
 			},
 
 			getTutorData: async () => {

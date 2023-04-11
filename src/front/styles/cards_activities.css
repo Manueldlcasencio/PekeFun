@@ -9,3 +9,11 @@
   .card .d-flex {
     justify-content: center;
   }
+
+  .cards-container {
+    max-height: calc(100% - 4rem); 
+    overflow-y: auto;
+  }
+
+  
+  

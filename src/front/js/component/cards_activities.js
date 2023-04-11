@@ -16,7 +16,7 @@ export const Cards_activities = ({ event_id, name, description, date, length, ca
 
     return (
         <div className="container">
-            <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+            <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-6 g-4">
                 {events.slice(0, 12).map((event, index) => (
                     <div key={index} className="col">
                         <div className="card h-100">
