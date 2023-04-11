@@ -28,7 +28,7 @@ export const Cards_activities = ({ event_id, name, description, date, length, ca
                                     <button className="btn btn-secondary"
                                         onClick={() => {
                                             console.log('Evento a seleccionar:', { id: event.event_id, name: event.name, description: event.description, date: event.date, length: event.length, category: event.category, slots: event.slots, min_age: event.min_age, max_age: event.max_age, contact: event.contact, cloth: event.cloth, others: event.others, });
-                                            actions.selectEvent({ id: event.event_id, name: event.name, description: event.description, date: event.date, length: event.length, category: event.category, slots: event.slots, min_age: event.min_age, max_age: event.max_age, contact: event.contact, cloth: event.cloth, others: event.others, });
+                                            actions.selectEvent({ id: event.event_id, name: event.name, description: event.description, date: event.date, length: event.length, category: event.category, slots: event.slots, min_age: event.min_age, max_age: event.max_age, image: event.image, contact: event.contact, cloth: event.cloth, others: event.others, });
                                             navigate(`/event/${event.event_id}`);
                                         }}>
                                         Saber Más

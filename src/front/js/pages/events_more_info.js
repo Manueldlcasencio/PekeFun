@@ -2,12 +2,14 @@ import React, { useContext, useState, useEffect } from "react";
 import { Context } from "../store/appContext";
 import { Modal_login_signup } from "../component/modal_login_signup.js";
 import {Child_Selection_Modal} from "../component/child_selection_modal.js";
+import { format } from "date-fns";
 
 export const Events_more_info = () => {
   const { store, actions } = useContext(Context);
   const [showModal, setShowModal] = useState(false);
   const [showLoginSignupModal, setShowLoginSignupModal] = useState(false);
-
+  const advertiserData = store.advertiserData
+  
   useEffect(() => {
     console.log("showModal value:", showModal);
   }, [showModal]);
@@ -15,7 +17,7 @@ export const Events_more_info = () => {
   useEffect(() => {
     console.log("store.tutorData.children:", store.tutorData.children);
   }, [store.tutorData.children]);
-  
+
   const handleShowModal = () => setShowModal(true);
   const handleHideModal = () => setShowModal(false);
   
@@ -44,6 +46,8 @@ export const Events_more_info = () => {
     name,
     description,
     date,
+    price,
+    image,
     length,
     category,
     slots,
@@ -54,29 +58,42 @@ export const Events_more_info = () => {
     others,
   } = store.selectedEvent;
 
+  const formattedDate = format(new Date(date), "dd/MM/yyyy");
+
   if (!store.selectedEvent) {
     return <h3>No hay evento seleccionado</h3>;
   } 
 
   console.log("tutorData en Events_more_info:", store.tutorData);
   return (
-    <div>
-      <h1>{name}</h1>
-      <p>{description}</p>
-      <p>{date}</p>
-      <p>{length}</p>
-      <p>{category}</p>
-      <p>{slots}</p>
-      <p>{min_age}</p>
-      <p>{max_age}</p>
-      <p>{contact}</p>
-      <p>{cloth}</p>
-      <p>{others}</p>
-      <button type="button" className="btn btn-warning" onClick={handleParticipantRegisterClick}>¡Inscribirse!</button>
-     
-      <Child_Selection_Modal show={showModal} onHide={handleHideModal} childList={store.tutorData.children} />
-      <Modal_login_signup show={showLoginSignupModal} onHide={() => setShowLoginSignupModal(false)} />
-    
+    <div className="container my-3">
+    <div className="row align-items-center">
+      <div className="col-12 col-lg-2 m-3">
+        <h3><strong>{name}</strong></h3>
+      </div>
+      <div className="col-12 col-lg-5">
+        <p><strong>¿Qué haremos?</strong> {description}</p>
+        <p><strong>¿Cuándo comenzaremos?</strong> {formattedDate}</p>
+        <p><strong>¿Cuánto dura?</strong> {length}</p>
+        <p><strong>Categoría:</strong> {category}</p>
+        <p><strong>¿Cuántas vacantes disponibles hay?</strong> {slots}</p>
+        <p><strong>¿Cuál es la edad mínima recomendada?</strong> {min_age}</p>
+        <p><strong>¿Cuál es la edad máxima recomendada?</strong> {max_age}</p>
+        <p><strong>¿Consultas? Pueden contactar directo al anunciante aquí!:</strong> {advertiserData.info.contact}</p>
+        <p><strong>¿Qué vestimenta es la ideal?</strong> {cloth}</p>
+        <p><strong>Otras aclaraciones:</strong> {others}</p>
+        <button type="button" className="btn btn-warning" onClick={handleParticipantRegisterClick}>
+          ¡Inscribirse!
+        </button>
+      </div>
+      <div className="col-12 col-lg-4 d-flex justify-content-center">
+        {image && (
+          <img src={image} className="img-fluid w-100 ms-auto d-block" alt="..." />
+        )}
+      </div>
     </div>
-  );
+    <Child_Selection_Modal show={showModal} onHide={handleHideModal} childList={store.tutorData.children} />
+   
+  </div>
+    );
 };

@@ -264,7 +264,7 @@ def signup_child():
             for item in required:
                 change = request.json.get(item,None)
                 if item != "id" and item != "parent" and change != "":
-                    checked_id.query.update({item: change})
+                    Child.query.filter_by(id = child_id).update({item: change})
             db.session.commit()
         return jsonify({"changes": request.json}), 200
 

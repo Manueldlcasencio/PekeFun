@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { Context } from "../store/appContext.js";
 import { Collapse } from "react-bootstrap";
 import { Login } from "./login.js";
+import "../../styles/modals.css";
 
 export const Modal_login_signup = () => {
   const { actions } = useContext(Context);

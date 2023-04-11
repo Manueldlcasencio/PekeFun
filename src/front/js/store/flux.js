@@ -501,6 +501,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 						"price": eventData.price,
 						"image": eventData.image,
 						"date": eventData.date,
+						"contact": eventData.contact,
 						"length": eventData.length,
 						"category": eventData.category,
 						"slots": eventData.slots,
