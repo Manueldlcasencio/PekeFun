@@ -4,6 +4,8 @@ import { Modal_login_signup } from "../component/modal_login_signup.js";
 import {Child_Selection_Modal} from "../component/child_selection_modal.js";
 import { format } from "date-fns";
 
+
+
 export const Events_more_info = () => {
   const { store, actions } = useContext(Context);
   const [showModal, setShowModal] = useState(false);

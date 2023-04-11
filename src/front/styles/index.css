@@ -2,6 +2,7 @@
     General Styles used on every website (Don't Repeat Yourself)
 */
 
+
 button, .btn {
     background-color: #f9643f;
     border-color: white; /* Modifica el color del borde */
@@ -38,7 +39,7 @@ button, .btn {
   }
   
   .navbar {
-    background-color: #8c52ff;
+    background-color: #19d8b6;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
     border-radius: 5px;
     padding: 10px;

@@ -1,41 +1,31 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Link } from "react-router-dom";
 import PekeFun from "../../img/pekefun2.png";
 import Perfil from "../../img/perfil.png";
 import { Modal_login_signup } from "./modal_login_signup.js";
 import { Logout } from "./logout.js";
 import { FavoritesDropdown } from "./favorites_dropdown.js";
+import { Context } from "../store/appContext.js";
+import { FiSearch } from "react-icons/fi";
 
-
-const categorias = [
-  {
-    nombre: "Deportes",
-    actividades: ["Fútbol", "Escuelas de Surf"]
-  },
-  {
-    nombre: "Categorias destacadas",
-    actividades: ["Campamentos de verano", "Baile", "Cocina"]
-  },
-  {
-    nombre: "Idiomas",
-    actividades: ["Inglés"]
-  }
-];
 
 export const Navbar = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const { store, actions } = useContext(Context);
   const [textSearch, setTextSearch] = useState("");
 
-
-  const handleLogin = () => {
-    // Aquí colocas la lógica para hacer login
-    setIsAuthenticated(true);
+  /* 
+  
+  const filterEventsByKeyword = (keyword) => {
+    const store = getStore();
+    const events_filtered = store.events.filter(
+      (event) =>
+        event.name.toLowerCase().includes(keyword.toLowerCase()) ||
+        event.description.toLowerCase().includes(keyword.toLowerCase())
+    );
+    setStore({ events_filtered: events_filtered });
   };
-
-  const handleLogout = () => {
-    // Aquí colocas la lógica para hacer logout
-    setIsAuthenticated(false);
-  };
+  
+  */
 
   const handleSearch = async () => {
     // aqui logica busqueda 
@@ -48,7 +38,7 @@ export const Navbar = () => {
         "Content-type": "application/json"
       },
       body: JSON.stringify({
-        "done": false,
+        "done": "false",
         "word": textSearch,
       })
     };
@@ -107,48 +97,32 @@ export const Navbar = () => {
                   Categorias
                 </Link>
               </li>
-
-
               <li className="nav-item">
                 <Link to="/contacto" className="nav-link">
                   Contacto
                 </Link>
               </li>
             </ul>
+
             {/* Barra de búsqueda */}
             <form className="d-flex">
-              <input type="text" placeholder="..." className="form-control search-input" value={textSearch} onChange={handleTextSearch} />
-              <button className="btn btn-outline-success" type="button" onClick={handleSearch}>Buscar</button>
+              <input type="text" placeholder="Encuentra tu actividad" className="form-control search-input"  value={textSearch} onChange={handleTextSearch} />
+              <button className="btn btn-outline-light mx-2" type="button" onClick={handleSearch}><FiSearch /></button>
             </form>
 
+            {/* Logica para mostrar el perfil usuario*/}
+            {/* Falta apuntar al link correcto*/}
             <Link to="/" className="navbar-brand">
-            <img src={Perfil} alt="" width="200" height="200" />
-          </Link>
+              <img src={Perfil} alt="" width="250" height="250" />
+            </Link>
 
-          <button
-            className="navbar-toggler"
-            color=""
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent"
-            aria-expanded="false"
-            aria-label="Toggle navigation"
-          >
-            <span className="navbar-toggler-icon"></span>
-          </button>
-          <Logout/>
-
-            {isAuthenticated ? (
-              <Logout handleLogout={handleLogout} />
-            ) : (
-              <Modal_login_signup handleLogin={handleLogin} />
-            )}
+            {/* Logica para botón login/logout*/}
+            {store.token ? (<Logout/>) : (<Modal_login_signup/>)}
+            
           </div>
         </div>
       </nav>
     </div>
   );
 };
-
 

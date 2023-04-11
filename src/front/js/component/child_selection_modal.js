@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "../../styles/modals.css";
+import '../../styles/toastify-custom.css';
 
 export const Child_Selection_Modal = ({ show, onHide, childList }) => {
   const { store, actions } = useContext(Context);
@@ -42,13 +43,14 @@ export const Child_Selection_Modal = ({ show, onHide, childList }) => {
 
   const navigate = useNavigate();
 
-  const handleSuccess = () => {
-    toast.success("Niño/s inscripto/s correctamente!", {
+  const handleSuccess = (childName) => {
+    toast.success(`${childName} ha sido inscripto correctamente!`, {
       onClose: () => {
         navigate("/");
       },
     });
   };
+  
 
   return (
     <Modal show={show} onHide={onHide} centered >
@@ -63,7 +65,13 @@ export const Child_Selection_Modal = ({ show, onHide, childList }) => {
       </Modal.Body>
       <Modal.Footer  style={{ backgroundColor: "#feb823" }}>
         <Button variant="secondary" onClick={onHide}>Cancelar</Button>
-        <Button variant="primary" onClick={() => actions.handleChildSelectionSubmit(onHide, store.selectedChildren, handleSuccess)}>Inscribir niños seleccionados</Button>
+        <Button variant="primary" onClick={() => { actions.handleChildSelectionSubmit(onHide, store.selectedChildren, () => {store.selectedChildren.forEach((child) => { handleSuccess(`${child.name} ${child.lastname}`);});
+    });
+  }}
+>
+  Inscribir niños seleccionados
+</Button>
+
         
       </Modal.Footer>
       <ToastContainer />

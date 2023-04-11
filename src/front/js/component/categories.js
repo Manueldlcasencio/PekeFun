@@ -30,11 +30,11 @@ export const Categories = () => {
       url: "/surfcamp",
       cat: "Escuelas de Surf",
     },
-    { 
+    {
       image: Verano,
       url: "/verano",
       cat: "Campamentos de Verano",
-     
+
     },
     {
       image: Musica,
@@ -44,7 +44,7 @@ export const Categories = () => {
     {
       image: Acuatico,
       url: "/acuatico",
-      cat:"Parques Acuáticos",
+      cat: "Parques Acuáticos",
     },
     {
       image: Baile,
@@ -74,54 +74,53 @@ export const Categories = () => {
       image: Campamento,
       url: "/campamento",
       cat: "Campings",
-      
+
     },
 
     {
       image: Teatro,
       url: "/teatro",
-     cat: "Clases de Teatro",
-    
+      cat: "Clases de Teatro",
+
     },
 
 
 
   ];
- const mostrarCards = (selectedCategory) => {
-  console.log(selectedCategory);
-  actions.filterEventsByCategory(selectedCategory); 
-  console.log(store.events_filtered);
-  return <Navigate to="/" />;
- };
+  const mostrarCards = (selectedCategory) => {
+    console.log(selectedCategory);
+    actions.filterEventsByCategory(selectedCategory);
+    console.log(store.events_filtered);
+    return <Navigate to="/" />;
+  };
+
+  // ... (imports and other code)
 
   const itemsToRender = [];
 
-  for (let i = 0; i < items.length; i += 3) {
+  for (let i = 0; i < items.length; i++) {
     const item = (
       <Carousel.Item key={i}>
         <div className="d-flex justify-content-between">
-          <div className="w-30">
-          {/*  <Link to={items[i].url}> */}
-          <span onClick={()=> mostrarCards(items[i].cat)}>
-          <img className="d-block w-100"  src={items[i].image} alt={i} />
-          </span>
-            {/*  </Link> */}
+          <div className="w-100 w-md-30">
+            <span onClick={() => mostrarCards(items[i].cat)}>
+              <img className="d-block w-100" src={items[i].image} alt={i} />
+            </span>
           </div>
-          <div className="w-30">
+          <div className="w-30 d-none d-md-block">
             {i + 1 < items.length && (
-                <span onClick={()=> mostrarCards(items[i+1].cat)}>
+              <span onClick={() => mostrarCards(items[i + 1].cat)}>
                 <img
                   className="d-block w-100"
                   src={items[i + 1].image}
                   alt={i + 1}
                 />
-               </span>
+              </span>
             )}
           </div>
-          <div className="w-30">
+          <div className="w-30 d-none d-md-block">
             {i + 2 < items.length && (
-              <span onClick={()=> mostrarCards(items[i+2].cat)}>
-
+              <span onClick={() => mostrarCards(items[i + 2].cat)}>
                 <img
                   className="d-block w-100"
                   src={items[i + 2].image}
@@ -134,11 +133,13 @@ export const Categories = () => {
       </Carousel.Item>
     );
     itemsToRender.push(item);
+    i += 2; // Incrementa el índice en 2 adicionales cuando la pantalla es md o superior
   }
-
+  
   return (
     <Carousel activeIndex={index} onSelect={handleSelect}>
       {itemsToRender}
     </Carousel>
   );
+
 };

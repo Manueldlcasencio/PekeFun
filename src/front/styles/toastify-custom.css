@@ -1,0 +1,66 @@
+/* toastify-custom.css */
+/* Personalizar el color de fondo y el color del texto */
+.Toastify__toast {
+    background-color: #333;
+    color: #fff;
+  }
+  
+  /* Personalizar la apariencia del toast de éxito */
+  .Toastify__toast--success {
+    background-color: #8c52ff;
+  }
+  
+  /* Personalizar la apariencia del toast de error */
+  .Toastify__toast--error {
+    background-color: #f44336;
+  }
+  
+  /* Personalizar la apariencia del toast de información */
+  .Toastify__toast--info {
+    background-color: #2196f3;
+  }
+  
+  /* Personalizar la apariencia del toast de advertencia */
+  .Toastify__toast--warning {
+    background-color: #ff9800;
+  }
+  
+  /* Personalizar el estilo de los botones de cierre */
+  .Toastify__close-button {
+    color: #fff;
+  }
+
+  /* toastify-custom.css */
+
+/* Personalizar la apariencia de la barra de progreso */
+.Toastify__progress-bar {
+    background-color: #ff9800; /* Establezca el color de fondo de la barra de progreso */
+    height: 4px; /* Establezca el grosor de la barra de progreso */
+  }
+  
+  /* Personalizar la apariencia de la barra de progreso para el toast de éxito */
+  .Toastify__progress-bar--success {
+    background-color: #ffb100;
+  }
+  
+  /* Personalizar la apariencia de la barra de progreso para el toast de error */
+  .Toastify__progress-bar--error {
+    background-color: #f44336;
+  }
+  
+  /* Personalizar la apariencia de la barra de progreso para el toast de información */
+  .Toastify__progress-bar--info {
+    background-color: #2196f3;
+  }
+  
+  /* Personalizar la apariencia de la barra de progreso para el toast de advertencia */
+  .Toastify__progress-bar--warning {
+    background-color: #ffeb3b;
+  }
+  
+  /* Personalizar la apariencia de la barra de progreso para el toast de pantalla completa */
+  .Toastify__progress-bar--fullscreen {
+    background-color: #4caf50;
+  }
+  
+  
