@@ -21,7 +21,7 @@ export const Social_media = () => {
   const { store } = useContext(Context);
 
   const containerStyle = {
-    width: "800px",
+    width: "100%",
     height: "400px",
   };
 
@@ -132,56 +132,56 @@ export const Social_media = () => {
 
   return isLoaded ? (
     <div className="social-div my-4">
-      <div className="social-header">
-        <h3>Nuestra comunidad</h3>
-      </div>
-      <div className="container-fluid d-inline-flex justify-content-evenly">
-        <div className="my-3 mx-auto p-3 d-flex flex-column justify-content-between half">
-          <h5 className="text-center">Nuestros participantes</h5>
-          <div className="container d-inline-flex justify-content-center">
-            {/* Card 1 */}
-            <div className="card card-social m-2" id="card-1">
-              <img
-                src="https://d38b8me95wjkbc.cloudfront.net/uploads/blog/cover_image/190/blog_image_2038713.jpg"
-                className="card-img-top cardimg p-1 mx-auto"
-                alt="Kids around a fire"
-              />
-              <div className="card-body">
-                <h5 className="card-title">Camping y salud</h5>
-                <p className="card-text text-just">
-                  Niños y adultos pueden pasarlo muy bien en una jornada al aire
-                  libre, pero, ¿qué beneficios...
-                </p>
-                <a href="#" className="btn btn-primary">
-                  Ver más
-                </a>
-              </div>
-            </div>
-            {/* Card 2 */}
-            <div className="card card-social m-2">
-              <img
-                src="https://www.moralzarzal.es/wp-content/uploads/2019/06/F%C3%9ATBOL-SALA-ALEV%C3%8DN-.jpg"
-                className="card-img-top cardimg p-1 mx-auto"
-                alt="..."
-              />
-              <div className="card-body">
-                <h5 className="card-title">Torneo ADS</h5>
-                <p className="card-text text-just">
-                  Tras un campeonato difícil, los chicos consiguieron hacerse
-                  con la victoria en el torneo...
-                </p>
-                <a href="#" className="btn btn-primary">
-                  Ver más
-                </a>
+      <div className="text-center p-3 m-2 rounded d-flex align-items-center justify-content-center" style={{ backgroundColor: "#feb823" }}><h3>Nuestra Comunidad</h3></div>
+      <div className="container-fluid">
+        <div className="row">
+          <div className="my-3 mx-auto p-3 col-12 col-lg-6">
+            <h5 className="text-center">Nuestros participantes</h5>
+            <div className="d-flex justify-content-center flex-wrap">
+              {/* Card 1 */}
+          <div className="card card-social m-2" id="card-1">
+          <img
+                         src="https://d38b8me95wjkbc.cloudfront.net/uploads/blog/cover_image/190/blog_image_2038713.jpg"
+                         className="card-img-top cardimg p-1 mx-auto"
+                         alt="Kids around a fire"
+                       />
+          <div className="card-body">
+          <h5 className="card-title">Camping y salud</h5>
+          <p className="card-text text-just">
+          Niños y adultos pueden pasarlo muy bien en una jornada al aire
+          libre, pero, ¿qué beneficios...
+          </p>
+          <a href="#" className="btn btn-primary">
+          Ver más
+          </a>
+          </div>
+          </div>
+          {/* Card 2*/}
+              <div className="card card-social m-2">
+                <img
+                  src="https://www.moralzarzal.es/wp-content/uploads/2019/06/F%C3%9ATBOL-SALA-ALEV%C3%8DN-.jpg"
+                  className="card-img-top cardimg p-1 mx-auto"
+                  alt="..."
+                />
+                <div className="card-body">
+                  <h5 className="card-title">Torneo ADS</h5>
+                  <p className="card-text text-just">
+                    Tras un campeonato difícil, los chicos consiguieron hacerse
+                    con la victoria en el torneo...
+                  </p>
+                  <a href="#" className="btn btn-primary">
+                    Ver más
+                  </a>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        <div className="m-3 p-3 half">
-          <h5 className="text-center">Algunos de nuestros eventos</h5>
-          <div className="container d-inline-flex">
-            <div width="5%" className="d-flex flex-column mx-2">
-              {event.length > 1 ? mapa : <h4>Cargando</h4>}
+          <div className="my-3 p-3 col-12 col-lg-6">
+            <h5 className="text-center">Algunos de nuestros eventos</h5>
+            <div className="d-flex justify-content-center">
+              <div className="d-flex flex-column mx-2 w-100">
+                {event.length > 1 ? mapa : <h4>Cargando</h4>}
+              </div>
             </div>
           </div>
         </div>
@@ -192,4 +192,4 @@ export const Social_media = () => {
   );
 };
 
-// Google API Key: AIzaSyAA0p9RXeAwigbbMWcrtJ6f0pl8pesrj8E
+          // Google API Key: AIzaSyAA0p9RXeAwigbbMWcrtJ6f0pl8pesrj8E
