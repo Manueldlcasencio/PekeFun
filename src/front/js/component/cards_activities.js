@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Context } from "../store/appContext.js";
 import '../../styles/cards_activities.css';
+import "../../styles/index.css";
 
 export const Cards_activities = ({ event_id, name, description, date, length, category, slots, min_age, max_age, contact, cloth, others }) => {
     const { store, actions } = useContext(Context);
@@ -30,7 +31,7 @@ export const Cards_activities = ({ event_id, name, description, date, length, ca
                                             console.log('Evento a seleccionar:', { id: event.event_id, name: event.name, description: event.description, date: event.date, length: event.length, category: event.category, slots: event.slots, min_age: event.min_age, max_age: event.max_age, contact: event.contact, cloth: event.cloth, others: event.others, });
                                             actions.selectEvent({ id: event.event_id, name: event.name, description: event.description, date: event.date, length: event.length, category: event.category, slots: event.slots, min_age: event.min_age, max_age: event.max_age, image: event.image, contact: event.contact, cloth: event.cloth, others: event.others, });
                                             navigate(`/event/${event.event_id}`);
-                                        }}>
+                                        }} style={{ backgroundColor: "#f9643f" }}>
                                         Saber Más
                                     </button>
                                 </div>

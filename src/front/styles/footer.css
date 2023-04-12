@@ -1,0 +1,43 @@
+.footer {
+    background-color: #feb823;
+    color: #fff;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 16px;
+    padding: 50px 0;
+  }
+  
+  .footer h5 {
+    color: #fff;
+    font-size: 20px;
+    font-weight: 700;
+  }
+  
+  .footer p {
+    color: #fff;
+    font-size: 16px;
+  }
+  
+  .footer ul li {
+    margin-bottom: 10px;
+  }
+  
+  .footer ul li a {
+    color: #fff;
+    font-size: 16px;
+  }
+  
+  .footer-bottom {
+    background-color: #333;
+    color: #fff;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 14px;
+    padding: 10px 0;
+  }
+  
+  .footer-bottom a {
+    color: #fff;
+    font-size: 14px;
+  }
+  
+  
+  

@@ -2,6 +2,7 @@ import React, { useContext, useEffect } from "react";
 import { Context } from "../store/appContext";
 import PekeFun from "../../img/fondo.png";
 import "../../styles/home.css";
+import "../../styles/index.css";
 import { Social_media } from "../component/social_media.jsx";
 import { Cards_activities } from "../component/cards_activities";
 import { Categories } from "../component/categories.js";
@@ -38,13 +39,13 @@ export const Home = () => {
 			<p>
 				<img src={PekeFun} className="responsive-image w-100" />
 			</p>
-			<button className="btn btn-danger" onClick={() => actions.deleteUser(username, "test")}>PRUEBA ELIMINAR USUARIO</button>
-			<button className="btn btn-danger" onClick={() => actions.changePassword(username, "teste", "nueva contrasena")}>PRUEBA CAMBIAR CONTRASEÑA</button>
-			<button className="btn btn-danger" onClick={handleModifyChild}>PRUEBA MODIFICAR DATOS NIÑO</button>
+			{/*<button className="btn btn-danger" onClick={() => actions.deleteUser(username, "test")}>PRUEBA ELIMINAR USUARIO</button>}
+			{/*<button className="btn btn-danger" onClick={() => actions.changePassword(username, "teste", "nueva contrasena")}>PRUEBA CAMBIAR CONTRASEÑA</button>
+			{/*<button className="btn btn-danger" onClick={handleModifyChild}>PRUEBA MODIFICAR DATOS NIÑO</button>*/}
 			
-		<Cards_activities />
+		
 		<Categories />
-
+		<Cards_activities />
 	{/*<Create_event_form />*/}
 		{/*<button className="btn btn-secondary" type="button" onClick={() => actions.getTutorData()}> 
           recuperar info del tutor

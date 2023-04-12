@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "../../styles/modals.css";
+import "../../styles/index.css";
 import '../../styles/toastify-custom.css';
 
 export const Child_Selection_Modal = ({ show, onHide, childList }) => {
@@ -64,8 +65,8 @@ export const Child_Selection_Modal = ({ show, onHide, childList }) => {
     <Form.Check key={child.id} id={`child-${child.id}`} label={`${child.name} ${child.lastname}`} defaultChecked onChange={e => handleChildCheckboxChange(child, e.target.checked)}/>))}</Form>
       </Modal.Body>
       <Modal.Footer  style={{ backgroundColor: "#feb823" }}>
-        <Button variant="secondary" onClick={onHide}>Cancelar</Button>
-        <Button variant="primary" onClick={() => { actions.handleChildSelectionSubmit(onHide, store.selectedChildren, () => {store.selectedChildren.forEach((child) => { handleSuccess(`${child.name} ${child.lastname}`);});
+        <Button variant="secondary" type="button" onClick={onHide}>Cancelar</Button>
+        <Button variant="primary" type="button" onClick={() => { actions.handleChildSelectionSubmit(onHide, store.selectedChildren, () => {store.selectedChildren.forEach((child) => { handleSuccess(`${child.name} ${child.lastname}`);});
     });
   }}
 >

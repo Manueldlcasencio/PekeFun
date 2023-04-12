@@ -1,12 +1,7 @@
 import React, { useState, useContext } from "react";
 import { Context } from "../store/appContext.js";
 import "../../styles/social.css";
-import {
-  GoogleMap,
-  useJsApiLoader,
-  Marker,
-  InfoWindow,
-} from "@react-google-maps/api";
+import {GoogleMap, useJsApiLoader, Marker, InfoWindow,} from "@react-google-maps/api";
 
 export const Social_media = () => {
   const { isLoaded } = useJsApiLoader({
@@ -132,7 +127,7 @@ export const Social_media = () => {
 
   return isLoaded ? (
     <div className="social-div my-4">
-      <div className="text-center p-3 m-2 rounded d-flex align-items-center justify-content-center" style={{ backgroundColor: "#feb823" }}><h3>Nuestra Comunidad</h3></div>
+      <div className="text-center p-3 m-2 rounded d-flex align-items-center justify-content-center shadow-lg" style={{ backgroundColor: "#feb823" }}><h3>Nuestra Comunidad</h3></div>
       <div className="container-fluid">
         <div className="row">
           <div className="my-3 mx-auto p-3 col-12 col-lg-6">
@@ -151,7 +146,7 @@ export const Social_media = () => {
           Niños y adultos pueden pasarlo muy bien en una jornada al aire
           libre, pero, ¿qué beneficios...
           </p>
-          <a href="#" className="btn btn-primary">
+          <a href="#" className="btn btn-primary" style={{ backgroundColor: "#f9643f" }}>
           Ver más
           </a>
           </div>
@@ -169,7 +164,7 @@ export const Social_media = () => {
                     Tras un campeonato difícil, los chicos consiguieron hacerse
                     con la victoria en el torneo...
                   </p>
-                  <a href="#" className="btn btn-primary">
+                  <a href="#" className="btn btn-primary" style={{ backgroundColor: "#f9643f" }}>
                     Ver más
                   </a>
                 </div>

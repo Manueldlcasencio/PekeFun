@@ -2,13 +2,12 @@ import React, { useState, useContext } from "react";
 import { Link } from "react-router-dom";
 import PekeFun from "../../img/pekefun2.png";
 import Perfil from "../../img/perfil.png";
-import { Modal_login_signup } from "./modal_login_signup.js";
+import { Modal_login_signup} from "./modal_login_signup.js";
 import { Logout } from "./logout.js";
 import { FavoritesDropdown } from "./favorites_dropdown.js";
 import { Context } from "../store/appContext.js";
 import { FiSearch } from "react-icons/fi";
-import "../../styles/index.css";
-import "../../styles/home.css";
+import "../../styles/navbar.css";
 
 export const Navbar = () => {
   const { store, actions } = useContext(Context);
@@ -27,22 +26,24 @@ export const Navbar = () => {
   return (
     <div className="container-fluid">
       <nav className="navbar navbar-expand-lg navbar-light bg-#19d8b6">
+        <Link to="/" className="navbar-brand d-flex align-items-center d-lg-none">
+          <img src={PekeFun} alt="" className="img-fluid custom-logo" />
+        </Link>
+        <button
+          className="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span className="navbar-toggler-icon"></span>
+        </button>
         <div className="container">
-          <Link to="/" className="navbar-brand d-flex align-items-center">
+          <Link to="/" className="navbar-brand d-none d-lg-flex align-items-center">
             <img src={PekeFun} alt="" className="img-fluid custom-logo" />
           </Link>
-
-          <button
-            className="navbar-toggler"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent"
-            aria-expanded="false"
-            aria-label="Toggle navigation"
-          >
-            <span className="navbar-toggler-icon"></span>
-          </button>
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
             <ul className="navbar-nav me-auto mb-2 mb-lg-0">
               <li className="nav-item">
@@ -69,23 +70,27 @@ export const Navbar = () => {
               <button
                 className="btn btn-outline-light mx-2 rounded-circle"
                 type="button"
-                onClick={handleSearch}
-              >
-                <FiSearch />
-              </button>
-            </form>
-
-            {/* Logica para mostrar el perfil usuario*/}
-            {/* Falta apuntar al link correcto*/}
-            <Link to="/" className="navbar-brand d-flex align-items-center">
-              <img src={Perfil} alt="" className="img-fluid custom-profile" />
-            </Link>
-
-            {/* Logica para botón login/logout*/}
-            {store.token ? <Logout /> : <Modal_login_signup />}
+                onClick={handleSearch}>
+                  <FiSearch />
+                </button>
+              </form>
+      
+              {/* Logica para mostrar el perfil usuario*/}
+              {/* Falta apuntar al link correcto*/}
+              <div className="d-none d-lg-block">
+                <div className="d-flex justify-content-end align-items-center profile-container">
+                  <Link to="/" className="navbar-brand d-flex align-items-center">
+                    <img src={Perfil} alt="" className="img-fluid custom-profile" />
+                  </Link>
+      
+                  {/* Logica para botón login/logout*/}
+                  {store.token ? <Logout /> : <Modal_login_signup />}
+                </div>
+              </div>
+            </div>
           </div>
-          </div>
-  </nav>
-</div>
-);
+        </nav>
+      </div>
+      );
 };
+      

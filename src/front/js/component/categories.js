@@ -13,7 +13,7 @@ import Verano from "../../img/verano.png";
 import { Context } from "../store/appContext.js";
 import { Link, Navigate } from "react-router-dom";
 import { Col } from "react-bootstrap";
-
+import "../../styles/categories.css";
 
 
 export const Categories = () => {
@@ -104,8 +104,8 @@ export const Categories = () => {
      <Carousel.Item key={i}>
        <div className="row">
          <Col xs={12}>
-           <span onClick={() => mostrarCards(items[i].cat)}>
-             <img className="d-block w-100" src={items[i].image} alt={i} />
+           <span onClick={() => mostrarCards(items[i].cat)}  className="carousel-image">
+             <img className="d-block w-80" src={items[i].image} alt={i} />
            </span>
          </Col>
        </div>
@@ -119,15 +119,15 @@ export const Categories = () => {
      <Carousel.Item key={i}>
        <div className="row">
          <Col md={4}>
-           <span onClick={() => mostrarCards(items[i].cat)}>
-             <img className="d-block w-100" src={items[i].image} alt={i} />
+           <span onClick={() => mostrarCards(items[i].cat)}  className="carousel-image">
+             <img className="d-block w-80" src={items[i].image} alt={i} />
            </span>
          </Col>
          <Col md={4}>
            {i + 1 < items.length && (
-             <span onClick={() => mostrarCards(items[i + 1].cat)}>
+             <span onClick={() => mostrarCards(items[i + 1].cat)}  className="carousel-image">
                <img
-                 className="d-block w-100"
+                 className="d-block w-80"
                  src={items[i + 1].image}
                  alt={i + 1}
                />
@@ -136,9 +136,9 @@ export const Categories = () => {
          </Col>
          <Col md={4}>
            {i + 2 < items.length && (
-             <span onClick={() => mostrarCards(items[i + 2].cat)}>
+             <span onClick={() => mostrarCards(items[i + 2].cat)}  className="carousel-image">
                <img
-                 className="d-block w-100"
+                 className="d-block w-80"
                  src={items[i + 2].image}
                  alt={i + 2}
                />

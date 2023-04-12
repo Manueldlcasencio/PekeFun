@@ -16,4 +16,11 @@
   }
 
   
-  
+  button, .btn {
+    background-color: #f9643f;
+    border-color: white; /* Modifica el color del borde */
+    color: #fff;
+    box-shadow: 0 0 40px 40px #f9643f inset, 0 0 0 0 #f9643f;
+    -webkit-transition: all 300ms ease-in-out;
+    transition: all 300ms ease-in-out;
+  }

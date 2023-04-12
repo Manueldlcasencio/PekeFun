@@ -5,7 +5,6 @@ import {Child_Selection_Modal} from "../component/child_selection_modal.js";
 import { format } from "date-fns";
 
 
-
 export const Events_more_info = () => {
   const { store, actions } = useContext(Context);
   const [showModal, setShowModal] = useState(false);
@@ -19,6 +18,10 @@ export const Events_more_info = () => {
   useEffect(() => {
     console.log("store.tutorData.children:", store.tutorData.children);
   }, [store.tutorData.children]);
+
+  const handleLoginSignupModalClose = () => {
+    setShowLoginSignupModal(false);
+  };
 
   const handleShowModal = () => setShowModal(true);
   const handleHideModal = () => setShowModal(false);
@@ -84,9 +87,9 @@ export const Events_more_info = () => {
         <p><strong>¿Consultas? Pueden contactar directo al anunciante aquí!:</strong>{" "}{advertiserData.info?.contact || "anunciante@gmail.com"}</p>
         <p><strong>¿Qué vestimenta es la ideal?</strong> {cloth}</p>
         <p><strong>Otras aclaraciones:</strong> {others}</p>
-        <button type="button" className="btn btn-warning" onClick={handleParticipantRegisterClick}>
+        {store.token ? <button type="button" className="btn btn-warning" onClick={handleParticipantRegisterClick} style={{ backgroundColor: "#f9643f" }}>
           ¡Inscribirse!
-        </button>
+        </button> : <Modal_login_signup show={showLoginSignupModal} onHide={handleLoginSignupModalClose} />}
       </div>
       <div className="col-12 col-lg-3 d-flex justify-content-center">
         {image && (
@@ -95,7 +98,7 @@ export const Events_more_info = () => {
       </div>
     </div>
     <Child_Selection_Modal show={showModal} onHide={handleHideModal} childList={store.tutorData.children} />
-   
+    
   </div>
-    );
+);
 };
