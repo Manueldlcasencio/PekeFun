@@ -48,9 +48,11 @@ export const Footer = () => {
         </div>
       </div>
 
-      <div className="text-center p-3" style={{ backgroundColor: "#feb823" }} >
-        <strong>© 2023 PekeFun. Todos los derechos reservados.</strong>
+      <div className="text-center p-3 rounded d-flex align-items-center justify-content-center" style={{ backgroundColor: "#feb823" }} >
+        <strong className="text-dark">© 2023 PekeFun. Todos los derechos reservados.</strong>
       </div>
     </footer>
   );
 };
+
+

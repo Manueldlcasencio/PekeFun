@@ -2,41 +2,6 @@
     General Styles used on every website (Don't Repeat Yourself)
 */
 
-/*NAVBAR */ 
-.navbar {
-  background-color: #19d8b6;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-  border-radius: 5px;
-  padding: 10px;
-  height: 80px;
-  margin-top: 10px;
-}
-
-.navbar-brand {
-  display: flex;
-  align-items: center;
-}
-
-.navbar-brand img {
-  margin-top: 30px;
-  margin-right: 40;
-}
-
-.navbar-nav {
-  margin-left: auto;
-}
-
-.nav-link {
-  color: #fff;
-  font-weight: bold;
-  transition: all 0.3s ease-in-out;
-}
-
-.nav-link:hover {
-  color: #fff;
-  text-decoration: none;
-}
-/*Botones navbar */
 button, .btn {
     background-color: #f9643f;
     border-color: white; /* Modifica el color del borde */
@@ -44,49 +9,37 @@ button, .btn {
     box-shadow: 0 0 40px 40px #f9643f inset, 0 0 0 0 #f9643f;
     -webkit-transition: all 300ms ease-in-out;
     transition: all 300ms ease-in-out;
-    
   }
- 
+  
+  .search-input {
+    width: 100%;
+    max-width: 300px;
+  }
   
   button:hover, .btn:hover {
     box-shadow: 0 0 10px 0 white inset, 0 0 10px 4px white;
     border-color: white;
   }
 
+  .nav-link {
+    color: black;
+    border-color: white; /* Modifica el color del borde */
+  }
 
-/*BODY */
   body {
     background-color: #19d8b6;
   }
-  
 
+  
+  .form-check-input:checked {
+    background-color: #8c52ff;
+  }
+  
   .container {
     display: flex;
     justify-content: center;
   }
-
-  .search-input {
-    width: 250px; 
-  }
-
-
-  /*VISTA CONTACTO*/
-  .contacto-form-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
-  }
-  
-  .contacto-form {
-    max-width: 500px;
-    width: 100%;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    box-shadow: 0px 0px 10px #ccc;
-  }
-  
+    
   .form-group {
     margin-bottom: 20px;
   }
@@ -111,80 +64,3 @@ button, .btn {
 
 
 
-/* Estilos para el buscador */
-.search-input {
-  border-radius: 20px;
-  border: none;
-  font-size: 16px;
-  padding: 6px 12px;
-  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
-  width: 250px;
-}
-
-.btn-buscar {
-  border-radius: 20px;
-  border: none;
-  background-color: #19d8b6;
-  color: white;
-  font-size: 16px;
-  padding: 6px 12px;
-  margin-left: 17px;
-  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
-}
-
-/* Estilos para el login */
-.modal-login-signup {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.modal-login-signup form {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.modal-login-signup label {
-  font-size: 16px;
-  margin-bottom: 5px;
-}
-
-.modal-login-signup input[type="email"],
-.modal-login-signup input[type="password"] {
-  border-radius: 20px;
-  border: none;
-  font-size: 16px;
-  padding: 6px 12px;
-  margin-bottom: 10px;
-  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
-}
-
-.modal-login-signup button[type="submit"] {
-  border-radius: 20px;
-  border: none;
-  background-color: #19d8b6;
-  color: white;
-  font-size: 16px;
-  padding: 6px 12px;
-  margin-top: 10px;
-  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
-}
-
-/* Estilos para el footer */
-.footer-links li {
-  margin-right: 25px;
-  box-shadow: 0 0 5px 0 white inset, 0 0 5px 4px white;
-}
-
-.social-media a:hover {
-  box-shadow: 0px 3px 3px 0px rgba(241, 238, 238, 0.75);
-}
-
-
-
-/* Estilos para imaganes carrusel  */
-.carousel-img {
-  height: 400px;
-  width: 250px;
-}

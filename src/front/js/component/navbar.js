@@ -7,7 +7,8 @@ import { Logout } from "./logout.js";
 import { FavoritesDropdown } from "./favorites_dropdown.js";
 import { Context } from "../store/appContext.js";
 import { FiSearch } from "react-icons/fi";
-
+import "../../styles/index.css";
+import "../../styles/home.css";
 
 export const Navbar = () => {
   const { store, actions } = useContext(Context);
@@ -25,15 +26,14 @@ export const Navbar = () => {
 
   return (
     <div className="container-fluid">
-      <nav className="navbar navbar-expand-lg navbar-light bg-#19d8b6 ">
+      <nav className="navbar navbar-expand-lg navbar-light bg-#19d8b6">
         <div className="container">
-          <Link to="/" className="navbar-brand">
-            <img src={PekeFun} alt="" width="200" height="200" />
+          <Link to="/" className="navbar-brand d-flex align-items-center">
+            <img src={PekeFun} alt="" className="img-fluid custom-logo" />
           </Link>
 
           <button
             className="navbar-toggler"
-            color=""
             type="button"
             data-bs-toggle="collapse"
             data-bs-target="#navbarSupportedContent"
@@ -59,23 +59,33 @@ export const Navbar = () => {
 
             {/* Barra de búsqueda */}
             <form className="d-flex">
-              <input type="text" placeholder="Encuentra tu actividad" className="form-control search-input"  value={textSearch} onChange={handleTextSearch} />
-              <button className="btn btn-outline-light mx-2" type="button" onClick={handleSearch}><FiSearch /></button>
+              <input
+                type="text"
+                placeholder="Encuentra tu actividad"
+                className="form-control search-input"
+                value={textSearch}
+                onChange={handleTextSearch}
+              />
+              <button
+                className="btn btn-outline-light mx-2 rounded-circle"
+                type="button"
+                onClick={handleSearch}
+              >
+                <FiSearch />
+              </button>
             </form>
 
             {/* Logica para mostrar el perfil usuario*/}
             {/* Falta apuntar al link correcto*/}
-            <Link to="/" className="navbar-brand">
-              <img src={Perfil} alt="" width="250" height="250" />
+            <Link to="/" className="navbar-brand d-flex align-items-center">
+              <img src={Perfil} alt="" className="img-fluid custom-profile" />
             </Link>
 
             {/* Logica para botón login/logout*/}
-            {store.token ? (<Logout/>) : (<Modal_login_signup/>)}
-            
+            {store.token ? <Logout /> : <Modal_login_signup />}
           </div>
-        </div>
-      </nav>
-    </div>
-  );
+          </div>
+  </nav>
+</div>
+);
 };
-

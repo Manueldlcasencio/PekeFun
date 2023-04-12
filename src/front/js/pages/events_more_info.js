@@ -73,7 +73,7 @@ export const Events_more_info = () => {
       <div className="col-12 col-lg-2 m-3">
         <h3><strong>{name}</strong></h3>
       </div>
-      <div className="col-12 col-lg-5">
+      <div className="col-12 col-lg-6">
         <p><strong>¿Qué haremos?</strong> {description}</p>
         <p><strong>¿Cuándo comenzaremos?</strong> {formattedDate}</p>
         <p><strong>¿Cuánto dura?</strong> {length}</p>
@@ -81,14 +81,14 @@ export const Events_more_info = () => {
         <p><strong>¿Cuántas vacantes disponibles hay?</strong> {slots}</p>
         <p><strong>¿Cuál es la edad mínima recomendada?</strong> {min_age}</p>
         <p><strong>¿Cuál es la edad máxima recomendada?</strong> {max_age}</p>
-        <p><strong>¿Consultas? Pueden contactar directo al anunciante aquí!:</strong> {advertiserData.info.contact}</p>
+        <p><strong>¿Consultas? Pueden contactar directo al anunciante aquí!:</strong>{" "}{advertiserData.info?.contact || "anunciante@gmail.com"}</p>
         <p><strong>¿Qué vestimenta es la ideal?</strong> {cloth}</p>
         <p><strong>Otras aclaraciones:</strong> {others}</p>
         <button type="button" className="btn btn-warning" onClick={handleParticipantRegisterClick}>
           ¡Inscribirse!
         </button>
       </div>
-      <div className="col-12 col-lg-4 d-flex justify-content-center">
+      <div className="col-12 col-lg-3 d-flex justify-content-center">
         {image && (
           <img src={image} className="img-fluid w-100 ms-auto d-block" alt="..." />
         )}
