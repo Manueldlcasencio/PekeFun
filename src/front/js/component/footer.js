@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 export const Footer = () => {
   return (
-    <footer className="bg-dark text-white">
+    <footer className="bg-dark text-white mt-5 p-2">
       <div className="container-fluid">
         <div className="row">
           <div className="col-lg-4 col-md-6 mb-4 mb-md-0">
@@ -48,8 +48,8 @@ export const Footer = () => {
         </div>
       </div>
 
-      <div className="text-center p-3" style={{ backgroundColor: "#feb823" }}>
-        © 2023 PekeFun. Todos los derechos reservados.
+      <div className="text-center p-3 rounded d-flex align-items-center justify-content-center" style={{ backgroundColor: "#feb823" }}>
+        <strong className="text-dark">© 2023 PekeFun. Todos los derechos reservados.</strong>
         <div>
           <Link to="/" className="text-decoration-none text-white me-3"><i className="bi bi-facebook"></i></Link>
           <Link to="/" className="text-decoration-none text-white me-3"><i className="bi bi-twitter"></i></Link>
@@ -59,3 +59,5 @@ export const Footer = () => {
     </footer>
   );
 };
+
+

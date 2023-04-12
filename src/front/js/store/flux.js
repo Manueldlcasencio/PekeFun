@@ -28,6 +28,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				min_age: "",
 				max_age: "",
 				price: "",
+				image: "",
 				date: "",
 				length: "",
 				category: "",
@@ -251,6 +252,55 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			},
 
+			deleteUser: async (email, password, token) => {
+				const store = getStore();
+				try {
+					const userRequestOptions = {
+						method: "DELETE",
+						headers: {
+							"Content-type": "application/json",
+							Authorization: `Bearer ${store.token}`
+						},
+						body: JSON.stringify({"username": email, "password": password})};
+					
+					const userResp = await fetch(process.env.BACKEND_URL + "/api/signup/info", userRequestOptions)
+					
+					const userDelResp = await userResp.json();
+					console.log(userDelResp);
+					
+					return true;
+
+				} catch (error) {
+					console.error("Error al intentar eliminar el usuario:", error);
+				}
+			},
+
+			changePassword: async (email, password, newPassword, token) => {
+				const store = getStore();
+				try {
+					let user = { "username": email,
+								 "old_password": password,
+								 "new_password": newPassword}
+					console.log(user);
+					const passRequestOptions = {
+						method: "PUT",
+						headers: {
+							"Content-type": "application/json",
+							Authorization: `Bearer ${store.token}`
+						},
+						body: JSON.stringify(user)
+					};
+
+					const changePassResp = await fetch(process.env.BACKEND_URL + "/api/signup/info", passRequestOptions)
+					const changePassResponse = await changePassResp.json();
+					console.log("Respuesta a pedido de cambio de contraseña:", changePassResponse);
+					return true;
+
+				} catch (error) {
+					console.error("Error al modificar la contraseña:", error);
+				}
+			},
+
 			//*****************************************SECCION TUTOR Y "CHILDRENS"****************************************/
 			createTutor: async (email, tutorData) => {
 				const store = getStore();
@@ -351,6 +401,51 @@ const getState = ({ getStore, getActions, setStore }) => {
 				const newChildren = [...store.tutorData.children, childData];
 				setStore({ tutorData: { ...store.tutorData, children: newChildren } });
 			},
+			
+			//A REVISAR!!!!! SE CAMBIAN TODOS LOS REGISTROS DE NIÑOS!!!!!!
+			modifyChild: async (email, childToUpdate) => {
+				const store = getStore();
+				try {
+				  const childData = {
+					...childToUpdate,
+					"name": childToUpdate.name,
+					"username": email,
+					"lastname": childToUpdate.lastname,
+					"preferences": childToUpdate.preferences || "",
+					"avatar": childToUpdate.avatar || "",
+					"school": childToUpdate.school || "",
+					"others": childToUpdate.others || "",
+					"parent": childToUpdate.parent || "",
+					"birth": childToUpdate.birth,
+					"child_id": childToUpdate.id,
+				  };
+							  
+				  console.log(childData);
+				  const childrenRequestOptions = {
+					method: "PUT",
+					headers: {
+					  "Content-type": "application/json",
+					  Authorization: `Bearer ${store.token}`
+					},
+					body: JSON.stringify(childData)
+				  };
+			  
+				  const modifyChildrenResp = await fetch(`${process.env.BACKEND_URL}/api/signup/tutor/child/`, childrenRequestOptions);
+				  const modifiedChild = await modifyChildrenResp.json();
+				  console.log("Respuesta a pedido de actualización de datos de niño:", modifiedChild);
+			  
+				  const newChildrenData = store.tutorData.children.map(child =>
+					child.id === childToUpdate.id ? childData : child
+				  );
+			  
+				  setStore({ tutorData: { ...store.tutorData, children: newChildrenData } });
+			  
+				  return true;
+			  
+				} catch (error) {
+				  console.error("Error al intentar modificar datos del/de los niño/s:", error);
+				}
+			},
 
 			getTutorData: async () => {
 				const store = getStore();
@@ -404,7 +499,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 						"min_age": eventData.min_age,
 						"max_age": eventData.max_age,
 						"price": eventData.price,
+						"image": eventData.image,
 						"date": eventData.date,
+						"contact": eventData.contact,
 						"length": eventData.length,
 						"category": eventData.category,
 						"slots": eventData.slots,
@@ -462,8 +559,10 @@ const getState = ({ getStore, getActions, setStore }) => {
 			//PARA FILTRAR EVENTOS POR CATEGORÍA (AGREGAR EN EL ONCLICK AL CAROUSEL Y EN LA VISTA DE LAS CARDS RENDERIZAR EVENTOS DE FILTERED EVENTS)
 			filterEventsByCategory: (selectedCategory) => {
 				const store = getStore();
+				console.log(selectedCategory);
 				const events_filtered = store.events.filter(event => event.category === selectedCategory);
 				setStore({ events_filtered: events_filtered });
+				console.log(store.events_filtered);
 			},
 			
 			//PARA FILTRAR EVENTOS POR BÙSQUEDA MEDIANTE STRING:

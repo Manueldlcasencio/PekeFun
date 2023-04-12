@@ -1,0 +1,19 @@
+.card {
+    overflow-wrap: break-word;
+  }
+  
+  .card-text {
+    text-align: justify;
+  }
+  
+  .card .d-flex {
+    justify-content: center;
+  }
+
+  .cards-container {
+    max-height: calc(100% - 4rem); 
+    overflow-y: auto;
+  }
+
+  
+  

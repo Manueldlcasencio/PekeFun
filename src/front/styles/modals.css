@@ -1,0 +1,4 @@
+.custom-modal-header .btn-close::before,
+.custom-modal-header .btn-close::after {
+  background-color: white;
+}
