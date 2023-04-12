@@ -27,6 +27,7 @@ export const User = () => {
   const [tutorform, setTutorform] = useState({});
   const [childformsend, setChildformsend] = useState();
   const [adverform, setAdverform] = useState({});
+  const [eventform, setEventform] = useState({});
 
   // Fetchs de información
   async function isPrivate() {
@@ -839,8 +840,8 @@ export const User = () => {
             className="btn btn-primary"
             data-bs-toggle="modal"
             data-bs-target={"#" + e.name + "modal"}
-            onClick={(e) => {
-              console.log("Boton", e.target.getAttribute("data-bs-target"));
+            onClick={() => {
+              seteventtoedit(e);
             }}
           >
             Editar
@@ -868,26 +869,292 @@ export const User = () => {
                 ></button>
               </div>
               <div className="modal-body">
-                {/* Contenido del modal. Aquí debería invocar el componente de Pablo*/}
-                <form>
-                  <div className="mb-3">
-                    <label htmlFor="tutorname" className="form-label">
-                      Nombre
+                <form
+                  className="row g-3 needs-validation"
+                  onSubmit={eventsubmit}
+                  noValidate
+                >
+                  <h1>Crea un evento</h1>
+                  <div className="col-md-6">
+                    <label htmlFor="name" className="form-label">
+                      Nombre del evento
                     </label>
                     <input
-                      type="string"
+                      type="text"
                       className="form-control"
+                      id="name"
+                      name="name"
                       objkey="name"
-                      aria-describedby="emailHelp"
-                      onChange={handlechildform}
-                      placeholder={
-                        childselect != undefined &&
-                        childselect != 99 &&
-                        childselect != 98
-                          ? infochild[childselect].name
-                          : ""
-                      }
+                      placeholder={e.name}
+                      onChange={handleeventform}
+                      required
                     />
+                    <div className="invalid-feedback">
+                      Por favor, ingrese un nombre válido para el evento.
+                    </div>
+                  </div>
+
+                  <div className="col-md-6">
+                    <label htmlFor="street" className="form-label">
+                      Calle y número del evento
+                    </label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="street"
+                      objkey="localization"
+                      name="street"
+                      placeholder={e.localization}
+                      onChange={handleeventform}
+                      required
+                    />
+                    <div className="invalid-feedback">
+                      Por favor, ingrese una calle del evento válida.
+                    </div>
+                  </div>
+
+                  <div className="col-md-6">
+                    <label htmlFor="min_age" className="form-label">
+                      Edad mínima
+                    </label>
+                    <input
+                      type="number"
+                      className="form-control"
+                      id="min_age"
+                      name="min_age"
+                      objkey="min_age"
+                      placeholder={e.min_age}
+                      onChange={handleeventform}
+                      required
+                    />
+                    <div className="invalid-feedback">
+                      Por favor, ingrese una edad mínima válida.
+                    </div>
+                  </div>
+
+                  <div className="col-md-6">
+                    <label htmlFor="max_age" className="form-label">
+                      Edad máxima
+                    </label>
+                    <input
+                      type="number"
+                      className="form-control"
+                      id="max_age"
+                      name="max_age"
+                      objkey="max_age"
+                      placeholder={e.max_age}
+                      onChange={handleeventform}
+                      required
+                    />
+                    <div className="invalid-feedback">
+                      Por favor, ingrese una edad máxima válida.
+                    </div>
+                  </div>
+
+                  <div className="col-md-6">
+                    <label htmlFor="price" className="form-label">
+                      Precio
+                    </label>
+                    <input
+                      type="number"
+                      className="form-control"
+                      id="price"
+                      name="price"
+                      objkey="price"
+                      placeholder={e.price}
+                      onChange={handleeventform}
+                      required
+                    />
+                    <div className="invalid-feedback">
+                      Por favor, ingrese un precio válido.
+                    </div>
+                  </div>
+
+                  <div className="col-md-6">
+                    <label htmlFor="date" className="form-label">
+                      Fecha del evento
+                    </label>
+                    <input
+                      type="date"
+                      className="form-control"
+                      id="date"
+                      name="date"
+                      objkey="date"
+                      placeholder={e.date}
+                      onChange={handleeventform}
+                      required
+                    />
+                    <div className="invalid-feedback">
+                      Por favor, ingrese una fecha válida.
+                    </div>
+                  </div>
+
+                  <div className="col-md-6">
+                    <label htmlFor="length" className="form-label">
+                      Duración
+                    </label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="length"
+                      name="length"
+                      objkey="length"
+                      placeholder={e.length}
+                      onChange={handleeventform}
+                      required
+                    />
+                    <div className="invalid-feedback">
+                      Por favor, ingrese una duración válida.
+                    </div>
+                  </div>
+
+                  <div className="col-md-6">
+                    <label htmlFor="slots" className="form-label">
+                      Número de plazas
+                    </label>
+                    <input
+                      type="number"
+                      className="form-control"
+                      id="slots"
+                      objkey="slots"
+                      name="slots"
+                      placeholder={e.slots}
+                      onChange={handleeventform}
+                      required
+                    />
+                    <div className="invalid-feedback">
+                      Por favor, ingrese un número de plazas válido.
+                    </div>
+                  </div>
+
+                  <div className="col-12">
+                    <label htmlFor="description" className="form-label">
+                      Descripción
+                    </label>
+                    <textarea
+                      className="form-control"
+                      id="description"
+                      name="description"
+                      objkey="description"
+                      placeholder={e.description}
+                      onChange={handleeventform}
+                      required
+                    ></textarea>
+                    <div className="invalid-feedback">
+                      Por favor, ingrese una descripción válida.
+                    </div>
+                  </div>
+
+                  <div className="col-md-6">
+                    <label htmlFor="contact" className="form-label">
+                      Contacto
+                    </label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="contact"
+                      name="contact"
+                      objkey="contact"
+                      placeholder={e.contact}
+                      onChange={handleeventform}
+                      required
+                    />
+                    <div className="invalid-feedback">
+                      Por favor, ingrese datos de contacto válidos (email y/o
+                      teléfono)
+                    </div>
+                  </div>
+                  <div className="col-md-6">
+                    <label htmlFor="company" className="form-label">
+                      Empresa / Organización
+                    </label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="company"
+                      name="company"
+                      objkey="company"
+                      placeholder={e.company}
+                      onChange={handleeventform}
+                      required
+                    />
+                    <div className="invalid-feedback">
+                      Por favor, ingrese datos de Empresa / Organización válidos
+                    </div>
+                  </div>
+                  <div className="col-md-6">
+                    <label htmlFor="clothes" className="form-label">
+                      Vestimenta recomendada
+                    </label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="clothes"
+                      name="cloth"
+                      objkey="cloth"
+                      placeholder={e.cloth}
+                      onChange={handleeventform}
+                    />
+                    <div className="invalid-feedback">
+                      Por favor, indique si se requiere vestimenta específica.
+                    </div>
+                  </div>
+                  <div className="col-md-6">
+                    <label htmlFor="others" className="form-label">
+                      Otros comentarios específicos de la actividad,
+                      aclaraciones sobre alergias, etc.
+                    </label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="others"
+                      name="others"
+                      objkey="others"
+                      placeholder={e.others}
+                      onChange={handleeventform}
+                    />
+                    <div className="invalid-feedback">
+                      ¿La actividad es apta para todos?¿Ninguna aclaración?
+                    </div>
+                  </div>
+
+                  <div className="col-md-4">
+                    <label htmlFor="category" className="form-label">
+                      Category
+                    </label>
+                    <select
+                      className="form-select"
+                      id="category"
+                      objkey="category"
+                      name="category"
+                      placeholder={e.category}
+                      onChange={handleeventform}
+                      required
+                    >
+                      <option value="" disabled>
+                        Seleccione una categoría...
+                      </option>
+                      <option value="surf">Escuelas de surf</option>
+                      <option value="theater">Clases de teatro</option>
+                      <option value="summer_camps">
+                        Campamentos de verano
+                      </option>
+                      <option value="campings">Campings</option>
+                      <option value="water_parks">Parques acuáticos</option>
+                      <option value="ski_schools">
+                        Escuelas de ski/snowboard
+                      </option>
+                      <option value="dance">Baile</option>
+                      <option value="cooking">Cocina</option>
+                      <option value="programming">Programación</option>
+                      <option value="music">Música</option>
+                      <option value="soccer">Fútbol</option>
+                      <option value="other">Más actividades</option>
+                    </select>
+                    <div className="invalid-feedback">
+                      Por favor, seleccione una categoría para poder clasificar
+                      mejor su anuncio.
+                    </div>
                   </div>
                 </form>
               </div>
@@ -897,10 +1164,14 @@ export const User = () => {
                   className="btn btn-secondary"
                   data-bs-dismiss="modal"
                 >
-                  Close
+                  Cerrar
                 </button>
-                <button type="button" className="btn btn-primary">
-                  Save changes
+                <button
+                  type="button"
+                  className="btn btn-primary"
+                  onClick={eventsubmit}
+                >
+                  Guardar cambios
                 </button>
               </div>
             </div>
@@ -909,6 +1180,319 @@ export const User = () => {
       </div>
     ));
 
+  let newevent = (
+    <div
+      className="modal fade"
+      id="crearevento"
+      tabIndex="-1"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div className="modal-dialog">
+        <div className="modal-content">
+          <div className="modal-header">
+            <h1 className="modal-title fs-5" id="exampleModalLabel">
+              Nuevo evento
+            </h1>
+            <button
+              type="button"
+              className="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div className="modal-body">
+            <form
+              className="row g-3 needs-validation"
+              onSubmit={neweventsubmit}
+              noValidate
+            >
+              <h1>Crea un evento</h1>
+              <div className="col-md-6">
+                <label htmlFor="name" className="form-label">
+                  Nombre del evento
+                </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="name"
+                  name="name"
+                  objkey="name"
+                  onChange={handleeventform}
+                  required
+                />
+                <div className="invalid-feedback">
+                  Por favor, ingrese un nombre válido para el evento.
+                </div>
+              </div>
+
+              <div className="col-md-6">
+                <label htmlFor="street" className="form-label">
+                  Calle y número del evento
+                </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="street"
+                  objkey="localization"
+                  name="street"
+                  onChange={handleeventform}
+                  required
+                />
+                <div className="invalid-feedback">
+                  Por favor, ingrese una calle del evento válida.
+                </div>
+              </div>
+
+              <div className="col-md-6">
+                <label htmlFor="min_age" className="form-label">
+                  Edad mínima
+                </label>
+                <input
+                  type="number"
+                  className="form-control"
+                  id="min_age"
+                  name="min_age"
+                  objkey="min_age"
+                  onChange={handleeventform}
+                  required
+                />
+                <div className="invalid-feedback">
+                  Por favor, ingrese una edad mínima válida.
+                </div>
+              </div>
+
+              <div className="col-md-6">
+                <label htmlFor="max_age" className="form-label">
+                  Edad máxima
+                </label>
+                <input
+                  type="number"
+                  className="form-control"
+                  id="max_age"
+                  name="max_age"
+                  objkey="max_age"
+                  onChange={handleeventform}
+                  required
+                />
+                <div className="invalid-feedback">
+                  Por favor, ingrese una edad máxima válida.
+                </div>
+              </div>
+
+              <div className="col-md-6">
+                <label htmlFor="price" className="form-label">
+                  Precio
+                </label>
+                <input
+                  type="number"
+                  className="form-control"
+                  id="price"
+                  name="price"
+                  objkey="price"
+                  onChange={handleeventform}
+                  required
+                />
+                <div className="invalid-feedback">
+                  Por favor, ingrese un precio válido.
+                </div>
+              </div>
+
+              <div className="col-md-6">
+                <label htmlFor="date" className="form-label">
+                  Fecha del evento
+                </label>
+                <input
+                  type="date"
+                  className="form-control"
+                  id="date"
+                  name="date"
+                  objkey="date"
+                  onChange={handleeventform}
+                  required
+                />
+                <div className="invalid-feedback">
+                  Por favor, ingrese una fecha válida.
+                </div>
+              </div>
+
+              <div className="col-md-6">
+                <label htmlFor="length" className="form-label">
+                  Duración
+                </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="length"
+                  objkey="length"
+                  name="length"
+                  onChange={handleeventform}
+                  required
+                />
+                <div className="invalid-feedback">
+                  Por favor, ingrese una duración válida.
+                </div>
+              </div>
+
+              <div className="col-md-6">
+                <label htmlFor="slots" className="form-label">
+                  Número de plazas
+                </label>
+                <input
+                  type="number"
+                  className="form-control"
+                  id="slots"
+                  name="slots"
+                  objkey="slots"
+                  onChange={handleeventform}
+                  required
+                />
+                <div className="invalid-feedback">
+                  Por favor, ingrese un número de plazas válido.
+                </div>
+              </div>
+
+              <div className="col-12">
+                <label htmlFor="description" className="form-label">
+                  Descripción
+                </label>
+                <textarea
+                  className="form-control"
+                  id="description"
+                  name="description"
+                  objkey="description"
+                  onChange={handleeventform}
+                  required
+                ></textarea>
+                <div className="invalid-feedback">
+                  Por favor, ingrese una descripción válida.
+                </div>
+              </div>
+
+              <div className="col-md-6">
+                <label htmlFor="contact" className="form-label">
+                  Contacto
+                </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="contact"
+                  objkey="contact"
+                  name="contact"
+                  onChange={handleeventform}
+                  required
+                />
+                <div className="invalid-feedback">
+                  Por favor, ingrese datos de contacto válidos (email y/o
+                  teléfono)
+                </div>
+              </div>
+              <div className="col-md-6">
+                <label htmlFor="company" className="form-label">
+                  Empresa / Organización
+                </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="company"
+                  objkey="company"
+                  name="company"
+                  onChange={handleeventform}
+                  required
+                />
+                <div className="invalid-feedback">
+                  Por favor, ingrese datos de Empresa / Organización válidos
+                </div>
+              </div>
+              <div className="col-md-6">
+                <label htmlFor="clothes" className="form-label">
+                  Vestimenta recomendada
+                </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="clothes"
+                  objkey="clothes"
+                  name="cloth"
+                  onChange={handleeventform}
+                />
+                <div className="invalid-feedback">
+                  Por favor, indique si se requiere vestimenta específica.
+                </div>
+              </div>
+              <div className="col-md-6">
+                <label htmlFor="others" className="form-label">
+                  Otros comentarios específicos de la actividad, aclaraciones
+                  sobre alergias, etc.
+                </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="others"
+                  objkey="others"
+                  name="others"
+                  onChange={handleeventform}
+                />
+                <div className="invalid-feedback">
+                  ¿La actividad es apta para todos?¿Ninguna aclaración?
+                </div>
+              </div>
+
+              <div className="col-md-4">
+                <label htmlFor="category" className="form-label">
+                  Category
+                </label>
+                <select
+                  className="form-select"
+                  id="category"
+                  objkey="category"
+                  name="category"
+                  onChange={handleeventform}
+                  required
+                >
+                  <option value="" disabled>
+                    Seleccione una categoría...
+                  </option>
+                  <option value="surf">Escuelas de surf</option>
+                  <option value="theater">Clases de teatro</option>
+                  <option value="summer_camps">Campamentos de verano</option>
+                  <option value="campings">Campings</option>
+                  <option value="water_parks">Parques acuáticos</option>
+                  <option value="ski_schools">Escuelas de ski/snowboard</option>
+                  <option value="dance">Baile</option>
+                  <option value="cooking">Cocina</option>
+                  <option value="programming">Programación</option>
+                  <option value="music">Música</option>
+                  <option value="soccer">Fútbol</option>
+                  <option value="other">Más actividades</option>
+                </select>
+                <div className="invalid-feedback">
+                  Por favor, seleccione una categoría para poder clasificar
+                  mejor su anuncio.
+                </div>
+              </div>
+            </form>
+          </div>
+          <div className="modal-footer">
+            <button
+              type="button"
+              className="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Cerrar
+            </button>
+            <button
+              type="button"
+              className="btn btn-primary"
+              onClick={eventsubmit}
+            >
+              Guardar cambios
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
   //Funciones de gestión de botones
   function usersubmit(e) {
     e.preventDefault();
@@ -928,7 +1512,7 @@ export const User = () => {
 
   function childsubmit(e) {
     e.preventDefault();
-    //Si 98 crear, cualquier otro, modificar
+    //Si childselect 98 crear, cualquier otro, modificar
     console.log("Child submit");
   }
 
@@ -940,6 +1524,16 @@ export const User = () => {
   function adversubmit(e) {
     e.preventDefault();
     console.log("Adver submit");
+  }
+
+  function eventsubmit(e) {
+    e.preventDefault();
+    console.log("Event Form", eventform);
+  }
+
+  function neweventsubmit(e) {
+    e.preventDefault();
+    console.log("New Event form", eventform);
   }
 
   function handleselect(e) {
@@ -960,6 +1554,33 @@ export const User = () => {
   function handlechildform(e) {
     setChildformsend({
       ...childformsend,
+      [e.target.getAttribute("objkey")]: e.target.value,
+    });
+  }
+
+  function seteventtoedit(e) {
+    setEventform({
+      name: e.name,
+      localization: e.localization,
+      min_age: e.min_age,
+      max_age: e.max_age,
+      price: e.price,
+      image: e.image,
+      date: e.date,
+      length: e.length,
+      category: e.category,
+      slots: e.slots,
+      description: e.description,
+      contact: e.contact,
+      company: e.company,
+      cloth: e.cloth,
+      others: e.others,
+    });
+  }
+
+  function handleeventform(e) {
+    setEventform({
+      ...eventform,
       [e.target.getAttribute("objkey")]: e.target.value,
     });
   }
@@ -1085,6 +1706,14 @@ export const User = () => {
             <div className="container d-inline-flex justify-content-center">
               {contentevents}
             </div>
+            <button
+              className="btn btn-primary"
+              data-bs-toggle="modal"
+              data-bs-target="#crearevento"
+            >
+              Crear nuevo evento
+            </button>
+            {newevent}
           </div>
         </div>
       </div>
