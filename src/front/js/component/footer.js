@@ -5,8 +5,8 @@ import { FaFacebook, FaTwitter, FaInstagram } from "react-icons/fa";
 
 export const Footer = () => {
   return (
-    <footer className="bg-dark text-white mt-5">
-      <div className="container-fluid mt-5" style={{ backgroundColor: "#8c52ff" }}>
+    <footer className="text-white mt-5 p-2"  style={{ backgroundColor: "#8c52ff" }}>
+      <div className="container-fluid" style={{ backgroundColor: "#8c52ff" }}>
         <div className="row">
           <div className="col-lg-4 col-md-6 mb-4 mb-md-0" >
             <h5 className="text-uppercase">Sobre nosotros</h5>
@@ -49,7 +49,7 @@ export const Footer = () => {
         </div>
       </div>
 
-      <div className="text-center p-3 rounded d-flex align-items-center justify-content-center" style={{ backgroundColor: "#feb823" }} >
+      <div className="text-center p-2 rounded d-flex align-items-center justify-content-center mb-2" style={{ backgroundColor: "#feb823" }} >
         <strong className="text-dark">© 2023 PekeFun. Todos los derechos reservados.</strong>
       </div>
     </footer>

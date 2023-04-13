@@ -2,20 +2,9 @@
     background-color: #19d8b6;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
     border-radius: 5px;
-    padding: 5px;
-    height: 80px;
     margin-top: 10px;
   }
-  
-  .navbar-brand {
-    display: flex;
-    align-items: center;
-    margin-left: 0;
-  }
-  
-  .navbar-nav {
-    margin-left: auto;
-  }
+
   
   .nav-link,
   .dropdown-item {
@@ -30,48 +19,38 @@
     text-decoration: none;
     background-color: rgba(255, 255, 255, 0.2);
   }
-  
-  .pekefun-logo,
-  .perfil-logo {
-    height: 50px;
-    width: auto;
-  }
+
+/*IMAGEN MARCA - HOME*/
   
   @media (min-width: 992px) {
-    .pekefun-logo,
-    .perfil-logo {
-      height: 100px;
-      width: auto;
+    .image-nav {
+      height: auto;
+      width: 4.5em;
     }
   }
   
   @media (max-width: 991px) {
-    .navbar-brand {
-      margin-top: 0 !important;
-      margin-left: 0;
+    .image-nav {
+      height: auto;
+      width: 4em;
     }
-    .navbar-brand img {
-      margin-top: 0;
-      margin-right: 0;
     }
-  }
-  
-  @media (min-width: 992px) {
-    .navbar-brand img {
-      margin-top: 30px;
-      margin-right: 40px;
+
+/*IMAGEN PERFIL DE USUARIO*/
+
+    @media (min-width: 992px) {
+      .custom-profile {
+        height: auto;
+        width: 10em;
+      }
     }
-  }
-  
-  .custom-logo {
-    max-height: 180px;
-    width: auto;
-  }
-  
-  .custom-profile {
-    max-height: 200px;
-    width: auto;
-  }
+    
+    @media (max-width: 991px) {
+      .custom-profile {
+        height: auto;
+        width: 4em;
+      }
+      }
   
   .dropdown-toggle::after {
     display: none;

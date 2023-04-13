@@ -11,7 +11,7 @@ export const Contacto = () => {
   };
 
   return (
-    <div className="container">
+    <div className="container mt-5">
       <div className="row">
         <div className="col-md-6">
           <div className="card">

@@ -144,11 +144,6 @@ export const User = () => {
   if (info != undefined && infotutor == undefined) getInfoTutor();
   if (info != undefined && infoanunciante == undefined) getInfoAnunciante();
 
-  //Comprobación de logeo (zona privada)
-  if (protect != undefined && protect != 200) {
-    return <Navigate to="/" />;
-  }
-
   //Variables para tabs
   let tutor = () => {
     if (info != undefined) {
@@ -1605,6 +1600,11 @@ export const User = () => {
 
   function handlenewpassword(e) {
     setUserform({ ...userform, new_password: e.target.value });
+  }
+
+  //Comprobación de logeo (zona privada)
+  if (protect != undefined && protect != 200) {
+    return <Navigate to="/" />;
   }
 
   return (

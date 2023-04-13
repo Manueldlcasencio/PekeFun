@@ -37,7 +37,7 @@ export const Home = () => {
 		<div className="text-center mt-5">
 			<h1></h1>
 			<p>
-				<img src={PekeFun} className="responsive-image w-100" />
+				{localStorage.getItem("token")? <h1>Pekefun!</h1> : <img src={!localStorage.getItem("token")? PekeFun : ""} className="responsive-image w-100" />}
 			</p>
 			{/*<button className="btn btn-danger" onClick={() => actions.deleteUser(username, "test")}>PRUEBA ELIMINAR USUARIO</button>}
 			{/*<button className="btn btn-danger" onClick={() => actions.changePassword(username, "teste", "nueva contrasena")}>PRUEBA CAMBIAR CONTRASEÑA</button>
