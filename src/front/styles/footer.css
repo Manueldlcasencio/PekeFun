@@ -1,7 +1,7 @@
   
   .footer-links li {
     margin-right: 25px;
-    box-shadow: 0 0 5px 0 white inset, 0 0 5px 4px white;
+    /*box-shadow: 0 0 5px 0 white inset, 0 0 5px 4px white;*/
   }
   
   .social-media a:hover {

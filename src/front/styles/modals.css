@@ -74,3 +74,6 @@ div.modal-header {
   border-color: #feb823;
 }
 
+.modal-dialog {
+  min-width: 500px;
+}

@@ -3,6 +3,7 @@ import { Context } from "../store/appContext";
 import { Modal_login_signup } from "../component/modal_login_signup.js";
 import {Child_Selection_Modal} from "../component/child_selection_modal.js";
 import { format } from "date-fns";
+import "../../styles/events_more_info.css";
 
 
 export const Events_more_info = () => {
@@ -71,12 +72,12 @@ export const Events_more_info = () => {
 
   console.log("tutorData en Events_more_info:", store.tutorData);
   return (
-    <div className="container my-3">
+    <div className="container mt-3">
     <div className="row align-items-center">
-      <div className="col-12 col-lg-2 m-3">
+      <div className="col-12 col-lg-2 p-3">
         <h3><strong>{name}</strong></h3>
       </div>
-      <div className="col-12 col-lg-6">
+      <div className="col-12 col-lg-6 ">
         <p><strong>¿Qué haremos?</strong> {description}</p>
         <p><strong>¿Cuándo comenzaremos?</strong> {formattedDate}</p>
         <p><strong>¿Cuánto dura?</strong> {length}</p>
@@ -93,7 +94,7 @@ export const Events_more_info = () => {
       </div>
       <div className="col-12 col-lg-3 d-flex justify-content-center">
         {image && (
-          <img src={image} className="img-fluid w-100 ms-auto d-block" alt="..." />
+          <img src={image} className="img-fluid w-100 ms-auto d-block p-2" alt="..." />
         )}
       </div>
     </div>

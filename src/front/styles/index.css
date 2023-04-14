@@ -23,7 +23,7 @@ button, .btn {
 
   .nav-link {
     color: black;
-    border-color: white; /* Modifica el color del borde */
+  border-color: white; /* Modifica el color del borde */
   }
 
   body {
@@ -63,3 +63,17 @@ button, .btn {
   
 
 
+  html, body {
+    height: 100%;
+    margin: 0;
+  }
+  
+  .page-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+  
+  .content-wrapper {
+    flex: 1;
+  }

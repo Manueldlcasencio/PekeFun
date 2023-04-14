@@ -1,8 +1,6 @@
 import React, { useContext, useState, useEffect, useRef } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import { Context } from "../store/appContext";
-import "../../styles/home.css";
-
 import "../../styles/user.css";
 import { event } from "jquery";
 
@@ -150,7 +148,7 @@ export const User = () => {
       if (info.tutor == true)
         return (
           <button
-            className="nav-link"
+            className="nav-link user-menu"
             id="nav-profile-tab"
             data-bs-toggle="tab"
             data-bs-target="#nav-profile"
@@ -170,7 +168,7 @@ export const User = () => {
       if (info.advertiser == true)
         return (
           <button
-            className="nav-link"
+            className="nav-link user-menu"
             id="nav-advertiser-tab"
             data-bs-toggle="tab"
             data-bs-target="#nav-advertiser"
@@ -190,7 +188,7 @@ export const User = () => {
       if (info.tutor == true)
         return (
           <button
-            className="nav-link"
+            className="nav-link user-menu"
             id="nav-child-tab"
             data-bs-toggle="tab"
             data-bs-target="#nav-child"
@@ -210,7 +208,7 @@ export const User = () => {
       if (info.advertiser == true)
         return (
           <button
-            className="nav-link"
+            className="nav-link user-menu"
             id="nav-events-tab"
             data-bs-toggle="tab"
             data-bs-target="#nav-events"
@@ -1608,11 +1606,11 @@ export const User = () => {
   }
 
   return (
-    <div className="container-fluid justify-content-center no-nav mb-2">
+    <div className="container-fluid justify-content-center no-nav mb-2 px-md-3">
       <nav>
         <div className="nav nav-tabs" id="nav-tab" role="tablist">
           <button
-            className="nav-link active"
+            className="nav-link user active"
             id="nav-home-tab"
             data-bs-toggle="tab"
             data-bs-target="#nav-home"

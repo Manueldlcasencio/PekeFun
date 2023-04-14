@@ -25,7 +25,7 @@
   @media (min-width: 992px) {
     .image-nav {
       height: auto;
-      width: 4.5em;
+      max-width: 5em;
     }
   }
   
@@ -34,14 +34,14 @@
       height: auto;
       width: 4em;
     }
-    }
+  }
 
 /*IMAGEN PERFIL DE USUARIO*/
 
     @media (min-width: 992px) {
       .custom-profile {
         height: auto;
-        width: 10em;
+        max-width: 6.5em;
       }
     }
     
