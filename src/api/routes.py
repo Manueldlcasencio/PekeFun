@@ -74,9 +74,10 @@ def signup_info():
             if tutor:
                 if tutor.children:
                     for kid in tutor.children:
-                        participant_id = Participants.query.filter_by(child_id = kid.id).first()
+                        participant_id = Participants.query.filter_by(child_id = kid.id).all()
                         if participant_id:
-                            db.session.delete(participant_id)
+                            for id in participant_id:
+                                db.session.delete(id)
                     to_remove = []
                     for item in tutor.children:
                         to_remove.append(item)
@@ -85,21 +86,22 @@ def signup_info():
                             tutor.children.remove(item)
                             db.session.delete(item)
                 db.session.delete(tutor)
-            if advertiser:         
-                if advertiser.events: 
+            if advertiser:
+                advertiser_events = Event.query.filter_by(id_advertiser = advertiser.id).all()
+                if advertiser_events:
                     to_remove = []
-                    for item in advertiser.events:
+                    for item in advertiser_events:
                         to_remove.append(item)
                     for item in to_remove:
-                        for event in advertiser.events:
-                            advertiser.events.remove(item)
-                            db.session.delete(item) 
+                        for event in advertiser_events:
+                            db.session.delete(item)
+                db.session.delete(advertiser)
             db.session.delete(user)
             db.session.commit()
             return jsonify({"removed": username}), 200
         else:
             return jsonify({"msg": "Password is wrong."}), 400
-
+            
 # About tutors
 @api.route("/signup/tutor", methods=["GET", "POST", "PUT", "DELETE"])
 @jwt_required()
@@ -117,8 +119,15 @@ def signup_tutor():
             kids = tutor.children
             json_kids = []
             for kid in kids:
+                kid_event = Participants.query.filter_by(child_id = kid.id).all()
+                kid_events = []
+                for event in kid_event:
+                    specific_event = Event.query.filter_by(id = event.event_id).first()
+                    kid_events.append(specific_event.serialize())
                 temp_kids = kid.serialize()
+                temp_kids["events"] = kid_events
                 json_kids.append(temp_kids)
+                print(kid_events)
             return jsonify({"kids": json_kids,
                             "msg": basic_response}), 200
         else:
@@ -255,7 +264,7 @@ def signup_child():
             for item in required:
                 change = request.json.get(item,None)
                 if item != "id" and item != "parent" and change != "":
-                    checked_id.query.update({item: change})
+                    Child.query.filter_by(id = child_id).update({item: change})
             db.session.commit()
         return jsonify({"changes": request.json}), 200
 
@@ -401,6 +410,7 @@ def event():
                       min_age = request.json.get("min_age", None),
                       max_age = request.json.get("max_age", None),
                       price = request.json.get("price", None),
+                      image = request.json.get("image", None),
                       date = request.json.get("date", None),
                       length = request.json.get("length",None),
                       category = request.json.get("category", None),

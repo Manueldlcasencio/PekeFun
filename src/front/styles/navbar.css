@@ -1,0 +1,88 @@
+.navbar {
+    background-color: #19d8b6;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    border-radius: 5px;
+    margin-top: 10px;
+  }
+
+  
+  .nav-link,
+  .dropdown-item {
+    color: #fff;
+    font-weight: bold;
+    transition: all 0.3s ease-in-out;
+  }
+  
+  .nav-link:hover,
+  .dropdown-item:hover {
+    color: #fff;
+    text-decoration: none;
+    background-color: rgba(255, 255, 255, 0.2);
+  }
+
+/*IMAGEN MARCA - HOME*/
+  
+  @media (min-width: 992px) {
+    .image-nav {
+      height: auto;
+      max-width: 5em;
+    }
+  }
+  
+  @media (max-width: 991px) {
+    .image-nav {
+      height: auto;
+      width: 4em;
+    }
+  }
+
+/*IMAGEN PERFIL DE USUARIO*/
+
+    @media (min-width: 992px) {
+      .custom-profile {
+        height: auto;
+        max-width: 6.5em;
+      }
+    }
+    
+    @media (max-width: 991px) {
+      .custom-profile {
+        height: auto;
+        width: 4em;
+      }
+      }
+  
+  .dropdown-toggle::after {
+    display: none;
+  }
+  
+  .dropdown-menu {
+    background-color: #19d8b6;
+    border-radius: 5px;
+  }
+  
+  .search-input {
+    width: 250px;
+    border-radius: 20px;
+    border: none;
+    font-size: 16px;
+    padding: 6px 12px;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
+  }
+  
+  .contacto-form-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+  }
+  
+  .contacto-form {
+    max-width: 500px;
+    width: 100%;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px #ccc;
+  }
+  

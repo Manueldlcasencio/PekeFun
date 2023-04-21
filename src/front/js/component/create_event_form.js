@@ -5,64 +5,228 @@ import { Context } from "../store/appContext.js";
 export const Create_event_form = () => {
   const { actions } = useContext(Context);
   const [eventData, setEventData] = useState({
-    name: "", street: "", city: "", min_age: "", max_age: "", price: "", date: "", length: "", category: "", slots: "", description: "", contact: "", company: "", cloth: "", others: ""
+    name: "", street: "", city: "", min_age: "", max_age: "", price: "", image: "", date: "", length: "", category: "", slots: "", description: "", contact: "", company: "", cloth: "", others: ""
   });
   const email = localStorage.getItem('email');
   
   /*ARRAY DE PRUEBA (EVENTS ARRAY), BORRAR LUEGO!!!!!!*/
   const eventsArray = [
-  {
-    name: "Fiesta de disfraces",
-    street: "Calle de la Esperanza",
-    city: "Madrid",
-    min_age: 5,
-    max_age: 12,
-    price: 10,
-    date: "2023-04-20",
-    length: 3,
-    category: "Fiestas",
-    slots: 50,
-    description: "Ven a divertirte en nuestra fiesta de disfraces para niños.",
-    contact: "info@eventos-niños.es",
-    company: "Eventos Niños",
-    cloth: "Disfraz",
-    others: "Traer merienda"
-  },
-  {
-    name: "Taller de pintura",
-    street: "Calle del Sol",
-    city: "Barcelona",
-    min_age: 6,
-    max_age: 14,
-    price: 15,
-    date: "2023-05-10",
-    length: 2,
-    category: "Arte",
-    slots: 20,
-    description: "Aprende a pintar con acuarelas en nuestro taller de pintura para niños.",
-    contact: "talleres@arte-niños.es",
-    company: "Arte Niños",
+    { name: "Escuela de Surf",
+      street: "Avenida del Mar",
+      city: "Málaga",
+      min_age: 8,
+      max_age: 16,
+      price: 100,
+      image: "https://escueladesurflasdunas.com/wp-content/uploads/2021/05/image-asset.jpeg",
+      date: "2023-07-01",
+      length: 7,
+      category: "Escuelas de Surf",
+      slots: 30,
+      description: "Aprende a surfear en nuestras clases para niños y jóvenes.",
+      contact: "info@surf-niños.es",
+      company: "Surf Niños",
+      cloth: "Traje de baño y toalla",
+      others: "Protector solar y gorra"
+    },
+    {
+      name: "Taller de Teatro",
+      street: "Calle del Arte",
+      city: "Madrid",
+      min_age: 7,
+      max_age: 15,
+      price: 50,
+      image: "https://www.tallerparentesis.com/wp-content/uploads/2018/04/teatro-ninos.jpg",
+      date: "2023-06-10",
+      length: 5,
+      category: "Clases de Teatro",
+      slots: 25,
+      description: "Desarrolla tus habilidades de actuación en nuestro taller de teatro.",
+      contact: "info@teatro-niños.es",
+      company: "Teatro Niños",
+      cloth: "Ropa cómoda",
+      others: "Libreta y lápiz"
+    },
+    {
+      name: "Campamento de Verano",
+      street: "Camino de la Montaña",
+      city: "Granada",
+      min_age: 10,
+      max_age: 18,
+      price: 300,
+      image: "https://www.vigopeques.com/wp-content/uploads/2020/06/campamento-de-verano-tatarina-940x640.png",
+      date: "2023-07-15",
+      length: 14,
+      category: "Campamentos de Verano",
+      slots: 50,
+      description: "Disfruta de dos semanas de diversión y aprendizaje en nuestro campamento.",
+      contact: "info@campamento-niños.es",
+      company: "Campamento Niños",
+      cloth: "Ropa cómoda y de abrigo",
+      others: "Mochila, saco de dormir y linterna"
+    },
+    {
+      name: "Camping Familiar",
+      street: "Parque Natural",
+      city: "Girona",
+      min_age: 5,
+      max_age: 60,
+      price: 150,
+      image: "https://www.bassegodapark.com/FitxersWeb/12243/06-raons-anar-camping-web-noticia.jpg",
+      date: "2023-08-01",
+      length: 7,
+      category: "Campings",
+      slots: 100,
+      description: "Una semana de camping en familia en un entorno natural.",
+      contact: "info@camping-niños.es",
+      company: "Camping Niños",
+      cloth: "Ropa adecuada",
+      others: "Tienda de campaña y equipo de camping"
+    },
+    {
+      name: "Parque Acuático",
+      street: "Calle de la Diversión",
+      city: "Alicante",
+      min_age: 4,
+      max_age: 99,
+      price: 20,
+      image: "https://imagenes.20minutos.es/files/og_thumbnail/uploads/imagenes/2015/08/17/2047958a.jpg",
+      date: "2023-06-20",
+      length: 1,
+      category: "Parques Acuáticos",
+      slots: 500,
+      description: "Un día lleno de emociones y diversión acuática para toda la familia.",
+      contact: "info@parqueacuatico-niños.es",
+      company: "Parque Acuático Niños",
+      cloth: "Trade baño y toalla",
+      others: "Protector solar y gafas de sol"
+      },
+      {
+      name: "Taller de Cocina",
+      street: "Plaza de los Sabores",
+      city: "Sevilla",
+      min_age: 6,
+      max_age: 14,
+      price: 25,
+      image: "https://www.alcalanorte.com/wp-content/uploads/2018/12/shutterstock_167288825-1200x675.jpg",
+      date: "2023-05-18",
+      length: 2,
+      category: "Cocina",
+      slots: 20,
+      description: "Aprende a cocinar deliciosos platos en nuestro taller de cocina para niños.",
+      contact: "info@cocina-niños.es",
+      company: "Cocina Niños",
+      cloth: "Delantal",
+      others: "Todos los ingredientes incluidos"
+      },
+      {
+      name: "Curso de Programación",
+      street: "Calle de la Tecnología",
+      city: "Bilbao",
+      min_age: 10,
+      max_age: 16,
+      price: 150,
+      image: "https://blogcomparasoftware-192fc.kxcdn.com/wp-content/uploads/2022/10/Cursos-de-programacion-para-ninos-01-1024x640.jpg",
+      date: "2023-07-05",
+      length: 10,
+      category: "Programación",
+      slots: 30,
+      description: "Aprende a programar en nuestro curso de programación para niños y jóvenes.",
+      contact: "info@programacion-niños.es",
+      company: "Programación Niños",
+      cloth: "Ropa cómoda",
+      others: "Portátil"
+      },
+      {
+      name: "Clases de Música",
+      street: "Avenida de la Melodía",
+      city: "Valladolid",
+      min_age: 5,
+      max_age: 18,
+      price: 60,
+      image: "https://centrolafabrica.com/wp-content/uploads/2017/12/ni%C3%B1os.jpg",
+      date: "2023-04-25",
+      length: 4,
+      category: "Música",
+      slots: 15,
+      description: "Aprende a tocar un instrumento en nuestras clases de música para niños.",
+      contact: "info@musica-niños.es",
+      company: "Música Niños",
+      cloth: "Ropa cómoda",
+      others: "Instrumento musical"
+      },
+      {
+      name: "Escuela de Fútbol",
+      street: "Calle del Deporte",
+      city: "Zaragoza",
+      min_age: 8,
+      max_age: 14,
+      price: 120,
+      image: "https://www.diversioncolsubsidio.com/uploads/productos/3d544aa7105769b7c7d2867f2b1b697fd853e68b.jpg-Escualas_Futbol_1400x1016px%20(1).jpg",
+      date: "2023-06-12",
+      length: 6,
+      category: "Fútbol",
+      slots: 40,
+      description: "Mejora tus habilidades de fútbol en nuestra escuela para niños y jóvenes.",
+      contact: "info@futbol-niños.es",
+      company: "Fútbol Niños",
+      cloth: "Equipo de fútbol",
+      others: "Botas de fútbol y espinilleras"
+      },
+      {
+      name: "Clases de Baile",
+      street: "Calle de la Danza",
+      city: "Córdoba",
+      min_age: 4,
+      max_age: 12,
+      price: 30,
+      image: "https://asisebaila.com/wp-content/uploads/2020/01/bailes-para-ninos-y-ninas.jpg",
+      date: "2023-05-03",
+      length: 4,
+      category: "Baile",
+      slots: 20,
+      description: "Aprende diferentes estilos de baile en nuestras clases para niños.",
+      contact: "info@baile-niños.es",
+      company: "Baile Niños",
+      cloth: "Ropa de baile",
+      others: "Zapatillas de baile"
+    },
+    {
+    name: "Campamento de Surf",
+    street: "Playa del Viento",
+    city: "Cádiz",
+    min_age: 10,
+    max_age: 17,
+    price: 200,
+    image: "https://www.watsaysurfschool.com/wp-content/uploads/2020/10/escuelas-de-surf-en-cantabria.jpg",
+    date: "2023-08-15",
+    length: 7,
+    category: "Escuelas de Surf",
+    slots: 30,
+    description: "Disfruta de una semana de surf en nuestro campamento de verano para niños y jóvenes.",
+    contact: "info@campamento-surf-niños.es",
+    company: "Campamento Surf Niños",
+    cloth: "Traje de baño y toalla",
+    others: "Protector solar y gorra"
+    },
+    {
+    name: "Taller de Teatro Musical",
+    street: "Plaza del Espectáculo",
+    city: "Salamanca",
+    min_age: 7,
+    max_age: 15,
+    price: 45,
+    image: "https://www.escuelajana.com/wp-content/uploads/2014/03/high-school-music-3-193-740x346.jpg",
+    date: "2023-06-25",
+    length: 5,
+    category: "Clases de Teatro",
+    slots: 25,
+    description: "Aprende a cantar, bailar y actuar en nuestro taller de teatro musical para niños.",
+    contact: "info@teatro-musical-niños.es",
+    company: "Teatro Musical Niños",
     cloth: "Ropa cómoda",
-    others: "Todos los materiales incluidos"
-  },
-  {
-    name: "Clase de baile",
-    street: "Calle de la Luna",
-    city: "Valencia",
-    min_age: 4,
-    max_age: 10,
-    price: 5,
-    date: "2023-04-30",
-    length: 1,
-    category: "Danza",
-    slots: 15,
-    description: "Diviértete aprendiendo a bailar en nuestra clase de baile para niños.",
-    contact: "info@danza-niños.es",
-    company: "Danza Niños",
-    cloth: "Ropa de baile",
-    others: "Zapatillas de baile"
-  }
-];
+    others: "Botella de agua"
+    }
+    ];  
 
 //formula para prueba de array A BORRAR!!!
 const handleTestEvents = () => {
@@ -125,6 +289,14 @@ const handleTestEvents = () => {
         <input type="number" className="form-control" id="max_age" name="max_age" value={eventData.max_age} onChange={handleInputChange} required />
         <div className="invalid-feedback">
           Por favor, ingrese una edad máxima válida.
+        </div>
+      </div>
+
+      <div className="col-md-6">
+        <label htmlFor="price" className="form-label">URL de una Imagen del evento</label>
+        <input type="number" className="form-control" id="price" name="price" value={eventData.image} onChange={handleInputChange} />
+        <div className="invalid-feedback">
+          Por favor, ingrese un link válido para su imagen
         </div>
       </div>
 

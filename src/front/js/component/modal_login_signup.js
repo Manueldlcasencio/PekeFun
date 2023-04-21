@@ -1,8 +1,9 @@
 import React, { useState, useContext } from "react";
 import { Link } from "react-router-dom";
 import { Context } from "../store/appContext.js";
-import { Collapse } from "react-bootstrap";
+import { Collapse, Modal, Button } from "react-bootstrap";
 import { Login } from "./login.js";
+import "../../styles/modals.css";
 
 export const Modal_login_signup = () => {
   const { actions } = useContext(Context);
@@ -13,6 +14,11 @@ export const Modal_login_signup = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState("");
+  const [showModal, setShowModal] = useState(false);
+
+  const handleModalClose = () => setShowModal(false);
+  const handleModalShow = () => setShowModal(true);
+
 
   const handleTutorCheck = (e) => {
     setShowTutorForm(e.target.checked);
@@ -31,12 +37,12 @@ export const Modal_login_signup = () => {
     actions.modifyTutor(email, tutorData, token);
     console.log(`Esta es la información almacenada en Tutor Data: ${JSON.stringify(tutorData, null, 2)}`, showTutorForm);
   };
-    
+
   const handleAdvertiserFormSubmit = (token) => {
     actions.createAdvertiser(email, advertiserData, token);
     console.log(`Esta es la información almacenada en Advertiser Data: ${JSON.stringify(advertiserData, null, 2)}`);
   };
-  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (showTutorForm || showAdvertiserForm) {
@@ -47,11 +53,11 @@ export const Modal_login_signup = () => {
         if (token) {
           // Almacenar el email en el localStorage con la key "username"
           localStorage.setItem("username", email);
-  
+
           if (showTutorForm) {
             handleTutorFormSubmit(token);
-          } 
-          if (showAdvertiserForm) { 
+          }
+          if (showAdvertiserForm) {
             handleAdvertiserFormSubmit(token);
           }
         }
@@ -62,7 +68,7 @@ export const Modal_login_signup = () => {
       setErrorMessage('Por favor, selecciona una opción antes de continuar.');
     }
   };
-  
+
 
   const handleInputChange = (e, index, child) => {
     const { name, value } = e.target;
@@ -90,31 +96,39 @@ export const Modal_login_signup = () => {
 
   return (
     <div className="container">
-      <button type="button" className="btn btn-primary" style={{ backgroundColor: "#f9643f" }} data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+      <Button variant="primary" onClick={handleModalShow} style={{ backgroundColor: "#f9643f" }}>
         Login / Sign Up!
-      </button>
-      <div className="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div className="modal-dialog">
-          <div className="modal-content" style={{ backgroundColor: "#feb823" }}>
-            <ul className="nav nav-tabs justify-content-center" id="myTab" role="tablist">
-              <li className="nav-item" role="presentation">
-                <button className="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home-tab-pane" type="button" role="tab" aria-controls="home-tab-pane" aria-selected="true">
-                  Login
-                </button>
-              </li>
-              <li className="nav-item" role="presentation">
-                <button className="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile-tab-pane" type="button" role="tab" aria-controls="profile-tab-pane" aria-selected="false">
-                  Sign Up!
-                </button>
-              </li>
-              <div className="d-grid gap-2 d-md-flex justify-content-md-end ms-auto">
-                <button type="button" className="btn-close me-md-2 pt-3" data-bs-dismiss="modal" aria-label="Close"></button>
+      </Button>
+
+      <Modal show={showModal} onHide={handleModalClose} backdrop="static" keyboard={false} contentClassName="transparent-modal">
+        <Modal.Dialog>
+          <div style={{ backgroundColor: "#feb823" }} className="modal-content">
+            <Modal.Header closeButton>
+              <div className="container">
+                <ul className="nav nav-tabs justify-content-center" id="myTab" role="tablist">
+                  <li className="nav-item" role="presentation">
+                    <button className="nav-link active tabs-modal" id="home-tab" data-bs-toggle="tab" data-bs-target="#home-tab-pane" type="button" role="tab" aria-controls="home-tab-pane" aria-selected="true">
+                      Login
+                    </button>
+                  </li>
+                  <li className="nav-item" role="presentation">
+                    <button className="nav-link tabs-modal" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile-tab-pane" type="button" role="tab" aria-controls="profile-tab-pane" aria-selected="false">
+                      Sign Up!
+                    </button>
+                  </li>
+                  <li>
+
+                  </li>
+                </ul>
               </div>
-            </ul>
+            </Modal.Header>
+
+
+
             <div className="tab-content" id="myTabContent">
               <div className="tab-pane fade show active p-3" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab">
-            
-            <Login />
+
+                <Login />
 
               </div>
               <div className="tab-pane fade p-3" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab">
@@ -268,19 +282,17 @@ export const Modal_login_signup = () => {
                     </div>
                   )}
 
-                  <button
-                    type="submit"
-                    className="btn btn-primary"
-                    style={{ backgroundColor: "#f9643f" }}
-                    onClick={handleSubmit}>
-                    Registrarse
-                  </button>
+                  <Modal.Footer>
+                    <button type="submit" className="btn btn-primary" style={{ backgroundColor: "#f9643f" }} onClick={handleSubmit}>Registrarse</button>
+                  </Modal.Footer>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      </div>
+        </Modal.Dialog>
+
+      </Modal>
+
     </div>
   );
 };

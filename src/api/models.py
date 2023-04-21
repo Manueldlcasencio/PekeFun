@@ -117,11 +117,11 @@ class Advertiser(db.Model):
             "lastname": self.lastname,
             "contact": self.contact,
             "company": self.company,
-            "working since": self.working_since,
+            "working_since": self.working_since,
             "description": self.description,
             "twitter": self.twitter,
             "avatar": self.avatar,
-            "company image": self.company_image,
+            "company_image": self.company_image,
             "others": self.others
         }
 
@@ -133,6 +133,7 @@ class Event(db.Model):
     min_age = db.Column(db.Integer, unique=False, nullable=False)
     max_age = db.Column(db.Integer, unique=False, nullable=False)
     price = db.Column(db.Integer, unique=False, nullable=False)
+    image = db.Column(db.String, unique=False)
     date = db.Column(db.DateTime, unique=False, nullable=False)
     length = db.Column(db.Integer, unique=False, nullable=True)
     category = db.Column(db.String(200), unique=False, nullable=False)
@@ -156,10 +157,12 @@ class Event(db.Model):
         return {
             "event_id": self.id,
             "advertiser_id": self.id_advertiser,
+            "name": self.name,
             "localization": self.localization,
             "min_age": self.min_age,
             "max_age": self.max_age,
             "price": self.price,
+            "image":self.image,
             "date": self.date,
             "length": self.length,
             "category": self.category,

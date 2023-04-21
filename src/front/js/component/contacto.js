@@ -11,7 +11,7 @@ export const Contacto = () => {
   };
 
   return (
-    <div className="container">
+    <div className="container mt-5">
       <div className="row">
         <div className="col-md-6">
           <div className="card">
@@ -31,7 +31,7 @@ export const Contacto = () => {
                 <ul>
                   <li>Dirección: 1234 Calle Principal</li>
                   <li>Teléfono: 555-1234</li>
-                  <li>Correo electrónico: <a href="mailto:info@pekefun.com">info@pekefun.com</a></li>
+                  <li>Correo electrónico: <Link to="mailto:infopekefun@gmail.com">infopekefun@gmail.com</Link></li>
                 </ul>
                 <p>
                   ¡Gracias por visitar nuestra página web! Si tienes alguna

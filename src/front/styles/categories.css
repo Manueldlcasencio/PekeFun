@@ -1,0 +1,13 @@
+.carousel-image {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 95%;
+  }
+  
+  .carousel-image img {
+    max-width: 95%;
+    max-height: 95%;
+    object-fit: contain;
+  }
+  

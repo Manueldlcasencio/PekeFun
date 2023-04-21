@@ -2,40 +2,58 @@ import React, { useContext, useEffect } from "react";
 import { Context } from "../store/appContext";
 import PekeFun from "../../img/fondo.png";
 import "../../styles/home.css";
-import {Social_media} from "../component/social_media.jsx"
+import "../../styles/index.css";
+import { Social_media } from "../component/social_media.jsx";
 import { Cards_activities } from "../component/cards_activities";
-
+import { Categories } from "../component/categories.js";
+import { Create_event_form } from "../component/create_event_form.js";
 
 export const Home = () => {
-	const { store, actions } = useContext(Context);
+    const { store, actions } = useContext(Context);
+    const username = localStorage.getItem("username");
 
-	//Para limpiar "selected category" y que se muestren todas las cards:
     useEffect(() => {
         actions.clearFilteredEvents();
     }, []);
+
+    const handleModifyChild = () => {
+		const childToUpdateId = 1; // Cambiar esto al ID del niño que desea actualizar
+		const childToUpdate = store.tutorData.children.find(child => child.id === childToUpdateId);
+	  
+		if (childToUpdate) {
+		  const updatedChildData = {
+			...childToUpdate,
+			name: "holi",
+			lastname: "holita"
+		  };
+	  
+		  actions.modifyChild(username, updatedChildData);
+		} else {
+		  console.log("Child not found");
+		}
+	  };
 
 	return (
 		<div className="text-center mt-5">
 			<h1></h1>
 			<p>
-				<img src={PekeFun} />
+				{localStorage.getItem("token")? <h1>Pekefun!</h1> : <img src={!localStorage.getItem("token")? PekeFun : ""} className="responsive-image w-100" />}
 			</p>
-
-			{/* -INSERTO CARDS DE ACTIVIDADES EN EL HOME-
-			<div className="container bg-dark mb-3">
-            <h1 className="text-light text-center pt-4">Characters</h1>
-			<div className="row row-cols-1 row-cols-md-3 row-cols-xl-5 g-2">
-				{   people.map((e, i)=>{
-                        let card = <CardPeople key= {i} id={i+1} name = {e.name} height = {e.height} birth_year = {e.birth_year} hair_color = {e.hair_color} eye_color = {e.eye_color} />
-                        return card;
-                    })
-                }
-			</div>
-		</div>
-			*/}
-
+			{/*<button className="btn btn-danger" onClick={() => actions.deleteUser(username, "test")}>PRUEBA ELIMINAR USUARIO</button>}
+			{/*<button className="btn btn-danger" onClick={() => actions.changePassword(username, "teste", "nueva contrasena")}>PRUEBA CAMBIAR CONTRASEÑA</button>
+			{/*<button className="btn btn-danger" onClick={handleModifyChild}>PRUEBA MODIFICAR DATOS NIÑO</button>*/}
+			
+		
+		<Categories />
 		<Cards_activities />
+	{/*<Create_event_form />*/}
+		{/*<button className="btn btn-secondary" type="button" onClick={() => actions.getTutorData()}> 
+          recuperar info del tutor
+        </button> */}
+
+	
 		<Social_media />
+
 		</div>
 	);
 };
